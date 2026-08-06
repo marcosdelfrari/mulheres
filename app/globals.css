@@ -3,15 +3,35 @@
 :root {
   --background: #ffffff;
   --foreground: #1a1a1a;
-  --purple: #7c3aed;
-  --purple-hover: #6d28d9;
+  --purple: #3d1a5c;
+  --purple-hover: #2a1140;
   --border: #e5e7eb;
   --muted: #6b7280;
+  --luxury-bg: #0c0414;
+  --luxury-fg: #f8fafc;
+  --luxury-accent: #c5a059;
+  --luxury-accent-hover: #b38a42;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-luxury-accent: var(--luxury-accent);
+  --color-luxury-accent-hover: var(--luxury-accent-hover);
+
+  /* Plum profundo no lugar do roxo neon */
+  --color-purple-50: #f7f4f9;
+  --color-purple-100: #ebe4f0;
+  --color-purple-200: #d5c6e0;
+  --color-purple-300: #b39bc7;
+  --color-purple-400: #8f6fad;
+  --color-purple-500: #6b4a8a;
+  --color-purple-600: #4f3268;
+  --color-purple-700: #3d1a5c;
+  --color-purple-800: #2a1140;
+  --color-purple-900: #1a0a28;
+  --color-purple-950: #0c0414;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
@@ -26,7 +46,7 @@ body {
 }
 
 ::selection {
-  background: #ede9fe;
+  background: rgba(197, 160, 89, 0.25);
   color: #1a1a1a;
 }
 
@@ -35,9 +55,23 @@ body {
 }
 
 input[type="range"] {
-  accent-color: #7c3aed;
+  accent-color: var(--luxury-accent);
 }
 
 input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
+}
+
+/* Roxo Noir Luxo */
+.luxury-shell {
+  background:
+    radial-gradient(circle at top right, rgba(197, 160, 89, 0.05), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(61, 26, 92, 0.35), transparent 40%),
+    var(--luxury-bg);
+  color: var(--luxury-fg);
+}
+
+.luxury-shell ::selection {
+  background: rgba(197, 160, 89, 0.3);
+  color: #fff;
 }

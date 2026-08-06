@@ -1,0 +1,60 @@
+; DNS for AI Discovery (DNS-AID) — mulheresdeluxo.com.br
+; Draft: https://datatracker.ietf.org/doc/draft-mozleywilliams-dnsop-dnsaid/
+; SVCB/HTTPS: https://www.rfc-editor.org/rfc/rfc9460
+;
+; Publique estes registros no DNS autoritativo (Registro.br → DNS)
+; e ative DNSSEC na zona para validação autenticada.
+;
+; Experimental SvcParamKeys (ainda sem código IANA estável) usam keyNNNNN
+; no intervalo Private Use (65280–65535), conforme a skill DNS-AID:
+;   key65280 = well-known path (RFC 8615), sem prefixo /.well-known/
+;   key65281 = capability descriptor URI (cap)
+;   key65282 = capability SHA-256 base64url (cap-sha256)
+
+$ORIGIN mulheresdeluxo.com.br.
+$TTL 3600
+
+; --- Organizational agent index (known-org discovery) ---
+_index._agents  IN  HTTPS  1  mulheresdeluxo.com.br. (
+                        alpn="h2,h3"
+                        port=443
+                        mandatory=alpn,port
+                        key65280="/.well-known/agents"
+                      )
+
+_index._agents  IN  SVCB   1  mulheresdeluxo.com.br. (
+                        alpn="h2,h3"
+                        port=443
+                        mandatory=alpn,port
+                        key65280="/.well-known/agents"
+                      )
+
+; --- HTTPS agent endpoint (web / discovery card) ---
+_https._agents  IN  HTTPS  1  mulheresdeluxo.com.br. (
+                        alpn="h2,h3"
+                        port=443
+                        mandatory=alpn,port
+                        key65280="agent-card.json"
+                        key65281="https://mulheresdeluxo.com.br/.well-known/agent-card.json"
+                      )
+
+; --- A2A-style agent binding ---
+_a2a._agents    IN  SVCB   1  mulheresdeluxo.com.br. (
+                        alpn="a2a,h2"
+                        port=443
+                        mandatory=alpn,port
+                        key65280="agent-card.json"
+                        key65281="https://mulheresdeluxo.com.br/.well-known/agent-card.json"
+                      )
+
+; Primary owner alias under inventory leaf (AliasMode priority 0)
+mulheres-web._agents  IN  SVCB  0  mulheresdeluxo.com.br.
+
+; Normative ServiceMode record at primary owner (apex)
+@               IN  HTTPS  1  . (
+                        alpn="h2,h3"
+                        port=443
+                        mandatory=alpn,port
+                        key65280="agent-card.json"
+                        key65281="https://mulheresdeluxo.com.br/.well-known/agent-card.json"
+                      )

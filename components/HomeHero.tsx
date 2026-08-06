@@ -6,9 +6,8 @@ import { useState } from "react";
 
 const STATS = [
   { value: "10+", label: "bairros em BH" },
-  { value: "WhatsApp", label: "contato direto" },
-  { value: "BH+", label: "região metropolitana" },
-  { value: "100%", label: "perfis verificados" },
+  { value: "BH+", label: "região metro" },
+  { value: "100%", label: "verificados" },
 ] as const;
 
 export function HomeHero() {
@@ -25,74 +24,63 @@ export function HomeHero() {
   };
 
   return (
-    <section className="relative overflow-hidden border-b border-gray-100 bg-white">
+    <section className="relative overflow-hidden border-b border-white/5 pb-12 pt-28 sm:pb-20 sm:pt-32">
+      {/* Luzes de ambiente sutis */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-40"
+        className="pointer-events-none absolute inset-0 opacity-30"
         aria-hidden
       >
-        <div className="absolute -right-16 top-8 h-72 w-72 rounded-full bg-purple-100 blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 h-48 w-48 rounded-full bg-purple-50 blur-2xl" />
+        <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-luxury-accent/10 blur-[120px]" />
+        <div className="absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-purple-900/20 blur-[120px]" />
       </div>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:py-16">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-purple-100 bg-purple-50 px-4 py-1.5 text-sm font-bold text-purple-800">
-            <span className="h-2 w-2 rounded-full bg-purple-600" aria-hidden />
-            Lançamento em Minas Gerais
+          <p className="inline-flex items-center gap-2 rounded-full border border-luxury-accent/20 bg-luxury-accent/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-luxury-accent">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-luxury-accent animate-pulse"
+              aria-hidden
+            />
+            Exclusividade em Minas Gerais
           </p>
 
-          <h1 className="mt-5 font-serif text-3xl font-bold italic leading-[1.1] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.75rem]">
-            Acompanhantes de{" "}
-            <span className="text-purple-700">luxo</span> em Belo Horizonte
+          <h1 className="mt-6 font-serif text-4xl font-bold italic leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
+            Acompanhantes de <span className="text-luxury-accent">luxo</span> em
+            Belo Horizonte
           </h1>
 
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-gray-600">
-            Estamos começando em BH e região metropolitana. Perfis verificados,
-            busca por bairro e contato direto — com discrição e respeito.
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/60">
+            Descubra perfis selecionados na capital mineira e região. Uma
+            curadoria focada em discrição, sofisticação e atendimento de alto
+            nível.
           </p>
 
-          <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-            {STATS.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3.5"
-              >
-                <dt className="text-xl font-black tracking-tight text-purple-700 sm:text-2xl">
-                  {stat.value}
-                </dt>
-                <dd className="mt-0.5 text-sm font-semibold text-gray-600">
-                  {stat.label}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Link
-              href="/login?role=acompanhante"
-              className="rounded-2xl bg-purple-700 px-8 py-4 text-center text-base font-bold text-white hover:bg-purple-800 transition-all active:scale-95"
+              href="/criar-conta?role=acompanhante"
+              className="rounded-full bg-white px-8 py-4 text-center text-base font-bold text-[#0c0414] transition-all hover:bg-gray-100 active:scale-95 shadow-xl shadow-white/5"
             >
-              Anunciar como acompanhante
+              Anunciar Perfil
             </Link>
             <Link
-              href="/login?role=cliente"
-              className="rounded-2xl border-2 border-purple-700 px-8 py-4 text-center text-base font-bold text-purple-700 hover:bg-purple-50 transition-all active:scale-95"
+              href="/criar-conta?role=cliente"
+              className="rounded-full border border-white/20 bg-white/5 px-8 py-4 text-center text-base font-bold text-white transition-all hover:bg-white/10 active:scale-95"
             >
-              Cadastrar como cliente
+              Cadastrar Cliente
             </Link>
           </div>
 
-          <form onSubmit={handleSubmit} className="relative mt-10 max-w-lg">
+          <form onSubmit={handleSubmit} className="relative mt-12 max-w-lg">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar por bairro em Belo Horizonte..."
-              className="w-full rounded-2xl border border-gray-200 bg-white py-4.5 pl-6 pr-16 text-base text-gray-900 placeholder:text-gray-400 focus:border-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-600/5 transition-all"
+              placeholder="Qual bairro você procura?"
+              className="w-full rounded-full border border-white/10 bg-white/5 py-5 pl-8 pr-16 text-base text-white placeholder:text-white/30 focus:border-luxury-accent/50 focus:outline-none focus:ring-4 focus:ring-luxury-accent/5 transition-all"
             />
             <button
               type="submit"
-              className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-xl bg-purple-700 text-white hover:bg-purple-800 transition-all"
+              className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center rounded-full bg-luxury-accent text-[#0c0414] transition-all hover:bg-luxury-accent-hover active:scale-90"
               aria-label="Buscar"
             >
               <svg
@@ -113,18 +101,23 @@ export function HomeHero() {
         </div>
 
         <div className="relative hidden justify-center lg:flex">
-          <div className="absolute -right-4 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-purple-100" />
+          {/* Elemento Decorativo Elegante */}
           <div className="relative z-10 flex flex-col items-center">
-            <div className="flex h-80 w-64 items-end justify-center overflow-hidden rounded-t-[5rem] bg-gradient-to-b from-purple-200 to-purple-50">
-              <div className="mb-0 h-72 w-56 rounded-t-[4rem] bg-gradient-to-b from-purple-300 to-purple-400 opacity-80" />
+            <div className="relative h-[480px] w-72 overflow-hidden rounded-t-[140px] border border-white/10 bg-gradient-to-b from-white/10 to-transparent p-1">
+              <div className="h-full w-full rounded-t-[136px] bg-gradient-to-b from-luxury-accent/20 to-[#0c0414] opacity-80" />
             </div>
-            <div className="relative -mt-8 rounded-3xl bg-white border border-gray-100 px-6 py-4 text-center">
-              <p className="text-base font-black leading-snug text-purple-700">
-                Respeito, Segurança
-                <br />& Dignidade.
+
+            <div className="relative -mt-16 rounded-3xl border border-white/10 bg-[#0c0414] px-8 py-6 text-center shadow-2xl shadow-black">
+              <p className="font-serif text-lg italic leading-snug text-luxury-accent">
+                "Onde a sofisticação
+                <br />
+                encontra o desejo."
               </p>
             </div>
           </div>
+
+          {/* Anel de luz atrás */}
+          <div className="absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-luxury-accent/5 opacity-50" />
         </div>
       </div>
     </section>

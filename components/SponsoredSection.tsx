@@ -42,9 +42,9 @@ export function SponsoredSection({
       <div>
         <h2 className="font-serif text-xl font-bold italic tracking-tight text-gray-900 sm:text-2xl">
           {title}{" "}
-          <span className="text-purple-700">em Destaque</span>
+          <span className="text-luxury-accent">em Destaque</span>
         </h2>
-        <p className="mt-1 text-sm text-gray-500 sm:text-base">{subtitle}</p>
+        <p className="mt-1 text-sm text-gray-600 sm:text-base">{subtitle}</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

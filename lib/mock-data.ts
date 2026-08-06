@@ -110,12 +110,20 @@ const DEFAULT_EXTRAS: ProfileExtras = {
   payments: ["Efetivo", "Pix"],
 };
 
-function buildAdMeta(id: string, name: string): Pick<Companion, "adId" | "publishedAt"> {
+function buildAdMeta(
+  id: string,
+  name: string,
+  verified: boolean,
+): Pick<Companion, "adId" | "publishedAt" | "verifiedAt"> {
   const slug = name.toLowerCase().replace(/[^a-z]/g, "").slice(0, 3);
   const day = Math.max(1, 12 - Number(id));
+  const publishedAt = `2026-07-${String(day).padStart(2, "0")}T10:00:00.000Z`;
   return {
     adId: `br${id}zb${slug}${Number(id) * 2}`,
-    publishedAt: `2026-07-${String(day).padStart(2, "0")}T10:00:00.000Z`,
+    publishedAt,
+    verifiedAt: verified
+      ? `2026-06-${String(Math.max(1, 20 - Number(id))).padStart(2, "0")}T14:00:00.000Z`
+      : undefined,
   };
 }
 
@@ -129,13 +137,14 @@ type RawCompanion = Omit<
   | "payments"
   | "adId"
   | "publishedAt"
+  | "verifiedAt"
   | "sponsored"
   | "coverPhoto"
 >;
 
 function withProfileExtras(companion: RawCompanion): Companion {
   const extras = PROFILE_EXTRAS[companion.id] ?? DEFAULT_EXTRAS;
-  const adMeta = buildAdMeta(companion.id, companion.name);
+  const adMeta = buildAdMeta(companion.id, companion.name, companion.verified);
   return {
     ...companion,
     ...extras,
@@ -192,7 +201,7 @@ const rawCompanions: RawCompanion[] = [
     latitude: -23.6012,
     longitude: -46.6645,
     online: false,
-    avatarColor: "#7c3aed",
+    avatarColor: "#3d1a5c",
     photos: buildPhotos("2", 4),
   },
   {
@@ -232,7 +241,7 @@ const rawCompanions: RawCompanion[] = [
     latitude: -22.9711,
     longitude: -43.1822,
     online: true,
-    avatarColor: "#6d28d9",
+    avatarColor: "#2a1140",
     photos: buildPhotos("4", 6),
   },
   {
@@ -392,7 +401,7 @@ const rawCompanions: RawCompanion[] = [
     latitude: -19.9356,
     longitude: -43.9256,
     online: false,
-    avatarColor: "#7c3aed",
+    avatarColor: "#3d1a5c",
     photos: buildPhotos("12", 4),
   },
   {
@@ -432,7 +441,7 @@ const rawCompanions: RawCompanion[] = [
     latitude: -19.9167,
     longitude: -43.9345,
     online: true,
-    avatarColor: "#6d28d9",
+    avatarColor: "#2a1140",
     photos: buildPhotos("14", 6),
   },
 ];

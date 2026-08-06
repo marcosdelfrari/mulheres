@@ -43,7 +43,7 @@ export function CompanionContactBar({ phone, whatsappUrl }: CompanionContactBarP
       <div className="mx-auto flex max-w-3xl gap-3">
         <a
           href={`tel:${tel}`}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-fuchsia-700 px-3 py-3.5 text-sm font-bold text-white transition-colors hover:bg-fuchsia-800 active:scale-[0.98]"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-purple-700 px-3 py-3.5 text-sm font-bold text-white transition-colors hover:bg-purple-600 active:scale-[0.98]"
         >
           <PhoneIcon />
           <span className="truncate">{phone}</span>

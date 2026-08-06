@@ -65,7 +65,7 @@ export function Avatar({
     <div
       className={`flex items-center justify-center rounded-3xl font-black text-white ${sizeClasses[size]}`}
       style={{
-        background: `linear-gradient(135deg, ${companion.avatarColor}, #a78bfa)`,
+        background: `linear-gradient(135deg, ${companion.avatarColor}, #3d1a5c)`,
       }}
     >
       {getInitials(companion.name)}

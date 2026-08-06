@@ -2,92 +2,65 @@
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/lib/auth-context";
-import type { UserRole } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { postLoginPath, useAuth } from "@/lib/auth-context";
 
 const inputClass =
-  "w-full rounded border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 focus:border-purple-600 focus:outline-none focus:ring-1 focus:ring-purple-600";
+  "w-full rounded-full border border-white/10 bg-white/5 px-5 py-3 text-base text-white placeholder:text-white/30 focus:border-luxury-accent/50 focus:outline-none focus:ring-2 focus:ring-luxury-accent/10 transition-all";
 
 function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { login, user, isLoading } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<UserRole>("cliente");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const paramRole = searchParams.get("role");
-    if (paramRole === "acompanhante" || paramRole === "cliente") {
-      setRole(paramRole);
-    }
-  }, [searchParams]);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace("/");
+      router.replace(postLoginPath(user));
     }
   }, [user, isLoading, router]);
 
   if (isLoading || user) {
-    return null;
+    return (
+      <p className="text-center text-base text-white/60">Carregando…</p>
+    );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSubmitting(true);
 
-    if (!email || !password) {
-      setError("Preencha e-mail e senha.");
-      return;
+    try {
+      const nextUser = await login(email, password);
+      router.push(postLoginPath(nextUser));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Falha na autenticação.");
+    } finally {
+      setSubmitting(false);
     }
-
-    if (password.length < 4) {
-      setError("Senha com pelo menos 4 caracteres.");
-      return;
-    }
-
-    login(email, password, role);
-    router.push("/");
   };
 
   return (
     <>
-      <h1 className="font-serif text-2xl font-bold italic text-gray-900">Entrar</h1>
-      <p className="mt-1 text-base text-gray-600">
-        Cliente ou acompanhante.
+      <h1 className="font-serif text-3xl font-bold italic text-white">
+        Entrar
+      </h1>
+      <p className="mt-2 text-base text-white/60">
+        Área exclusiva para <span className="text-white">acompanhantes</span>.
+        Use e-mail e senha da sua conta de anúncios.
+      </p>
+      <p className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-relaxed text-white/50">
+        Clientes não precisam de login — navegue no catálogo e entre em contato
+        direto pelo WhatsApp ou telefone.
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-2 rounded border border-gray-200 p-1">
-        <button
-          type="button"
-          onClick={() => setRole("cliente")}
-          className={`rounded py-2.5 text-base font-medium ${
-            role === "cliente"
-              ? "bg-purple-700 text-white"
-              : "text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          Cliente
-        </button>
-        <button
-          type="button"
-          onClick={() => setRole("acompanhante")}
-          className={`rounded py-2.5 text-base font-medium ${
-            role === "acompanhante"
-              ? "bg-purple-700 text-white"
-              : "text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          Acompanhante
-        </button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
         <div>
-          <label className="mb-1 block text-base font-medium text-gray-700">
+          <label className="mb-2 block text-sm font-bold uppercase tracking-widest text-white/50">
             E-mail
           </label>
           <input
@@ -96,11 +69,13 @@ function LoginForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="seu@email.com"
             className={inputClass}
+            autoComplete="email"
+            required
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-base font-medium text-gray-700">
+          <label className="mb-2 block text-sm font-bold uppercase tracking-widest text-white/50">
             Senha
           </label>
           <input
@@ -108,30 +83,51 @@ function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className={inputClass}
+            autoComplete="current-password"
+            required
           />
         </div>
 
         {error && (
-          <p className="rounded border border-red-200 bg-red-50 px-3 py-2 text-base text-red-700">
+          <p className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-base text-red-400">
             {error}
           </p>
         )}
 
         <button
           type="submit"
-          className="w-full rounded bg-purple-700 py-3 text-base font-medium text-white hover:bg-purple-800"
+          disabled={submitting}
+          className="w-full rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:opacity-60 active:scale-[0.98]"
         >
-          Entrar
+          {submitting ? "Aguarde…" : "Entrar"}
         </button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-gray-500">
-        Demonstração: qualquer e-mail e senha com 4+ caracteres.
+      <p className="mt-6 text-center">
+        <Link
+          href="/recuperar-senha"
+          className="text-base text-white/60 underline hover:text-luxury-accent transition-colors"
+        >
+          Esqueci minha senha
+        </Link>
+      </p>
+
+      <p className="mt-8 text-center text-base text-white/60 border-t border-white/5 pt-8">
+        Ainda não anuncia?{" "}
+        <Link
+          href="/criar-conta?role=acompanhante"
+          className="font-bold text-white underline hover:text-luxury-accent transition-colors"
+        >
+          Criar conta de acompanhante
+        </Link>
       </p>
 
       <p className="mt-4 text-center">
-        <Link href="/" className="text-base text-purple-700 underline hover:text-purple-900">
-          Voltar ao catálogo
+        <Link
+          href="/"
+          className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+        >
+          ← Voltar ao catálogo
         </Link>
       </p>
     </>

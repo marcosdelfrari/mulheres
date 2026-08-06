@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
 import type { Companion } from "./types";
+import { companionProfilePath } from "./companion-utils";
+import { SEO_COMPETITOR_KEYWORDS } from "./brand-copy";
+import type { CityHub, NeighborhoodHub } from "./location-hubs";
+import { cityHubPath, neighborhoodHubPath } from "./location-hubs";
 
 export const SITE_NAME = "Mulheres";
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mulheres.com.br";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mulheresdeluxo.com.br";
 
 export const SITE_DESCRIPTION =
   "Catálogo de acompanhantes em Belo Horizonte e todo o Brasil. Perfis verificados, filtros por bairro e contato direto via WhatsApp.";
 
-/** Termos que o público usa ao buscar — inclui concorrentes para capturar tráfego orgânico */
-export const SEARCH_ALTERNATIVES = [
-  "Fatal Model",
-  "Garota com Local",
-  "Photoacompanhante",
-  "Skokka",
-] as const;
+export const DEFAULT_OG_IMAGE = "/opengraph-image";
 
 export const BH_NEIGHBORHOODS = [
   "Savassi",
@@ -37,9 +35,9 @@ export const BH_FAQ = [
       "No Mulheres você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
   },
   {
-    question: "O Mulheres é alternativa ao Fatal Model em BH?",
+    question: "O Mulheres é uma boa opção para quem busca acompanhantes em BH?",
     answer:
-      "Sim. Se você costuma buscar no Fatal Model, Garota com Local, Photoacompanhante ou Skokka, o Mulheres oferece a mesma praticidade com interface moderna, filtros avançados e perfis verificados em Belo Horizonte e região metropolitana.",
+      "Sim. O Mulheres oferece catálogo com perfis verificados, filtros por bairro, interface moderna e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
   },
   {
     question: "Quais bairros de Belo Horizonte têm acompanhantes no catálogo?",
@@ -57,9 +55,9 @@ export const BH_FAQ = [
       "Sim. Muitas acompanhantes em Belo Horizonte atendem em hotel, motel, eventos ou deslocamento. Cada perfil indica os locais de atendimento disponíveis.",
   },
   {
-    question: "Qual a diferença entre Mulheres e sites como Skokka ou Photoacompanhante?",
+    question: "O que o Mulheres oferece?",
     answer:
-      "O Mulheres prioriza perfis verificados, filtros por bairro e distância, e uma experiência limpa sem anúncios invasivos. Funciona como alternativa moderna ao Fatal Model, Garota com Local, Photoacompanhante e Skokka para quem busca acompanhantes em Belo Horizonte.",
+      "Perfis verificados, filtros por bairro e distância, páginas dedicadas por região e uma experiência limpa com contato direto via WhatsApp — sem intermediários.",
   },
 ] as const;
 
@@ -67,9 +65,55 @@ export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+function ogImageMeta(title: string) {
+  return [
+    {
+      url: absoluteUrl(DEFAULT_OG_IMAGE),
+      width: 1200,
+      height: 630,
+      alt: title,
+    },
+  ];
+}
+
+export function buildPageMetadata(options: {
+  title: string;
+  description: string;
+  path: string;
+  type?: "website" | "profile" | "article";
+  overrides?: Partial<Metadata>;
+}): Metadata {
+  const { title, description, path, type = "website", overrides } = options;
+  const url = absoluteUrl(path);
+  const fullTitle = title.includes(SITE_NAME)
+    ? title
+    : `${title} | ${SITE_NAME}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      type,
+      locale: "pt_BR",
+      url,
+      siteName: SITE_NAME,
+      title: fullTitle,
+      description,
+      images: ogImageMeta(fullTitle),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+    },
+    alternates: { canonical: url },
+    ...overrides,
+  };
+}
+
 export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
   const title = `${SITE_NAME} — Acompanhantes em Belo Horizonte e Brasil`;
-  const description = SITE_DESCRIPTION;
   const keywords = [
     "acompanhantes belo horizonte",
     "acompanhantes bh",
@@ -77,11 +121,7 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
     "garotas de programa bh",
     "acompanhantes savassi",
     "acompanhantes lourdes",
-    ...SEARCH_ALTERNATIVES.map((s) => s.toLowerCase()),
-    "fatal model bh",
-    "garota com local bh",
-    "photoacompanhante bh",
-    "skokka bh",
+    ...SEO_COMPETITOR_KEYWORDS,
   ];
 
   return {
@@ -90,7 +130,7 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
       default: title,
       template: `%s | ${SITE_NAME}`,
     },
-    description,
+    description: SITE_DESCRIPTION,
     keywords,
     authors: [{ name: SITE_NAME }],
     creator: SITE_NAME,
@@ -100,12 +140,14 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
       url: SITE_URL,
       siteName: SITE_NAME,
       title,
-      description,
+      description: SITE_DESCRIPTION,
+      images: ogImageMeta(title),
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description,
+      description: SITE_DESCRIPTION,
+      images: [absoluteUrl(DEFAULT_OG_IMAGE)],
     },
     robots: {
       index: true,
@@ -127,64 +169,107 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
 export function buildCompanionMetadata(companion: Companion): Metadata {
   const title = `${companion.name}, ${companion.age} — Acompanhante em ${companion.city}`;
   const description = `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} - ${companion.region}. R$ ${companion.pricePerHour}/hora. ${companion.bio.slice(0, 120)}`;
-  const url = absoluteUrl(`/acompanhante/${companion.id}`);
 
-  return {
+  return buildPageMetadata({
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "profile",
-    },
-    alternates: { canonical: url },
-  };
+    path: companionProfilePath(companion),
+    type: "profile",
+  });
 }
 
 export function buildCatalogMetadata(params: {
   region?: string;
   search?: string;
+  city?: string;
+  neighborhood?: string;
 }): Metadata {
-  const { region, search } = params;
+  const { region, search, city, neighborhood } = params;
 
-  if (search?.toLowerCase().includes("belo horizonte") || search?.toLowerCase() === "bh") {
+  if (neighborhood && city) {
+    const title = `Acompanhantes em ${neighborhood}, ${city}`;
+    const description = `Encontre acompanhantes verificadas em ${neighborhood}, ${city}. Perfis com fotos reais e contato direto via WhatsApp.`;
+    const url = `/catalogo?city=${encodeURIComponent(city)}&neighborhood=${encodeURIComponent(neighborhood)}${region ? `&region=${encodeURIComponent(region)}` : ""}`;
+    return buildPageMetadata({ title, description, path: url });
+  }
+
+  if (
+    search?.toLowerCase().includes("belo horizonte") ||
+    search?.toLowerCase() === "bh"
+  ) {
     return buildBhCatalogMetadata();
   }
 
   if (region === "Minas Gerais") {
-    const title = "Acompanhantes em Minas Gerais";
-    const description =
-      "Catálogo de acompanhantes em Minas Gerais. Belo Horizonte, Contagem, Betim e região. Filtros por bairro, preço e serviços.";
-    const url = absoluteUrl("/catalogo?region=Minas%20Gerais");
-    return { title, description, alternates: { canonical: url } };
+    return buildPageMetadata({
+      title: "Acompanhantes em Minas Gerais",
+      description:
+        "Catálogo de acompanhantes em Minas Gerais. Belo Horizonte, Contagem, Betim e região. Filtros por bairro, preço e serviços.",
+      path: "/catalogo?region=Minas%20Gerais",
+    });
   }
 
   if (search) {
-    const title = `Acompanhantes em ${search}`;
-    const description = `Encontre acompanhantes em ${search}. Perfis verificados, fotos e contato via WhatsApp.`;
-    const url = absoluteUrl(`/catalogo?search=${encodeURIComponent(search)}`);
-    return { title, description, alternates: { canonical: url } };
+    return buildPageMetadata({
+      title: `Acompanhantes em ${search}`,
+      description: `Encontre acompanhantes em ${search}. Perfis verificados, fotos e contato via WhatsApp.`,
+      path: `/catalogo?search=${encodeURIComponent(search)}`,
+    });
   }
 
-  return {
+  return buildPageMetadata({
     title: "Catálogo de Acompanhantes",
     description:
       "Navegue pelo catálogo completo de acompanhantes. Filtre por região, cidade, bairro, preço e serviços.",
-    alternates: { canonical: absoluteUrl("/catalogo") },
-  };
+    path: "/catalogo",
+  });
 }
 
 export function buildBhCatalogMetadata(): Metadata {
-  const title = "Acompanhantes em Belo Horizonte, MG";
-  const description =
-    "Acompanhantes em Belo Horizonte com perfis verificados. Savassi, Lourdes, Funcionários, Pampulha e mais. Alternativa ao Fatal Model, Garota com Local, Photoacompanhante e Skokka.";
-  return {
-    title,
-    description,
-    alternates: { canonical: absoluteUrl("/minas-gerais/belo-horizonte") },
-  };
+  return buildPageMetadata({
+    title: "Acompanhantes em Belo Horizonte, MG",
+    description:
+      "Acompanhantes em Belo Horizonte com perfis verificados. Savassi, Lourdes, Funcionários, Pampulha e mais. Filtros por bairro e contato direto via WhatsApp.",
+    path: "/minas-gerais/belo-horizonte",
+  });
 }
+
+export function buildCityHubMetadata(hub: CityHub): Metadata {
+  return buildPageMetadata({
+    title: hub.title,
+    description: hub.intro.slice(0, 160),
+    path: cityHubPath(hub),
+  });
+}
+
+export function buildNeighborhoodMetadata(
+  hub: CityHub,
+  neighborhood: NeighborhoodHub,
+): Metadata {
+  const title = `Acompanhantes em ${neighborhood.name}, ${hub.city}`;
+  return buildPageMetadata({
+    title,
+    description: neighborhood.intro.slice(0, 160),
+    path: neighborhoodHubPath(hub, neighborhood),
+  });
+}
+
+export function buildGuideMetadata(options: {
+  title: string;
+  description: string;
+  slug: string;
+}): Metadata {
+  return buildPageMetadata({
+    title: options.title,
+    description: options.description,
+    path: `/guias/${options.slug}`,
+    type: "article",
+  });
+}
+
+export const NOINDEX_METADATA: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export function buildWebSiteJsonLd() {
   return {
@@ -212,19 +297,22 @@ export function buildOrganizationJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     description: SITE_DESCRIPTION,
+    logo: absoluteUrl("/og-default.png"),
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "contato@mulheresdeluxo.com.br",
+      availableLanguage: "Portuguese",
+    },
     areaServed: {
-      "@type": "City",
-      name: "Belo Horizonte",
-      containedInPlace: {
-        "@type": "State",
-        name: "Minas Gerais",
-      },
+      "@type": "Country",
+      name: "Brasil",
     },
   };
 }
 
 export function buildFaqJsonLd(
-  faqs: readonly { question: string; answer: string }[]
+  faqs: readonly { question: string; answer: string }[],
 ) {
   return {
     "@context": "https://schema.org",
@@ -240,10 +328,7 @@ export function buildFaqJsonLd(
   };
 }
 
-export function buildItemListJsonLd(
-  companions: Companion[],
-  listName: string
-) {
+export function buildItemListJsonLd(companions: Companion[], listName: string) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -252,9 +337,25 @@ export function buildItemListJsonLd(
     itemListElement: companions.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: absoluteUrl(`/acompanhante/${c.id}`),
+      url: absoluteUrl(companionProfilePath(c)),
       name: `${c.name} — Acompanhante em ${c.neighborhood}, ${c.city}`,
     })),
+  };
+}
+
+export function buildCollectionPageJsonLd(options: {
+  name: string;
+  description: string;
+  url: string;
+  companions: Companion[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: options.name,
+    description: options.description,
+    url: options.url,
+    mainEntity: buildItemListJsonLd(options.companions, options.name),
   };
 }
 
@@ -264,7 +365,7 @@ export function buildCompanionJsonLd(companion: Companion) {
     "@type": "Person",
     name: companion.name,
     description: companion.bio,
-    url: absoluteUrl(`/acompanhante/${companion.id}`),
+    url: absoluteUrl(companionProfilePath(companion)),
     address: {
       "@type": "PostalAddress",
       addressLocality: companion.city,
@@ -274,9 +375,7 @@ export function buildCompanionJsonLd(companion: Companion) {
   };
 }
 
-export function buildBreadcrumbJsonLd(
-  items: { name: string; url: string }[]
-) {
+export function buildBreadcrumbJsonLd(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -286,5 +385,33 @@ export function buildBreadcrumbJsonLd(
       name: item.name,
       item: item.url,
     })),
+  };
+}
+
+export function buildArticleJsonLd(options: {
+  title: string;
+  description: string;
+  url: string;
+  datePublished: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: options.title,
+    description: options.description,
+    url: options.url,
+    datePublished: options.datePublished,
+    author: {
+      "@type": "Organization",
+      name: SITE_NAME,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/og-default.png"),
+      },
+    },
   };
 }

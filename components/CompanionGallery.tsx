@@ -67,7 +67,7 @@ export function CompanionGallery({
               onClick={() => setActiveIndex(index)}
               className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors ${
                 index === activeIndex
-                  ? "border-purple-700"
+                  ? "border-luxury-accent"
                   : "border-transparent opacity-70 hover:opacity-100"
               }`}
               aria-label={`Ver foto ${index + 1} de ${name}`}

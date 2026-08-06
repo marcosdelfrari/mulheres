@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { Header } from "@/components/Header";
+import { CreateListingFab } from "@/components/CreateListingFab";
+import { CompanionListingPrompt } from "@/components/CompanionListingPrompt";
 import { Footer } from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { JsonLd } from "@/components/JsonLd";
+import { WebMcp } from "@/components/WebMcp";
 import {
   buildDefaultMetadata,
   buildOrganizationJsonLd,
@@ -42,12 +46,16 @@ export default function RootLayout({
       <head>
         <GoogleAnalytics />
       </head>
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
+      <body className="flex min-h-full flex-col bg-white text-gray-900">
+        <Script src="/webmcp.js" strategy="afterInteractive" />
+        <WebMcp />
         <JsonLd data={[buildWebSiteJsonLd(), buildOrganizationJsonLd()]} />
         <AuthProvider>
           <Header />
-          <main className="w-full flex-1">{children}</main>
+          <main className="flex w-full flex-1 flex-col">{children}</main>
           <Footer />
+          <CreateListingFab />
+          <CompanionListingPrompt />
         </AuthProvider>
       </body>
     </html>

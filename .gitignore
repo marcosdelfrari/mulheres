@@ -45,3 +45,9 @@ yarn-error.log*
 
 # cursor
 .cursor/
+
+/lib/generated/prisma
+
+# uploads
+/public/uploads
+/lib/generated

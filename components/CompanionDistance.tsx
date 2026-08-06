@@ -29,7 +29,7 @@ export function CompanionDistance({ companion }: { companion: Companion }) {
   if (distanceKm === null) return null;
 
   return (
-    <span className="inline-block rounded-lg bg-purple-50 px-2 py-0.5 text-xs font-bold text-purple-700">
+    <span className="inline-block rounded-lg bg-purple-50 px-2 py-0.5 text-xs font-bold text-luxury-accent">
       {formatDistance(distanceKm)} de você
     </span>
   );

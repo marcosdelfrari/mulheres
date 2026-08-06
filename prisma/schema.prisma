@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  cliente
+  acompanhante
+}
+
+enum VerificationStatus {
+  pending
+  submitted
+  verified
+  rejected
+}
+
+enum VerificationMethod {
+  documento
+  foto_perfil
+}
+
+enum ListingStatus {
+  draft
+  published
+  paused
+}
+
+enum LuxoPaymentStatus {
+  pending
+  paid
+  expired
+  cancelled
+}
+
+model User {
+  id                 String             @id @default(cuid())
+  email              String             @unique
+  passwordHash       String
+  name               String
+  role               UserRole           @default(acompanhante)
+  phone              String?
+  verificationStatus VerificationStatus @default(pending)
+  verificationMethod VerificationMethod?
+  documentPhotoUrl   String?
+  profilePhotoUrl    String?
+  verifiedAt         DateTime?
+  lastLoginAt        DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  sessions           Session[]
+  passwordResets     PasswordResetToken[]
+  listings           Listing[]
+  luxoPayments       LuxoPayment[]
+  oauthCodes         OAuthAuthorizationCode[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Listing {
+  id               String        @id @default(cuid())
+  userId           String
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  description      String
+  pricePerHour     Int
+  age              Int           @default(25)
+  gender           String        @default("Mulher")
+  region           String        @default("Minas Gerais")
+  city             String        @default("Belo Horizonte")
+  neighborhood     String        @default("")
+  phone            String?
+  whatsapp         String?
+  services         String[]      @default([])
+  servicesFor      String[]      @default([])
+  serviceLocations String[]      @default([])
+  status           ListingStatus @default(draft)
+  isLuxo           Boolean       @default(false)
+  luxoUntil        DateTime?
+  online           Boolean       @default(true)
+  photoUrl         String?
+  photos           String[]      @default([])
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  luxoPayments LuxoPayment[]
+
+  @@index([userId])
+  @@index([status, isLuxo])
+}
+
+model LuxoPayment {
+  id        String            @id @default(cuid())
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing           @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  amount    Int
+  pixCode   String
+  pixKey    String
+  hours     Int               @default(4)
+  status    LuxoPaymentStatus @default(pending)
+  paidAt    DateTime?
+  expiresAt DateTime
+  createdAt DateTime          @default(now())
+
+  @@index([userId])
+  @@index([listingId])
+  @@index([status])
+}
+
+model OAuthAuthorizationCode {
+  id                  String    @id @default(cuid())
+  codeHash            String    @unique
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId            String
+  redirectUri         String
+  scope               String    @default("openid profile email")
+  codeChallenge       String?
+  codeChallengeMethod String?
+  expiresAt           DateTime
+  usedAt              DateTime?
+  createdAt           DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}

@@ -27,22 +27,22 @@ export function TopCompanions() {
   }, [location]);
 
   return (
-    <section className="mx-auto max-w-6xl space-y-12 px-4 py-12 sm:px-6">
+    <section className="mx-auto max-w-6xl space-y-12 bg-white px-4 py-12 sm:px-6">
       <SponsoredSection />
 
       <div>
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="font-serif text-3xl font-bold italic tracking-tight text-gray-900">
-              Acompanhantes <span className="text-purple-700">Tops</span>
+              Acompanhantes <span className="text-luxury-accent">Tops</span>
             </h2>
-            <p className="mt-2 text-lg font-medium text-gray-500">
+            <p className="mt-2 text-lg font-medium text-gray-600">
               As profissionais verificadas em destaque.
             </p>
           </div>
           <Link
             href="/catalogo"
-            className="hidden text-sm font-black uppercase tracking-widest text-purple-700 hover:text-purple-900 sm:block"
+            className="hidden text-sm font-black uppercase tracking-widest text-purple-800 hover:text-luxury-accent sm:block"
           >
             Ver todas →
           </Link>
@@ -61,7 +61,7 @@ export function TopCompanions() {
         <div className="mt-10 text-center sm:hidden">
           <Link
             href="/catalogo"
-            className="inline-block rounded-2xl bg-gray-100 px-8 py-4 text-base font-black uppercase tracking-widest text-gray-900 hover:bg-gray-200"
+            className="inline-block rounded-full bg-gray-900 px-8 py-4 text-base font-bold text-white hover:bg-black"
           >
             Ver catálogo completo
           </Link>

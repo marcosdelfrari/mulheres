@@ -1,0 +1,8 @@
+{
+  "kty": "RSA",
+  "n": "3uTwGsYVeeNUE9GSAMQOoGot2r5ob3wHv-sQOnhfVCc9jRV3Wyq2Llik_1vq8GNlIlCiWIrYSnHZ102w-QHl_XuzTV5B9BQbQYW9-UkqeIrl_KrBu1jj6O7blJLljeezako6hGd_cF8vpIlu4XGM94D5PvSzyxMvfGRQBuS7r2b3nMXgwqa0cXgCrYTe9nHbQLPLNEvWh6qHVXTJvkXqlggkuHU8RJCUU6fz5RrTAIaZM7UoIj2A_q3QWUhYftyUFv46-dkyr-8J-jQMd0c-rX5cc_E9YU-t8ikmxvMtuF1-yA2dvSonJ8D3atAG6731dfdJ9cpGV8zTlBTZ4-LTKw",
+  "e": "AQAB",
+  "alg": "RS256",
+  "use": "sig",
+  "kid": "mulheres-1"
+}

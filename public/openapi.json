@@ -1,0 +1,292 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Mulheres API",
+    "description": "HTTP APIs for authentication, listings and profile verification on Mulheres.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Mulheres",
+      "url": "https://mulheresdeluxo.com.br/contato",
+      "email": "contato@mulheresdeluxo.com.br"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://mulheresdeluxo.com.br",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/api/auth/me": {
+      "get": {
+        "summary": "Current authenticated user",
+        "tags": ["Auth"],
+        "responses": {
+          "200": {
+            "description": "Session user payload"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login",
+        "tags": ["Auth"],
+        "responses": {
+          "200": {
+            "description": "Logged in"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register account",
+        "tags": ["Auth"],
+        "responses": {
+          "201": {
+            "description": "Account created"
+          }
+        }
+      }
+    },
+    "/api/listings": {
+      "get": {
+        "summary": "List current user ads",
+        "tags": ["Listings"],
+        "responses": {
+          "200": {
+            "description": "Listings for the authenticated companion"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create listing with photos (S3)",
+        "tags": ["Listings"],
+        "responses": {
+          "201": {
+            "description": "Listing created"
+          }
+        }
+      }
+    },
+    "/api/listings/{id}": {
+      "patch": {
+        "summary": "Update listing",
+        "tags": ["Listings"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listing updated"
+          }
+        }
+      }
+    },
+    "/api/profile/verify": {
+      "post": {
+        "summary": "Submit verification photo",
+        "tags": ["Profile"],
+        "responses": {
+          "200": {
+            "description": "Profile verified"
+          }
+        }
+      }
+    },
+    "/api/luxo": {
+      "post": {
+        "summary": "Create Luxo PIX payment for listing promotion",
+        "tags": ["Luxo"],
+        "responses": {
+          "200": {
+            "description": "PIX payment created"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Confirm Luxo payment",
+        "tags": ["Luxo"],
+        "responses": {
+          "200": {
+            "description": "Listing promoted"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": ["Discovery"],
+        "responses": {
+          "200": {
+            "description": "Service is healthy"
+          }
+        }
+      }
+    },
+    "/.well-known/oauth-protected-resource": {
+      "get": {
+        "summary": "OAuth Protected Resource Metadata (RFC 9728)",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "Protected resource metadata"
+          }
+        }
+      }
+    },
+    "/.well-known/openid-configuration": {
+      "get": {
+        "summary": "OpenID Connect Discovery",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "OIDC provider metadata"
+          }
+        }
+      }
+    },
+    "/.well-known/oauth-authorization-server": {
+      "get": {
+        "summary": "OAuth 2.0 Authorization Server Metadata (RFC 8414)",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "OAuth AS metadata including agent_auth"
+          }
+        }
+      }
+    },
+    "/auth.md": {
+      "get": {
+        "summary": "Auth.md agent registration instructions",
+        "tags": ["OAuth", "Discovery"],
+        "responses": {
+          "200": {
+            "description": "Markdown Auth.md skill document"
+          }
+        }
+      }
+    },
+    "/agent/identity": {
+      "post": {
+        "summary": "Register an agent identity (Auth.md)",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "Registration / identity assertion"
+          }
+        }
+      }
+    },
+    "/agent/identity/claim": {
+      "post": {
+        "summary": "Claim ceremony for agent registration",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "Claim ceremony payload or completed assertion"
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "summary": "OAuth token endpoint",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "Access token response"
+          }
+        }
+      }
+    },
+    "/oauth/revoke": {
+      "post": {
+        "summary": "OAuth token revocation (RFC 7009)",
+        "tags": ["OAuth"],
+        "responses": {
+          "200": {
+            "description": "Token revoked"
+          }
+        }
+      }
+    },
+    "/.well-known/api-catalog": {
+      "get": {
+        "summary": "API catalog (RFC 9727 linkset)",
+        "tags": ["Discovery"],
+        "responses": {
+          "200": {
+            "description": "Linkset API catalog"
+          }
+        }
+      }
+    },
+    "/.well-known/mcp/server-card.json": {
+      "get": {
+        "summary": "MCP Server Card (SEP-1649 / SEP-2127)",
+        "tags": ["Discovery", "MCP"],
+        "responses": {
+          "200": {
+            "description": "MCP Server Card with serverInfo, transport, capabilities"
+          }
+        }
+      }
+    },
+    "/mcp": {
+      "post": {
+        "summary": "MCP Streamable HTTP JSON-RPC endpoint",
+        "tags": ["MCP"],
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response"
+          }
+        }
+      },
+      "get": {
+        "summary": "MCP transport discovery hint",
+        "tags": ["MCP"],
+        "responses": {
+          "200": {
+            "description": "How to connect via Streamable HTTP"
+          }
+        }
+      }
+    },
+    "/mcp/server-card": {
+      "get": {
+        "summary": "MCP Server Card (alternate SEP path)",
+        "tags": ["Discovery", "MCP"],
+        "responses": {
+          "200": {
+            "description": "Same card as /.well-known/mcp/server-card.json"
+          }
+        }
+      }
+    },
+    "/.well-known/agent-skills/index.json": {
+      "get": {
+        "summary": "Agent Skills Discovery index (RFC v0.2.0)",
+        "tags": ["Discovery"],
+        "responses": {
+          "200": {
+            "description": "Skills index with $schema, skills[], name/type/description/url/digest"
+          }
+        }
+      }
+    }
+  }
+}

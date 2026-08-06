@@ -30,118 +30,105 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
   const hasLocal = companion.serviceLocations.includes("Em casa");
 
   return (
-    <section className="mx-auto max-w-3xl">
-      <div className="relative h-32 w-full overflow-hidden bg-gray-200 sm:h-36">
-        <Image
-          src={companion.coverPhoto}
-          alt={`Capa de ${companion.name}`}
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority
-        />
-      </div>
-
-      <div className="px-4 sm:px-6">
-        <div className="-mt-10 flex items-end gap-3">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-[3px] border-white bg-gray-100 shadow-sm sm:h-24 sm:w-24">
-            {profilePhoto ? (
-              <Image
-                src={profilePhoto}
-                alt={companion.name}
-                fill
-                className="object-cover"
-                sizes="88px"
-                priority
-              />
-            ) : (
-              <div
-                className="flex h-full w-full items-center justify-center text-xl font-black text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${companion.avatarColor}, #a78bfa)`,
-                }}
-              >
-                {companion.name.slice(0, 1)}
-              </div>
-            )}
-          </div>
-
-          <div className="min-w-0 flex-1 pb-0.5">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <h1 className="font-serif text-xl font-bold italic leading-tight text-gray-900 sm:text-2xl">
-                {companion.name}
-              </h1>
-              <VerifiedBadge verified={companion.verified} size="sm" />
-              <OnlineBadge online={companion.online} />
+    <section className="mx-auto max-w-3xl px-4 pt-2 sm:px-6">
+      <div className="flex items-center gap-3">
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 sm:h-24 sm:w-24">
+          {profilePhoto ? (
+            <Image
+              src={profilePhoto}
+              alt={companion.name}
+              fill
+              className="object-cover"
+              sizes="88px"
+              priority
+            />
+          ) : (
+            <div
+              className="flex h-full w-full items-center justify-center text-xl font-black text-white"
+              style={{
+                background: `linear-gradient(135deg, ${companion.avatarColor}, #3d1a5c)`,
+              }}
+            >
+              {companion.name.slice(0, 1)}
             </div>
-            <p className="mt-0.5 text-xs text-gray-500 sm:text-sm">
-              Mulher · {companion.age} anos
-            </p>
-          </div>
+          )}
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5">
-            <p className="flex items-center gap-1 text-xs font-bold text-purple-700">
-              <svg
-                className="h-3.5 w-3.5 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              Valores
-            </p>
-            <p className="mt-1 text-sm font-bold leading-snug text-gray-900">
-              R$ {companion.pricePerHour}
-              <span className="font-normal text-gray-500"> /h</span>
-            </p>
-            <p className="mt-0.5 line-clamp-2 text-xs text-gray-500">
-              {formatServicesFor(companion.servicesFor)}
-            </p>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <h1 className="font-serif text-xl font-bold italic leading-tight text-gray-900 sm:text-2xl">
+              {companion.name}
+            </h1>
+            <VerifiedBadge verified={companion.verified} size="sm" />
+            <OnlineBadge online={companion.online} />
           </div>
+          <p className="mt-0.5 text-xs text-gray-500 sm:text-sm">
+            {companion.gender ?? "Mulher"} · {companion.age} anos
+          </p>
+        </div>
+      </div>
 
-          <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5">
-            <p className="flex items-center gap-1 text-xs font-bold text-purple-700">
-              <svg
-                className="h-3.5 w-3.5 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              Localização
-            </p>
-            <p className="mt-1 text-sm font-bold leading-snug text-gray-900">
-              {companion.neighborhood}
-            </p>
-            <p className="mt-0.5 text-xs text-gray-500">
-              {companion.city} - {uf}
-              {hasLocal && " · com local"}
-            </p>
-            <div className="mt-1">
-              <CompanionDistance companion={companion} />
-            </div>
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5">
+          <p className="flex items-center gap-1 text-xs font-bold text-luxury-accent">
+            <svg
+              className="h-3.5 w-3.5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Valores
+          </p>
+          <p className="mt-1 text-sm font-bold leading-snug text-gray-900">
+            R$ {companion.pricePerHour}
+            <span className="font-normal text-gray-500"> /h</span>
+          </p>
+          <p className="mt-0.5 line-clamp-2 text-xs text-gray-500">
+            {formatServicesFor(companion.servicesFor)}
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5">
+          <p className="flex items-center gap-1 text-xs font-bold text-luxury-accent">
+            <svg
+              className="h-3.5 w-3.5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            Localização
+          </p>
+          <p className="mt-1 text-sm font-bold leading-snug text-gray-900">
+            {companion.neighborhood}
+          </p>
+          <p className="mt-0.5 text-xs text-gray-500">
+            {companion.city} - {uf}
+            {hasLocal && " · com local"}
+          </p>
+          <div className="mt-1">
+            <CompanionDistance companion={companion} />
           </div>
         </div>
       </div>

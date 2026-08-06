@@ -7,7 +7,7 @@ export default function NotFound() {
       <p className="mt-2 text-lg text-gray-600">Perfil não encontrado</p>
       <Link
         href="/"
-        className="mt-6 rounded bg-purple-700 px-6 py-3 text-base font-medium text-white hover:bg-purple-800"
+        className="mt-6 rounded-full bg-[#0c0414] px-6 py-3 text-base font-medium text-white hover:bg-purple-900"
       >
         Voltar ao catálogo
       </Link>

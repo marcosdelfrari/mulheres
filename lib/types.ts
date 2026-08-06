@@ -1,5 +1,11 @@
 export type UserRole = "cliente" | "acompanhante";
 
+export type VerificationStatus =
+  | "pending"
+  | "submitted"
+  | "verified"
+  | "rejected";
+
 export type Region =
   | "São Paulo"
   | "Rio de Janeiro"
@@ -13,6 +19,12 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  phone?: string | null;
+  verificationStatus?: VerificationStatus;
+  verificationMethod?: string | null;
+  documentPhotoUrl?: string | null;
+  profilePhotoUrl?: string | null;
+  verifiedAt?: string | null;
 }
 
 export interface Companion {
@@ -41,7 +53,9 @@ export interface Companion {
   photos: string[];
   adId: string;
   publishedAt: string;
+  verifiedAt?: string;
   sponsored: boolean;
+  gender?: string;
 }
 
 export interface Coordinates {
@@ -61,10 +75,7 @@ export interface CatalogFilters {
   selectedServices: string[];
   selectedServicesFor: string[];
   selectedLocations: string[];
-  selectedNationalities: string[];
-  selectedBreastTypes: string[];
-  selectedHairTypes: string[];
-  selectedBodyTypes: string[];
+  selectedGenders: string[];
 }
 
 export const DEFAULT_CATALOG_FILTERS: CatalogFilters = {
@@ -79,8 +90,5 @@ export const DEFAULT_CATALOG_FILTERS: CatalogFilters = {
   selectedServices: [],
   selectedServicesFor: [],
   selectedLocations: [],
-  selectedNationalities: [],
-  selectedBreastTypes: [],
-  selectedHairTypes: [],
-  selectedBodyTypes: [],
+  selectedGenders: [],
 };

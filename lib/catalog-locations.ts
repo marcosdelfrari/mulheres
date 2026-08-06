@@ -42,15 +42,4 @@ export const FILTER_LOCATIONS = [
   "Eventos e festas",
 ];
 
-export const FILTER_NATIONALITIES = [
-  "Brasileira",
-  "Argentina",
-  "Colombiana",
-  "Paraguaia",
-];
-
-export const FILTER_BREAST_TYPES = ["Naturais", "Siliconados"];
-
-export const FILTER_HAIR_TYPES = ["Loiro", "Moreno", "Ruivo", "Preto"];
-
-export const FILTER_BODY_TYPES = ["Magra", "Atlética", "Curvilínea", "Plus size"];
+export const FILTER_GENDERS = ["Mulher", "Travesti", "Trans"];

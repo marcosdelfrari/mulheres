@@ -11,52 +11,110 @@ import type { User, UserRole } from "./types";
 
 interface AuthContextValue {
   user: User | null;
-  login: (email: string, password: string, role: UserRole) => void;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<User>;
+  register: (input: {
+    name: string;
+    email: string;
+    password: string;
+    role: UserRole;
+    phone?: string;
+  }) => Promise<User>;
+  logout: () => Promise<void>;
+  refresh: () => Promise<void>;
+  setUser: (user: User | null) => void;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const STORAGE_KEY = "mulheres-auth";
+async function readError(res: Response) {
+  try {
+    const data = (await res.json()) as { error?: string };
+    return data.error ?? "Algo deu errado.";
+  } catch {
+    return "Algo deu errado.";
+  }
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setUser(JSON.parse(stored) as User);
+      const res = await fetch("/api/auth/me", { credentials: "include" });
+      if (!res.ok) {
+        setUser(null);
+        return;
       }
+      const data = (await res.json()) as { user: User | null };
+      setUser(data.user);
     } catch {
-      localStorage.removeItem(STORAGE_KEY);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
-  const login = useCallback(
-    (email: string, _password: string, role: UserRole) => {
-      const mockUser: User = {
-        id: crypto.randomUUID(),
-        email,
-        name: role === "acompanhante" ? "Perfil Acompanhante" : "Cliente",
-        role,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(mockUser));
-      setUser(mockUser);
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  const login = useCallback(async (email: string, password: string) => {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      throw new Error(await readError(res));
+    }
+
+    const data = (await res.json()) as { user: User };
+    setUser(data.user);
+    return data.user;
+  }, []);
+
+  const register = useCallback(
+    async (input: {
+      name: string;
+      email: string;
+      password: string;
+      role: UserRole;
+      phone?: string;
+    }) => {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(input),
+      });
+
+      if (!res.ok) {
+        throw new Error(await readError(res));
+      }
+
+      const data = (await res.json()) as { user: User };
+      setUser(data.user);
+      return data.user;
     },
     []
   );
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+  const logout = useCallback(async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
     setUser(null);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, refresh, setUser, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -68,4 +126,11 @@ export function useAuth() {
     throw new Error("useAuth deve ser usado dentro de AuthProvider");
   }
   return context;
+}
+
+export function postLoginPath(user: User) {
+  if (user.role === "acompanhante") {
+    return "/conta";
+  }
+  return "/";
 }

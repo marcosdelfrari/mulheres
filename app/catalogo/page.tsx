@@ -1,23 +1,77 @@
-import type { Metadata } from "next";
-import { CatalogView } from "@/components/CatalogView";
-import { buildCatalogMetadata } from "@/lib/seo";
 import { Suspense } from "react";
+import { CatalogInteractive } from "@/components/CatalogInteractive";
+import { JsonLd } from "@/components/JsonLd";
+import { companions } from "@/lib/mock-data";
+import {
+  filterCompanions,
+  getCatalogHeading,
+  parseCatalogSearchParams,
+} from "@/lib/catalog-filter";
+import {
+  absoluteUrl,
+  buildCatalogMetadata,
+  buildCollectionPageJsonLd,
+} from "@/lib/seo";
 
 interface PageProps {
-  searchParams: Promise<{ region?: string; search?: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: PageProps) {
   const params = await searchParams;
-  return buildCatalogMetadata(params);
+  return buildCatalogMetadata({
+    region: typeof params.region === "string" ? params.region : undefined,
+    search: typeof params.search === "string" ? params.search : undefined,
+    city: typeof params.city === "string" ? params.city : undefined,
+    neighborhood:
+      typeof params.neighborhood === "string" ? params.neighborhood : undefined,
+  });
 }
 
-export default function CatalogPage() {
+export default async function CatalogPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const filters = parseCatalogSearchParams(params);
+  const items = filterCompanions(companions, filters);
+  const heading = getCatalogHeading(filters);
+  const canonicalPath = (() => {
+    const qs = new URLSearchParams();
+    if (filters.region !== "all") qs.set("region", filters.region);
+    if (filters.search) qs.set("search", filters.search);
+    if (filters.city) qs.set("city", filters.city);
+    if (filters.neighborhood !== "all")
+      qs.set("neighborhood", filters.neighborhood);
+    const q = qs.toString();
+    return q ? `/catalogo?${q}` : "/catalogo";
+  })();
+
   return (
-    <Suspense>
-      <CatalogView />
-    </Suspense>
+    <>
+      <JsonLd
+        data={buildCollectionPageJsonLd({
+          name: heading.title,
+          description: heading.description,
+          url: absoluteUrl(canonicalPath),
+          companions: items.map((i) => i.companion),
+        })}
+      />
+
+      <div
+        id="catalogo"
+        className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6"
+      >
+        <header>
+          <h1 className="font-serif text-2xl font-bold italic tracking-tight text-gray-900 sm:text-3xl">
+            {heading.title}
+          </h1>
+          <p className="mt-2 max-w-3xl text-base leading-relaxed text-gray-600">
+            {heading.description}
+          </p>
+        </header>
+
+        <Suspense>
+          <CatalogInteractive initialFilters={filters} />
+        </Suspense>
+      </div>
+    </>
   );
 }
