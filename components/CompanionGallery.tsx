@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useAgeGate } from "@/lib/age-gate-context";
+import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 
 interface CompanionGalleryProps {
   photos: string[];
@@ -16,10 +18,19 @@ export function CompanionGallery({
 }: CompanionGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
+  const { verified, requestVerification } = useAgeGate();
 
   if (photos.length === 0) return null;
 
   const isEmbedded = variant === "embedded";
+
+  const openFullscreen = () => {
+    if (!verified) {
+      requestVerification();
+      return;
+    }
+    setFullscreen(true);
+  };
 
   return (
     <>
@@ -43,20 +54,26 @@ export function CompanionGallery({
 
         <button
           type="button"
-          onClick={() => setFullscreen(true)}
+          onClick={openFullscreen}
           className={`relative block aspect-[4/5] w-full overflow-hidden bg-gray-100 ${
             isEmbedded ? "max-h-[480px] rounded-2xl" : "max-h-[520px]"
           }`}
-          aria-label={`Ampliar foto de ${name}`}
+          aria-label={
+            verified
+              ? `Ampliar foto de ${name}`
+              : "Verificar idade para ver a foto"
+          }
         >
-          <Image
-            src={photos[activeIndex]}
-            alt={`${name} — foto ${activeIndex + 1}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 720px"
-            priority
-          />
+          <AgeRestrictedMedia className="absolute inset-0" interactive={false}>
+            <Image
+              src={photos[activeIndex]}
+              alt={`${name} — foto ${activeIndex + 1}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 720px"
+              priority
+            />
+          </AgeRestrictedMedia>
         </button>
 
         <div className={`flex gap-2 overflow-x-auto ${isEmbedded ? "pt-4" : "p-4 sm:p-5"}`}>
@@ -64,7 +81,13 @@ export function CompanionGallery({
             <button
               key={photo}
               type="button"
-              onClick={() => setActiveIndex(index)}
+              onClick={() => {
+                if (!verified) {
+                  requestVerification();
+                  return;
+                }
+                setActiveIndex(index);
+              }}
               className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors ${
                 index === activeIndex
                   ? "border-luxury-accent"
@@ -72,19 +95,21 @@ export function CompanionGallery({
               }`}
               aria-label={`Ver foto ${index + 1} de ${name}`}
             >
-              <Image
-                src={photo}
-                alt={`${name} — miniatura ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="64px"
-              />
+              <AgeRestrictedMedia className="absolute inset-0" interactive={false}>
+                <Image
+                  src={photo}
+                  alt={`${name} — miniatura ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="64px"
+                />
+              </AgeRestrictedMedia>
             </button>
           ))}
         </div>
       </section>
 
-      {fullscreen && (
+      {fullscreen && verified && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => setFullscreen(false)}

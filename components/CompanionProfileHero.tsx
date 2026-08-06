@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import type { Companion, Region } from "@/lib/types";
+import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 import { CompanionDistance } from "./CompanionDistance";
 import { VerifiedBadge, OnlineBadge } from "./VerifiedBadge";
 
@@ -32,7 +35,7 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
   return (
     <section className="mx-auto max-w-3xl px-4 pt-2 sm:px-6">
       <div className="flex items-center gap-3">
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 sm:h-24 sm:w-24">
+        <AgeRestrictedMedia className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 sm:h-24 sm:w-24" interactive={false}>
           {profilePhoto ? (
             <Image
               src={profilePhoto}
@@ -52,7 +55,7 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
               {companion.name.slice(0, 1)}
             </div>
           )}
-        </div>
+        </AgeRestrictedMedia>
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { companionProfilePath } from "@/lib/companion-utils";
 import type { Companion } from "@/lib/types";
 import { formatDistance } from "@/lib/geo";
+import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 import { OnlineBadge, VerifiedBadge } from "./VerifiedBadge";
 
 interface SponsoredCompanionCardProps {
@@ -24,18 +27,20 @@ export function SponsoredCompanionCard({
       href={companionProfilePath(companion)}
       className="group flex flex-col overflow-hidden rounded-3xl border border-luxury-accent/35 bg-[#0c0414] transition-colors hover:border-luxury-accent/70 sm:flex-row sm:items-stretch"
     >
-      <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-black/40 sm:aspect-auto sm:h-auto sm:w-48 sm:self-stretch">
-        <Image
-          src={companion.photos[0]}
-          alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
-          fill
-          className="object-cover transition-transform group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, 192px"
-          priority={priority}
-          fetchPriority={priority ? "high" : "auto"}
-        />
+      <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-black/40 sm:aspect-auto sm:h-auto sm:w-48 sm:self-stretch sm:min-h-[12rem]">
+        <AgeRestrictedMedia className="absolute inset-0" interactive={false}>
+          <Image
+            src={companion.photos[0]}
+            alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, 192px"
+            priority={priority}
+            fetchPriority={priority ? "high" : "auto"}
+          />
+        </AgeRestrictedMedia>
         {distanceKm !== undefined && (
-          <span className="absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">
+          <span className="pointer-events-none absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">
             {formatDistance(distanceKm)} de você
           </span>
         )}

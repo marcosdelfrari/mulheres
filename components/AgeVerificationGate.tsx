@@ -2,28 +2,24 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import {
-  AGE_MINIMUM,
-  AGE_SCAN_MS,
-  readAgeVerifiedCookie,
-  writeAgeVerifiedCookie,
-} from "@/lib/age-gate";
+import { useAgeGate } from "@/lib/age-gate-context";
+import { AGE_MINIMUM, AGE_SCAN_MS } from "@/lib/age-gate";
 
 type GatePhase =
-  | "boot"
   | "intro"
   | "loading_models"
   | "ready_camera"
   | "scanning"
   | "passed"
   | "denied"
-  | "error"
-  | "done";
+  | "error";
 
 const MODEL_URL = "/models/face-api";
 const EXIT_URL = "https://www.google.com";
 
 export function AgeVerificationGate() {
+  const { open, closeVerification, completeVerification } = useAgeGate();
+
   const webcamRef = useRef<Webcam>(null);
   const agesRef = useRef<number[]>([]);
   const loopActiveRef = useRef(false);
@@ -32,22 +28,30 @@ export function AgeVerificationGate() {
     null,
   );
 
-  const [phase, setPhase] = useState<GatePhase>("boot");
+  const [phase, setPhase] = useState<GatePhase>("intro");
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    setPhase(readAgeVerifiedCookie() ? "done" : "intro");
-  }, []);
+    if (!open) {
+      loopActiveRef.current = false;
+      expectCameraRef.current = false;
+      setPhase("intro");
+      setProgress(0);
+      setMessage("");
+      return;
+    }
+    setPhase("intro");
+  }, [open]);
 
   useEffect(() => {
-    if (phase === "done" || phase === "boot") return;
+    if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [phase]);
+  }, [open]);
 
   useEffect(() => {
     return () => {
@@ -56,10 +60,11 @@ export function AgeVerificationGate() {
   }, []);
 
   const finishPassed = useCallback(() => {
-    writeAgeVerifiedCookie();
     setPhase("passed");
-    window.setTimeout(() => setPhase("done"), 900);
-  }, []);
+    window.setTimeout(() => {
+      completeVerification();
+    }, 800);
+  }, [completeVerification]);
 
   const startScanLoop = useCallback(async () => {
     const faceapi = faceapiRef.current;
@@ -153,7 +158,7 @@ export function AgeVerificationGate() {
     }
   }, []);
 
-  if (phase === "boot" || phase === "done") {
+  if (!open) {
     return null;
   }
 
@@ -169,7 +174,19 @@ export function AgeVerificationGate() {
       aria-modal="true"
       aria-labelledby="age-gate-title"
     >
-      <div className="absolute inset-0 bg-[#0c0414]/55 backdrop-blur-xl" />
+      <button
+        type="button"
+        className="absolute inset-0 bg-[#0c0414]/55 backdrop-blur-xl"
+        aria-label="Fechar verificação"
+        onClick={() => {
+          if (phase === "scanning" || phase === "loading_models" || phase === "ready_camera") {
+            return;
+          }
+          if (phase !== "denied") {
+            closeVerification();
+          }
+        }}
+      />
 
       <div className="relative z-10 w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#12081c] text-white shadow-2xl shadow-black/50">
         <div className="border-b border-white/10 px-6 py-5">
@@ -190,9 +207,9 @@ export function AgeVerificationGate() {
             <strong className="font-semibold text-white/90">
               Estatuto da Criança e do Adolescente (ECA — Lei nº 8.069/1990)
             </strong>
-            , o acesso a conteúdo adulto exige verificação de idade. A análise
-            usa a câmera por cerca de 3 segundos para estimar a idade pelo
-            rosto — processada neste dispositivo, sem gravar ou enviar a imagem.
+            , fotos e contato exigem verificação de idade. A análise usa a
+            câmera por cerca de 3 segundos — processada neste dispositivo, sem
+            gravar ou enviar a imagem.
           </p>
 
           {showCamera && phase !== "loading_models" && (
@@ -251,14 +268,14 @@ export function AgeVerificationGate() {
 
           {phase === "passed" && (
             <p className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-emerald-200">
-              Verificação concluída. Bom uso do Mulheres.
+              Verificação concluída. Fotos e contato liberados.
             </p>
           )}
 
           {phase === "denied" && (
             <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-200">
-              A análise não confirmou idade mínima de 18 anos. O acesso a este
-              site não é permitido.
+              A análise não confirmou idade mínima de 18 anos. Fotos e contato
+              permanecem bloqueados.
             </p>
           )}
 
@@ -272,12 +289,13 @@ export function AgeVerificationGate() {
         <div className="flex flex-col gap-2 border-t border-white/10 px-6 py-5 sm:flex-row sm:justify-end">
           {(phase === "intro" || phase === "error") && (
             <>
-              <a
-                href={EXIT_URL}
+              <button
+                type="button"
+                onClick={closeVerification}
                 className="order-2 rounded-full border border-white/15 px-5 py-3 text-center text-sm font-bold text-white/70 hover:bg-white/5 sm:order-1"
               >
-                Sair
-              </a>
+                Agora não
+              </button>
               <button
                 type="button"
                 onClick={() => void beginVerification()}
@@ -289,12 +307,21 @@ export function AgeVerificationGate() {
           )}
 
           {phase === "denied" && (
-            <a
-              href={EXIT_URL}
-              className="rounded-full bg-white/10 px-5 py-3 text-center text-sm font-bold text-white hover:bg-white/15"
-            >
-              Sair do site
-            </a>
+            <>
+              <button
+                type="button"
+                onClick={closeVerification}
+                className="order-2 rounded-full border border-white/15 px-5 py-3 text-center text-sm font-bold text-white/70 hover:bg-white/5 sm:order-1"
+              >
+                Fechar
+              </button>
+              <a
+                href={EXIT_URL}
+                className="order-1 rounded-full bg-white/10 px-5 py-3 text-center text-sm font-bold text-white hover:bg-white/15 sm:order-2"
+              >
+                Sair do site
+              </a>
+            </>
           )}
 
           {(phase === "loading_models" ||

@@ -1,3 +1,8 @@
+"use client";
+
+import type { MouseEvent } from "react";
+import { useAgeGate } from "@/lib/age-gate-context";
+
 interface CompanionContactBarProps {
   phone: string;
   whatsappUrl: string;
@@ -37,26 +42,46 @@ function WhatsAppIcon() {
 
 export function CompanionContactBar({ phone, whatsappUrl }: CompanionContactBarProps) {
   const tel = phone.replace(/\D/g, "");
+  const { verified, requestVerification } = useAgeGate();
+
+  const guardContact = (e: MouseEvent) => {
+    if (verified) return;
+    e.preventDefault();
+    e.stopPropagation();
+    requestVerification();
+  };
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
       <div className="mx-auto flex max-w-3xl gap-3">
         <a
-          href={`tel:${tel}`}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-purple-700 px-3 py-3.5 text-sm font-bold text-white transition-colors hover:bg-purple-600 active:scale-[0.98]"
+          href={verified ? `tel:${tel}` : "#"}
+          onClick={guardContact}
+          aria-disabled={!verified}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-2xl px-3 py-3.5 text-sm font-bold text-white transition-colors active:scale-[0.98] ${
+            verified
+              ? "bg-purple-700 hover:bg-purple-600"
+              : "cursor-pointer bg-purple-700/50 hover:bg-purple-700/60"
+          }`}
         >
           <PhoneIcon />
-          <span className="truncate">{phone}</span>
+          <span className="truncate">{verified ? phone : "Verificar para ligar"}</span>
         </a>
 
         <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-3 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#1ebe57] active:scale-[0.98]"
+          href={verified ? whatsappUrl : "#"}
+          target={verified ? "_blank" : undefined}
+          rel={verified ? "noopener noreferrer" : undefined}
+          onClick={guardContact}
+          aria-disabled={!verified}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-2xl px-3 py-3.5 text-sm font-bold text-white transition-colors active:scale-[0.98] ${
+            verified
+              ? "bg-[#25D366] hover:bg-[#1ebe57]"
+              : "cursor-pointer bg-[#25D366]/50 hover:bg-[#25D366]/60"
+          }`}
         >
           <WhatsAppIcon />
-          WhatsApp
+          {verified ? "WhatsApp" : "Verificar para WhatsApp"}
         </a>
       </div>
     </div>

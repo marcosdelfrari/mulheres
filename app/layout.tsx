@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
+import { AgeGateProvider } from "@/lib/age-gate-context";
 import { AgeVerificationGate } from "@/components/AgeVerificationGate";
 import { Header } from "@/components/Header";
 import { CreateListingFab } from "@/components/CreateListingFab";
@@ -52,12 +53,14 @@ export default function RootLayout({
         <WebMcp />
         <JsonLd data={[buildWebSiteJsonLd(), buildOrganizationJsonLd()]} />
         <AuthProvider>
-          <AgeVerificationGate />
-          <Header />
-          <main className="flex w-full flex-1 flex-col">{children}</main>
-          <Footer />
-          <CreateListingFab />
-          <CompanionListingPrompt />
+          <AgeGateProvider>
+            <AgeVerificationGate />
+            <Header />
+            <main className="flex w-full flex-1 flex-col">{children}</main>
+            <Footer />
+            <CreateListingFab />
+            <CompanionListingPrompt />
+          </AgeGateProvider>
         </AuthProvider>
       </body>
     </html>

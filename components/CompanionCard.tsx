@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { companionProfilePath } from "@/lib/companion-utils";
 import type { Companion } from "@/lib/types";
 import { formatDistance } from "@/lib/geo";
+import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 import { OnlineBadge, VerifiedBadge } from "./VerifiedBadge";
 
 interface CompanionCardProps {
@@ -24,26 +27,28 @@ export function CompanionCard({
       className="flex flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white transition-colors hover:border-luxury-accent/40"
     >
       <div className="relative aspect-[3/4] max-h-56 overflow-hidden bg-gray-100">
-        {photo ? (
-          <Image
-            src={photo}
-            alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 50vw, 320px"
-          />
-        ) : (
-          <div
-            className="flex h-full w-full items-center justify-center text-2xl font-black text-white"
-            style={{
-              background: `linear-gradient(135deg, ${companion.avatarColor}, #3d1a5c)`,
-            }}
-          >
-            {companion.name.slice(0, 1)}
-          </div>
-        )}
+        <AgeRestrictedMedia className="absolute inset-0" interactive={false}>
+          {photo ? (
+            <Image
+              src={photo}
+              alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 50vw, 320px"
+            />
+          ) : (
+            <div
+              className="flex h-full w-full items-center justify-center text-2xl font-black text-white"
+              style={{
+                background: `linear-gradient(135deg, ${companion.avatarColor}, #3d1a5c)`,
+              }}
+            >
+              {companion.name.slice(0, 1)}
+            </div>
+          )}
+        </AgeRestrictedMedia>
         {distanceKm !== undefined && (
-          <span className="absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">
+          <span className="pointer-events-none absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">
             {formatDistance(distanceKm)} de você
           </span>
         )}
