@@ -55,22 +55,7 @@ export function HomeHero() {
             nível.
           </p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Link
-              href="/criar-conta?role=acompanhante"
-              className="rounded-full bg-white px-8 py-4 text-center text-base font-bold text-[#0c0414] transition-all hover:bg-gray-100 active:scale-95 shadow-xl shadow-white/5"
-            >
-              Anunciar Perfil
-            </Link>
-            <Link
-              href="/criar-conta?role=cliente"
-              className="rounded-full border border-white/20 bg-white/5 px-8 py-4 text-center text-base font-bold text-white transition-all hover:bg-white/10 active:scale-95"
-            >
-              Cadastrar Cliente
-            </Link>
-          </div>
-
-          <form onSubmit={handleSubmit} className="relative mt-12 max-w-lg">
+          <form onSubmit={handleSubmit} className="relative mt-10 max-w-lg">
             <input
               type="text"
               value={query}
@@ -98,6 +83,15 @@ export function HomeHero() {
               </svg>
             </button>
           </form>
+
+          <p className="mt-5 max-w-lg text-center text-base text-white/50">
+            <Link
+              href="/criar-conta?role=acompanhante"
+              className="transition-colors hover:text-white/70"
+            >
+              Anunciar perfil
+            </Link>
+          </p>
         </div>
 
         <div className="relative hidden justify-center lg:flex">
