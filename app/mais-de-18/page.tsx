@@ -15,9 +15,12 @@ export default function MaisDe18Page() {
         Conteúdo para maiores de 18 anos
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-gray-600">
-        O Mulheres contém material destinado exclusivamente a adultos. Ao continuar
-        navegando, você confirma ter 18 anos ou mais e aceita nossos{" "}
-        <Link href="/termos" className="text-purple-800 hover:text-luxury-accent hover:underline">
+        O Mulheres contém material destinado exclusivamente a adultos. Ao
+        continuar navegando, você confirma ter 18 anos ou mais e aceita nossos{" "}
+        <Link
+          href="/termos"
+          className="text-purple-800 hover:text-luxury-accent hover:underline"
+        >
           Termos de Uso
         </Link>
         .
@@ -30,7 +33,7 @@ export default function MaisDe18Page() {
           Tenho 18 anos ou mais — continuar
         </Link>
         <a
-          href="https://www.google.com"
+          href="https://google.com"
           className="rounded-2xl border border-gray-200 px-6 py-3 text-sm font-bold text-gray-600 hover:bg-gray-50"
         >
           Sair

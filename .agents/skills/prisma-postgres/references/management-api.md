@@ -74,6 +74,6 @@ Database create supports explicit project, region, branch, and source context. A
 
 ## References
 
-- [Management API docs](https://www.prisma.io/docs/postgres/introduction/management-api)
+- [Management API docs](https://prisma.io/docs/postgres/introduction/management-api)
 - [OpenAPI docs](https://api.prisma.io/v1/doc)
 - [Swagger Editor](https://api.prisma.io/v1/swagger-editor)

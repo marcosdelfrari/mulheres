@@ -6,13 +6,24 @@ import {
 
 export const runtime = "nodejs";
 
+/** Internal converter — not a private `_` folder (those are unroutable in App Router). */
+function resolveOrigin(request: NextRequest) {
+  const host =
+    request.headers.get("x-forwarded-host") ??
+    request.headers.get("host") ??
+    request.nextUrl.host;
+  const proto =
+    request.headers.get("x-forwarded-proto") ??
+    (request.nextUrl.protocol.replace(":", "") || "https");
+  return `${proto}://${host}`;
+}
+
 async function handle(request: NextRequest) {
   const pathParam = request.nextUrl.searchParams.get("path") || "/";
   const method = request.nextUrl.searchParams.get("method") || "GET";
 
   let targetPath = pathParam;
   try {
-    // Guard against open redirects / external URLs.
     if (/^https?:\/\//i.test(targetPath)) {
       return NextResponse.json({ error: "Invalid path" }, { status: 400 });
     }
@@ -23,7 +34,7 @@ async function handle(request: NextRequest) {
     return NextResponse.json({ error: "Invalid path" }, { status: 400 });
   }
 
-  const origin = request.nextUrl.origin;
+  const origin = resolveOrigin(request);
   const htmlUrl = new URL(targetPath, origin);
 
   const htmlHeaders = new Headers();
@@ -31,19 +42,37 @@ async function handle(request: NextRequest) {
   if (cookie) htmlHeaders.set("cookie", cookie);
   htmlHeaders.set("accept", "text/html");
   htmlHeaders.set("x-markdown-bypass", "1");
-  htmlHeaders.set("user-agent", request.headers.get("user-agent") ?? "markdown-negotiation");
+  htmlHeaders.set(
+    "user-agent",
+    request.headers.get("user-agent") ?? "markdown-negotiation",
+  );
 
-  const htmlResponse = await fetch(htmlUrl, {
+  let htmlResponse = await fetch(htmlUrl, {
     method: "GET",
     headers: htmlHeaders,
     redirect: "manual",
     cache: "no-store",
   });
 
+  // Follow one same-origin redirect (apex ↔ www) so conversion still works.
   if (htmlResponse.status >= 300 && htmlResponse.status < 400) {
     const location = htmlResponse.headers.get("location");
     if (location) {
-      return NextResponse.redirect(new URL(location, origin), htmlResponse.status);
+      const nextUrl = new URL(location, origin);
+      const sameHost =
+        nextUrl.hostname === new URL(origin).hostname ||
+        nextUrl.hostname.replace(/^www\./, "") ===
+          new URL(origin).hostname.replace(/^www\./, "");
+      if (sameHost) {
+        htmlResponse = await fetch(nextUrl, {
+          method: "GET",
+          headers: htmlHeaders,
+          redirect: "manual",
+          cache: "no-store",
+        });
+      } else {
+        return NextResponse.redirect(nextUrl, htmlResponse.status);
+      }
     }
   }
 

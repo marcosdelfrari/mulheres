@@ -4,7 +4,7 @@ import { prefersMarkdown } from "@/lib/markdown-negotiation";
 const SKIP_PREFIXES = [
   "/api/",
   "/_next/",
-  "/__markdown",
+  "/markdown-negotiate",
   "/openapi.json",
   "/llms.txt",
   "/auth.md",
@@ -49,7 +49,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Internal HTML fetch from /__markdown must not re-enter negotiation.
+  // Internal HTML fetch from /markdown-negotiate must not re-enter negotiation.
   if (request.headers.get("x-markdown-bypass") === "1") {
     return NextResponse.next();
   }
@@ -65,7 +65,7 @@ export function middleware(request: NextRequest) {
   }
 
   const rewriteUrl = request.nextUrl.clone();
-  rewriteUrl.pathname = "/__markdown";
+  rewriteUrl.pathname = "/markdown-negotiate";
   rewriteUrl.search = "";
   rewriteUrl.searchParams.set("path", `${pathname}${search}`);
   rewriteUrl.searchParams.set("method", request.method);

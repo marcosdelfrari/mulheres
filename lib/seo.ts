@@ -7,8 +7,29 @@ import { cityHubPath, neighborhoodHubPath } from "./location-hubs";
 
 export const SITE_NAME = "Mulheres";
 
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mulheresdeluxo.com.br";
+function normalizeSiteUrl(raw: string): string {
+  const trimmed = raw
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .replace(/\/$/, "");
+  try {
+    const url = new URL(
+      trimmed.includes("://") ? trimmed : `https://${trimmed}`,
+    );
+    url.protocol = "https:";
+    // Produção redireciona apex → www; sitemap/canonical devem bater com o host final.
+    if (url.hostname === "mulheresdeluxo.com.br") {
+      url.hostname = "www.mulheresdeluxo.com.br";
+    }
+    return url.origin;
+  } catch {
+    return "https://mulheresdeluxo.com.br";
+  }
+}
+
+export const SITE_URL = normalizeSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mulheresdeluxo.com.br",
+);
 
 export const SITE_DESCRIPTION =
   "Catálogo de acompanhantes em Belo Horizonte e todo o Brasil. Perfis verificados, filtros por bairro e contato direto via WhatsApp.";

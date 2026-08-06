@@ -1,6 +1,6 @@
 import { absoluteUrl } from "@/lib/seo";
 
-const PROFILE = "https://www.rfc-editor.org/info/rfc9727";
+const PROFILE = "https://rfc-editor.org/info/rfc9727";
 
 type LinkTarget = {
   href: string;

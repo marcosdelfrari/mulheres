@@ -18,7 +18,7 @@ const PRIVATE_PATHS = [
   "/perfil",
   "/conta",
   "/api/",
-  "/__markdown",
+  "/markdown-negotiate",
 ];
 
 function disallowBlock(paths: string[]) {

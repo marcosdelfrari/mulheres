@@ -1,6 +1,6 @@
 ; DNS for AI Discovery (DNS-AID) — mulheresdeluxo.com.br
 ; Draft: https://datatracker.ietf.org/doc/draft-mozleywilliams-dnsop-dnsaid/
-; SVCB/HTTPS: https://www.rfc-editor.org/rfc/rfc9460
+; SVCB/HTTPS: https://rfc-editor.org/rfc/rfc9460
 ;
 ; Publique estes registros no DNS autoritativo (Registro.br → DNS)
 ; e ative DNSSEC na zona para validação autenticada.

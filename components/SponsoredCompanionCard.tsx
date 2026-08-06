@@ -9,12 +9,15 @@ interface SponsoredCompanionCardProps {
   companion: Companion;
   distanceKm?: number;
   locationMode?: "city" | "neighborhood";
+  /** First visible card should be the LCP image (no lazy, fetchpriority=high). */
+  priority?: boolean;
 }
 
 export function SponsoredCompanionCard({
   companion,
   distanceKm,
   locationMode,
+  priority = false,
 }: SponsoredCompanionCardProps) {
   return (
     <Link
@@ -28,6 +31,8 @@ export function SponsoredCompanionCard({
           fill
           className="object-cover transition-transform group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, 192px"
+          priority={priority}
+          fetchPriority={priority ? "high" : "auto"}
         />
         {distanceKm !== undefined && (
           <span className="absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">

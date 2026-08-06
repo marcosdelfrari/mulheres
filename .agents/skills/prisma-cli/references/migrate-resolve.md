@@ -16,12 +16,12 @@ Updates the `_prisma_migrations` table to manually change the state of a migrati
 
 You must provide exactly one of `--applied` or `--rolled-back`.
 
-| Option | Description |
-|--------|-------------|
-| `--applied <name>` | Mark a migration as **applied** (success) |
+| Option                 | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| `--applied <name>`     | Mark a migration as **applied** (success)            |
 | `--rolled-back <name>` | Mark a migration as **rolled back** (ignored/failed) |
-| `--schema` | Path to schema file |
-| `--config` | Custom path to your Prisma config file |
+| `--schema`             | Path to schema file                                  |
+| `--config`             | Custom path to your Prisma config file               |
 
 ## Examples
 
@@ -53,5 +53,5 @@ This tells Prisma "Forget this migration run, let me try applying it again".
 
 ## References
 
-- [Baselining](https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate/baselining)
-- [Troubleshooting](https://www.prisma.io/docs/guides/database/production-troubleshooting)
+- [Baselining](https://prisma.io/docs/guides/database/developing-with-prisma-migrate/baselining)
+- [Troubleshooting](https://prisma.io/docs/guides/database/production-troubleshooting)

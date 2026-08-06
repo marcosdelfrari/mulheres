@@ -35,9 +35,9 @@ Prisma v6 side:
 
 - v6 fully supports MongoDB, including transactions on replica sets — "MongoDB only allows
   you to start a transaction on a replica set. Prisma ORM uses transactions internally"
-  ([replica set configuration](https://www.prisma.io/docs/orm/overview/databases/mongodb#replica-set-configuration)).
+  ([replica set configuration](https://prisma.io/docs/orm/overview/databases/mongodb#replica-set-configuration)).
 - v6 MongoDB has no Prisma Migrate; the workflow is `db push`
-  ([no support for Prisma Migrate](https://www.prisma.io/docs/orm/overview/databases/mongodb#no-support-for-prisma-migrate)).
+  ([no support for Prisma Migrate](https://prisma.io/docs/orm/overview/databases/mongodb#no-support-for-prisma-migrate)).
 
 ## Blocker checks before migrating
 
@@ -84,4 +84,4 @@ Staying is a decision, not a default-by-neglect:
 ## References
 
 - [Prisma Next repository](https://github.com/prisma/prisma-next)
-- [Prisma v6 MongoDB documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb)
+- [Prisma v6 MongoDB documentation](https://prisma.io/docs/orm/overview/databases/mongodb)

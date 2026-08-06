@@ -64,6 +64,6 @@ Management API connection responses expose both `endpoints.direct` (`db.prisma.i
 
 ## References
 
-- [Prisma Postgres overview](https://www.prisma.io/docs/postgres/introduction/overview)
-- [Viewing data](https://www.prisma.io/docs/postgres/integrations/viewing-data)
-- [Direct connections](https://www.prisma.io/docs/postgres/database/direct-connections)
+- [Prisma Postgres overview](https://prisma.io/docs/postgres/introduction/overview)
+- [Viewing data](https://prisma.io/docs/postgres/integrations/viewing-data)
+- [Direct connections](https://prisma.io/docs/postgres/database/direct-connections)

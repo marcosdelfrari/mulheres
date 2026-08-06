@@ -8,7 +8,7 @@ CRITICAL
 
 ## Why It Matters
 
-A v6 → Next migration is a *client and workflow* migration against the **same MongoDB
+A v6 → Next migration is a _client and workflow_ migration against the **same MongoDB
 database** — there is no data export/import step, and introducing one (or pointing the new
 stack at a fresh database) turns a code migration into an outage. The checklist below keeps
 the cutover observable and reversible.
@@ -56,5 +56,5 @@ hand-off rule in `SKILL.md`).
 
 ## References
 
-- [v6 MongoDB documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb)
+- [v6 MongoDB documentation](https://prisma.io/docs/orm/overview/databases/mongodb)
 - Prisma Next migrations + queries skills — authoritative for the Next side; verified @ `a2791c5dd59d579b4b3052942ae7f8fe5e2ee852`

@@ -48,12 +48,13 @@ export function SponsoredSection({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {items.map(({ companion, distanceKm }) => (
+        {items.map(({ companion, distanceKm }, index) => (
           <SponsoredCompanionCard
             key={companion.id}
             companion={companion}
             distanceKm={distanceKm}
             locationMode={locationMode}
+            priority={index === 0}
           />
         ))}
       </div>
