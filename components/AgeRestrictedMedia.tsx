@@ -29,12 +29,12 @@ export function AgeRestrictedMedia({
   };
 
   if (verified) {
-    return <div className={`relative h-full w-full ${className}`}>{children}</div>;
+    return <div className={className}>{children}</div>;
   }
 
   return (
     <div
-      className={`relative isolate h-full w-full overflow-hidden ${className}`}
+      className={`isolate overflow-hidden ${className}`}
       onClick={interactive ? onActivate : undefined}
       onKeyDown={
         interactive
