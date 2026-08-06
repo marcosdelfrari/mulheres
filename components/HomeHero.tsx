@@ -45,7 +45,7 @@ export function HomeHero() {
           </p>
 
           <h1 className="mt-6 font-serif text-4xl font-bold italic leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
-            Acompanhantes de <span className="text-luxury-accent">luxo</span> em
+            Acompanhantes <br />de <span className="text-luxury-accent">luxo</span> em <br />
             Belo Horizonte
           </h1>
 
