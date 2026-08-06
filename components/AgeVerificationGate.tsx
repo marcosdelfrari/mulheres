@@ -1,0 +1,311 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import Webcam from "react-webcam";
+import {
+  AGE_MINIMUM,
+  AGE_SCAN_MS,
+  readAgeVerifiedCookie,
+  writeAgeVerifiedCookie,
+} from "@/lib/age-gate";
+
+type GatePhase =
+  | "boot"
+  | "intro"
+  | "loading_models"
+  | "ready_camera"
+  | "scanning"
+  | "passed"
+  | "denied"
+  | "error"
+  | "done";
+
+const MODEL_URL = "/models/face-api";
+const EXIT_URL = "https://www.google.com";
+
+export function AgeVerificationGate() {
+  const webcamRef = useRef<Webcam>(null);
+  const agesRef = useRef<number[]>([]);
+  const loopActiveRef = useRef(false);
+  const expectCameraRef = useRef(false);
+  const faceapiRef = useRef<typeof import("@vladmandic/face-api") | null>(
+    null,
+  );
+
+  const [phase, setPhase] = useState<GatePhase>("boot");
+  const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setPhase(readAgeVerifiedCookie() ? "done" : "intro");
+  }, []);
+
+  useEffect(() => {
+    if (phase === "done" || phase === "boot") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [phase]);
+
+  useEffect(() => {
+    return () => {
+      loopActiveRef.current = false;
+    };
+  }, []);
+
+  const finishPassed = useCallback(() => {
+    writeAgeVerifiedCookie();
+    setPhase("passed");
+    window.setTimeout(() => setPhase("done"), 900);
+  }, []);
+
+  const startScanLoop = useCallback(async () => {
+    const faceapi = faceapiRef.current;
+    if (!faceapi) {
+      setMessage("Modelos de verificação indisponíveis.");
+      setPhase("error");
+      return;
+    }
+
+    agesRef.current = [];
+    setProgress(0);
+    setPhase("scanning");
+    loopActiveRef.current = true;
+    const startedAt = performance.now();
+
+    const tick = async () => {
+      if (!loopActiveRef.current) return;
+
+      const elapsed = performance.now() - startedAt;
+      setProgress(Math.min(100, Math.round((elapsed / AGE_SCAN_MS) * 100)));
+
+      const video = webcamRef.current?.video;
+      if (video && video.readyState >= 2) {
+        try {
+          const detection = await faceapi
+            .detectSingleFace(
+              video,
+              new faceapi.TinyFaceDetectorOptions({
+                inputSize: 224,
+                scoreThreshold: 0.4,
+              }),
+            )
+            .withAgeAndGender();
+          if (detection?.age != null) {
+            agesRef.current.push(detection.age);
+          }
+        } catch {
+          // ignora frame
+        }
+      }
+
+      if (!loopActiveRef.current) return;
+
+      if (elapsed >= AGE_SCAN_MS) {
+        loopActiveRef.current = false;
+        const samples = agesRef.current;
+        if (samples.length < 3) {
+          setMessage(
+            "Não foi possível analisar o rosto com segurança. Centralize o rosto na câmera com boa iluminação e tente de novo.",
+          );
+          setPhase("error");
+          return;
+        }
+        const avg = samples.reduce((sum, n) => sum + n, 0) / samples.length;
+        if (avg >= AGE_MINIMUM) {
+          finishPassed();
+        } else {
+          setPhase("denied");
+        }
+        return;
+      }
+
+      window.setTimeout(() => {
+        void tick();
+      }, 120);
+    };
+
+    void tick();
+  }, [finishPassed]);
+
+  const beginVerification = useCallback(async () => {
+    loopActiveRef.current = false;
+    setMessage("");
+    setProgress(0);
+    setPhase("loading_models");
+
+    try {
+      const faceapi = await import("@vladmandic/face-api");
+      await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+        faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL),
+      ]);
+      faceapiRef.current = faceapi;
+      expectCameraRef.current = true;
+      setPhase("ready_camera");
+    } catch {
+      setMessage(
+        "Não foi possível carregar a verificação facial. Atualize a página e tente novamente.",
+      );
+      setPhase("error");
+    }
+  }, []);
+
+  if (phase === "boot" || phase === "done") {
+    return null;
+  }
+
+  const showCamera =
+    phase === "ready_camera" ||
+    phase === "scanning" ||
+    phase === "loading_models";
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="age-gate-title"
+    >
+      <div className="absolute inset-0 bg-[#0c0414]/55 backdrop-blur-xl" />
+
+      <div className="relative z-10 w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#12081c] text-white shadow-2xl shadow-black/50">
+        <div className="border-b border-white/10 px-6 py-5">
+          <p className="text-xs font-bold uppercase tracking-widest text-luxury-accent">
+            Verificação etária · ECA
+          </p>
+          <h2
+            id="age-gate-title"
+            className="mt-2 font-serif text-2xl font-bold italic leading-snug"
+          >
+            Conteúdo exclusivo para maiores de 18 anos
+          </h2>
+        </div>
+
+        <div className="space-y-4 px-6 py-5 text-sm leading-relaxed text-white/70">
+          <p>
+            Conforme o{" "}
+            <strong className="font-semibold text-white/90">
+              Estatuto da Criança e do Adolescente (ECA — Lei nº 8.069/1990)
+            </strong>
+            , o acesso a conteúdo adulto exige verificação de idade. A análise
+            usa a câmera por cerca de 3 segundos para estimar a idade pelo
+            rosto — processada neste dispositivo, sem gravar ou enviar a imagem.
+          </p>
+
+          {showCamera && phase !== "loading_models" && (
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
+              <Webcam
+                ref={webcamRef}
+                audio={false}
+                mirrored
+                screenshotFormat="image/jpeg"
+                videoConstraints={{
+                  facingMode: "user",
+                  width: { ideal: 640 },
+                  height: { ideal: 480 },
+                }}
+                onUserMedia={() => {
+                  if (!expectCameraRef.current) return;
+                  expectCameraRef.current = false;
+                  void startScanLoop();
+                }}
+                onUserMediaError={() => {
+                  expectCameraRef.current = false;
+                  loopActiveRef.current = false;
+                  setMessage(
+                    "Permissão da câmera negada. Autorize o acesso para continuar a verificação.",
+                  );
+                  setPhase("error");
+                }}
+                className="aspect-[4/3] w-full object-cover"
+              />
+              {(phase === "scanning" || phase === "ready_camera") && (
+                <div className="space-y-2 px-4 py-3">
+                  <div className="flex items-center justify-between text-xs text-white/60">
+                    <span>
+                      {phase === "ready_camera"
+                        ? "Iniciando câmera…"
+                        : "Analisando rosto…"}
+                    </span>
+                    <span>{progress}%</span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-luxury-accent transition-[width] duration-150"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {phase === "loading_models" && (
+            <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
+              Preparando análise facial…
+            </p>
+          )}
+
+          {phase === "passed" && (
+            <p className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-emerald-200">
+              Verificação concluída. Bom uso do Mulheres.
+            </p>
+          )}
+
+          {phase === "denied" && (
+            <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-200">
+              A análise não confirmou idade mínima de 18 anos. O acesso a este
+              site não é permitido.
+            </p>
+          )}
+
+          {phase === "error" && (
+            <p className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-amber-100">
+              {message || "Ocorreu um erro na verificação."}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2 border-t border-white/10 px-6 py-5 sm:flex-row sm:justify-end">
+          {(phase === "intro" || phase === "error") && (
+            <>
+              <a
+                href={EXIT_URL}
+                className="order-2 rounded-full border border-white/15 px-5 py-3 text-center text-sm font-bold text-white/70 hover:bg-white/5 sm:order-1"
+              >
+                Sair
+              </a>
+              <button
+                type="button"
+                onClick={() => void beginVerification()}
+                className="order-1 rounded-full bg-luxury-accent px-5 py-3 text-sm font-bold text-[#0c0414] hover:bg-luxury-accent-hover sm:order-2"
+              >
+                {phase === "error" ? "Tentar novamente" : "Verificar meu rosto"}
+              </button>
+            </>
+          )}
+
+          {phase === "denied" && (
+            <a
+              href={EXIT_URL}
+              className="rounded-full bg-white/10 px-5 py-3 text-center text-sm font-bold text-white hover:bg-white/15"
+            >
+              Sair do site
+            </a>
+          )}
+
+          {(phase === "loading_models" ||
+            phase === "ready_camera" ||
+            phase === "scanning") && (
+            <p className="w-full text-center text-xs text-white/50">
+              Mantenha o rosto centralizado e bem iluminado por 3 segundos.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

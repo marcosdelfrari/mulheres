@@ -25,6 +25,7 @@ const AGENT_LINK_HEADER = [
 ].join(", ");
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@vladmandic/face-api"],
   images: {
     remotePatterns: [
       {
