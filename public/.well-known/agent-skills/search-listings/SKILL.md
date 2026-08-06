@@ -1,15 +1,15 @@
 ---
 name: search-listings
-description: Search and browse verified companion listings on Mulheres by city, neighborhood, and filters. Use when an agent needs to find profiles, compare options, or deep-link to public listing pages.
+description: Busca e navega anúncios de acompanhantes verificadas no Mulheres por cidade, bairro e filtros. Use quando um agente precisar encontrar perfis, comparar opções ou gerar deep-links para páginas públicas.
 ---
 
-# Search listings
+# Busca de anúncios
 
-Use this skill when the user asks to find companions, listings, or profiles on Mulheres.
+Use esta skill quando o usuário pedir para encontrar acompanhantes, anúncios ou perfis no Mulheres.
 
-## Preferred interfaces
+## Interfaces preferidas
 
-1. **MCP** (recommended for agents)
+1. **MCP** (recomendado para agentes)
 
 ```http
 POST /mcp
@@ -30,27 +30,27 @@ Content-Type: application/json
 }
 ```
 
-Initialize first with `method: "initialize"` if your client requires a session handshake. Server card: `/.well-known/mcp/server-card.json`.
+Inicialize antes com `method: "initialize"` se o cliente exigir handshake de sessão. Server card: `/.well-known/mcp/server-card.json`.
 
-2. **HTTP catalog pages**
+2. **Páginas HTTP do catálogo**
 
-- City hub: `/minas-gerais/belo-horizonte`
-- Neighborhood: `/minas-gerais/belo-horizonte/savassi`
-- Full catalog: `/catalogo`
-- Prefer `Accept: text/markdown` for machine-readable HTML pages.
+- Hub de cidade: `/minas-gerais/belo-horizonte`
+- Bairro: `/minas-gerais/belo-horizonte/savassi`
+- Catálogo completo: `/catalogo`
+- Prefira `Accept: text/markdown` para páginas HTML legíveis por máquina.
 
 3. **OpenAPI**
 
-See `/openapi.json` and `/.well-known/api-catalog` for HTTP APIs. Public listing reads may also be available via MCP `search_listings`.
+Veja `/openapi.json` e `/.well-known/api-catalog` para APIs HTTP. Leituras públicas de anúncios também podem vir via MCP `search_listings`.
 
-## Output expectations
+## Expectativas de saída
 
-- Return profile title, city, neighborhood, price, and canonical URL.
-- Content is for adults 18+. Do not invent profiles that are not returned by the API/MCP.
-- Prefer Luxo / verified profiles when summarizing.
+- Retorne título do perfil, cidade, bairro, preço e URL canônica.
+- Conteúdo destinado a maiores de 18 anos. Não invente perfis que a API/MCP não retornou.
+- Prefira perfis Luxo / verificados ao resumir.
 
-## Related discovery
+## Descoberta relacionada
 
-- `/llms.txt` — site overview
-- `/auth.md` — agent registration when authenticated APIs are needed
-- `/.well-known/agent-skills/index.json` — other Mulheres skills
+- `/llms.txt` — visão geral do site
+- `/auth.md` — registro de agente quando APIs autenticadas forem necessárias
+- `/.well-known/agent-skills/index.json` — outras skills do Mulheres

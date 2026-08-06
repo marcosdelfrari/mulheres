@@ -1,33 +1,33 @@
 ---
 name: webmcp
-description: Expose Mulheres site actions to in-browser AI agents via the WebMCP API (navigator.modelContext.registerTool / provideContext). Use when verifying or extending browser tool registration.
+description: Expõe ações do site Mulheres a agentes de IA no navegador via API WebMCP (navigator.modelContext.registerTool / provideContext). Use ao verificar ou estender o registro de tools no browser.
 ---
 
 # WebMCP
 
-Mulheres registers WebMCP tools on every page load via `/webmcp.js` and the `WebMcp` React component.
+O Mulheres registra tools WebMCP em cada carregamento de página via `/webmcp.js` e o componente React `WebMcp`.
 
-## Detection
+## Detecção
 
-Agents/scanners should observe calls to:
+Agentes/scanners devem observar chamadas a:
 
-- `navigator.modelContext.provideContext({ tools })` (legacy draft)
+- `navigator.modelContext.provideContext({ tools })` (draft legado)
 - `navigator.modelContext.registerTool({ name, description, inputSchema, execute })`
 
-Feature-detect with `"modelContext" in navigator` (HTTPS / secure context).
+Faça feature-detect com `"modelContext" in navigator` (HTTPS / secure context).
 
 ## Tools
 
-| Name | Purpose |
-|------|---------|
-| `searchListings` | Search published listings (via `/mcp`) |
-| `navigateTo` | Same-origin navigation |
-| `openCatalog` | Open `/catalogo` with filters |
-| `getDiscovery` | Discovery URLs |
+| Name | Finalidade |
+|------|------------|
+| `searchListings` | Busca anúncios publicados (via `/mcp`) |
+| `navigateTo` | Navegação same-origin |
+| `openCatalog` | Abre `/catalogo` com filtros |
+| `getDiscovery` | URLs de descoberta |
 | `getHealth` | `/api/health` |
 
-Each tool includes JSON Schema `inputSchema` and an async `execute` callback.
+Cada tool inclui `inputSchema` em JSON Schema e um callback `execute` assíncrono.
 
 ## Cleanup
 
-The React provider uses `AbortController` and `unregisterTool` on unmount so tools do not leak across navigations.
+O provider React usa `AbortController` e `unregisterTool` no unmount para não vazar tools entre navegações.

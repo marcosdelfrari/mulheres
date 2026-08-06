@@ -10,7 +10,7 @@ import {
 import { GENERIC_PLATFORMS_PHRASE } from "@/lib/brand-copy";
 
 const PAGE_DESCRIPTION =
-  "Guia para encontrar acompanhantes em Belo Horizonte com perfis verificados, filtros por bairro e contato direto via WhatsApp no Mulheres.";
+  "Guia para encontrar acompanhantes de luxo em Belo Horizonte com perfis verificados, filtros por bairro e contato direto via WhatsApp no Mulheres.";
 
 export const metadata = buildGuideMetadata({
   title: "Alternativas para encontrar acompanhantes em BH",

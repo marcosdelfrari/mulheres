@@ -116,8 +116,19 @@ export const CITY_HUBS: CityHub[] = [
     city: "Belo Horizonte",
     region: "Minas Gerais",
     title: "Acompanhantes em Belo Horizonte, MG",
-    intro: `Encontre acompanhantes em BH com perfis verificados, fotos reais e contato direto via WhatsApp. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres oferece filtros por bairro, distância e serviços.`,
-    faq: [],
+    intro: `Encontre acompanhantes de luxo em BH com perfis verificados, fotos reais e contato direto via WhatsApp. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres oferece filtros por bairro, distância e serviços.`,
+    faq: [
+      {
+        question: "Onde encontrar acompanhantes de luxo em Belo Horizonte?",
+        answer:
+          "No Mulheres você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
+      },
+      {
+        question: "Quais bairros de BH têm acompanhantes no Mulheres?",
+        answer:
+          "Savassi, Lourdes, Funcionários, Centro, Pampulha, Buritis e outros. Use as páginas de bairro ou os filtros do catálogo.",
+      },
+    ],
     neighborhoods: BH_NEIGHBORHOOD_HUBS,
   },
   {

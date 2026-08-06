@@ -192,7 +192,7 @@ export function wwwAuthenticateBearer(error?: string, description?: string) {
 
 export function unauthorizedBearer(
   error = "invalid_token",
-  description = "Authentication required.",
+  description = "Autenticação necessária.",
 ) {
   return Response.json(
     { error, error_description: description },

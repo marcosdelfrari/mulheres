@@ -12,7 +12,7 @@ export function HomeSeoSection() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="max-w-3xl">
           <h2 className="font-serif text-2xl font-bold italic text-gray-900">
-            Acompanhantes em Belo Horizonte — MG
+            Acompanhantes de luxo em Belo Horizonte — MG
           </h2>
 
           {bhHub && (
@@ -30,8 +30,9 @@ export function HomeSeoSection() {
           )}
 
           <p className="mt-4 leading-relaxed text-gray-600">
-            Estamos começando em Belo Horizonte. Encontre acompanhantes verificadas
-            em bairros como Savassi, Lourdes, Funcionários e Pampulha. Se você
+            Estamos começando em Belo Horizonte com curadoria focada em
+            discrição e sofisticação. Encontre acompanhantes verificadas em
+            bairros como Savassi, Lourdes, Funcionários e Pampulha. Se você
             costuma buscar em {alternatives}, conheça o Mulheres — catálogo
             moderno com filtros por bairro, preço e contato direto via WhatsApp.
           </p>

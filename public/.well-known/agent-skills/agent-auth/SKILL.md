@@ -1,22 +1,22 @@
 ---
 name: agent-auth
-description: Register and authenticate agents against Mulheres using Auth.md — discover PRM/AS metadata, register at /agent/identity, claim if needed, exchange for an access_token, and revoke. Use when calling protected APIs as an agent.
+description: Registre e autentique agentes no Mulheres com Auth.md — descubra metadados PRM/AS, registre em /agent/identity, reivindique se preciso, troque por access_token e revogue. Use ao chamar APIs protegidas como agente.
 ---
 
-# Agent auth (Auth.md)
+# Auth de agentes (Auth.md)
 
-Follow `/auth.md` end-to-end. Do not skip discovery.
+Siga `/auth.md` de ponta a ponta. Não pule a descoberta.
 
-## Discover
+## Descobrir
 
 ```http
 GET /.well-known/oauth-protected-resource
 GET /.well-known/oauth-authorization-server
 ```
 
-Read `agent_auth` for `skill`, `register_uri`, `claim_uri`, identity types, and credential types.
+Leia `agent_auth` para `skill`, `register_uri`, `claim_uri`, tipos de identidade e tipos de credencial.
 
-## Register
+## Registrar
 
 ```http
 POST /agent/identity
@@ -25,9 +25,9 @@ Content-Type: application/json
 { "type": "anonymous" }
 ```
 
-Other types: `service_auth` (with `login_hint` email), `identity_assertion` (ID-JAG / verified_email).
+Outros tipos: `service_auth` (com `login_hint` de e-mail), `identity_assertion` (ID-JAG / verified_email).
 
-## Claim (when required)
+## Claim (quando necessário)
 
 ```http
 POST /agent/identity/claim
@@ -36,7 +36,7 @@ Content-Type: application/json
 { "claim_token": "...", "email": "user@example.com" }
 ```
 
-Complete the human ceremony at `claim.verification_uri`, or finish with email + password when supported.
+Conclua a cerimônia humana em `claim.verification_uri`, ou finalize com e-mail + senha quando suportado.
 
 ## Token
 
@@ -45,13 +45,13 @@ POST /oauth/token
 Content-Type: application/x-www-form-urlencoded
 ```
 
-Grants include `authorization_code`, `password`, `client_credentials`, `urn:ietf:params:oauth:grant-type:jwt-bearer`, and `urn:workos:agent-auth:grant-type:claim`.
+Grants incluem `authorization_code`, `password`, `client_credentials`, `urn:ietf:params:oauth:grant-type:jwt-bearer` e `urn:workos:agent-auth:grant-type:claim`.
 
-## Call API / revoke
+## Chamar API / revogar
 
 ```http
 Authorization: Bearer <access_token>
 POST /oauth/revoke
 ```
 
-Full instructions: `/auth.md`.
+Instruções completas: `/auth.md`.

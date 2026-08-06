@@ -1,48 +1,48 @@
 ---
 name: api-discovery
-description: Discover and call Mulheres HTTP APIs using the RFC 9727 API catalog, OpenAPI, OAuth protected-resource metadata, and health status. Use when integrating programmatically or debugging agent connectivity.
+description: Descubra e chame as APIs HTTP do Mulheres usando o catálogo RFC 9727, OpenAPI, metadados OAuth protected-resource e status de saúde. Use ao integrar de forma programática ou depurar conectividade de agentes.
 ---
 
-# API discovery
+# Descoberta de APIs
 
-Use this skill to locate Mulheres machine interfaces before calling them.
+Use esta skill para localizar as interfaces máquina do Mulheres antes de chamá-las.
 
-## Bootstrap order
+## Ordem de bootstrap
 
-1. `GET /.well-known/api-catalog` — RFC 9727 linkset of API anchors
-2. `GET /openapi.json` — OpenAPI 3.1 service description
+1. `GET /.well-known/api-catalog` — linkset RFC 9727 dos anchors de API
+2. `GET /openapi.json` — descrição de serviço OpenAPI 3.1
 3. `GET /api/health` — liveness
-4. `GET /.well-known/oauth-protected-resource` — resource metadata for Bearer APIs
-5. `GET /.well-known/oauth-authorization-server` — AS metadata (+ `agent_auth`)
+4. `GET /.well-known/oauth-protected-resource` — metadados do resource para APIs Bearer
+5. `GET /.well-known/oauth-authorization-server` — metadados do AS (+ `agent_auth`)
 
-Home page `Link` headers also advertise these relations (`api-catalog`, `service-desc`, `status`, `oauth-protected-resource`).
+Os headers `Link` da home também anunciam essas relações (`api-catalog`, `service-desc`, `status`, `oauth-protected-resource`).
 
 ## Auth
 
-Protected routes return `401` with:
+Rotas protegidas retornam `401` com:
 
 ```http
 WWW-Authenticate: Bearer resource_metadata="https://mulheresdeluxo.com.br/.well-known/oauth-protected-resource"
 ```
 
-Follow Auth.md (`/auth.md`) or OAuth token endpoint (`/oauth/token`) to obtain an access token, then:
+Siga o Auth.md (`/auth.md`) ou o endpoint de token OAuth (`/oauth/token`) para obter um access token e então:
 
 ```http
 Authorization: Bearer <access_token>
 ```
 
-## Useful public endpoints
+## Endpoints públicos úteis
 
-| Path                       | Purpose             |
-| -------------------------- | ------------------- |
-| `/api/health`              | Health JSON         |
-| `/openapi.json`            | OpenAPI             |
-| `/.well-known/api-catalog` | Linkset catalog     |
-| `/llms.txt`                | LLM site summary    |
-| `/mcp`                     | MCP Streamable HTTP |
+| Path                       | Finalidade                 |
+| -------------------------- | -------------------------- |
+| `/api/health`              | Health em JSON             |
+| `/openapi.json`            | OpenAPI                    |
+| `/.well-known/api-catalog` | Catálogo linkset           |
+| `/llms.txt`                | Resumo do site para LLMs   |
+| `/mcp`                     | MCP Streamable HTTP        |
 
-## Related skills
+## Skills relacionadas
 
-- `search-listings` — catalog search via MCP/HTTP
-- `agent-auth` — Auth.md registration flow
+- `search-listings` — busca no catálogo via MCP/HTTP
+- `agent-auth` — fluxo de registro Auth.md
 - `mcp-catalog` — MCP Server Card + tools

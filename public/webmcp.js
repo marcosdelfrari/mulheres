@@ -49,7 +49,7 @@
     {
       name: "searchListings",
       description:
-        "Search Mulheres companion listings by city, neighborhood, or free text.",
+        "Busca anúncios de acompanhantes no Mulheres por cidade, bairro ou texto livre.",
       inputSchema: {
         type: "object",
         properties: {
@@ -69,7 +69,7 @@
     },
     {
       name: "navigateTo",
-      description: "Navigate to a same-origin Mulheres path or URL.",
+      description: "Navega para um caminho ou URL same-origin do Mulheres.",
       inputSchema: {
         type: "object",
         properties: { path: { type: "string" } },
@@ -90,7 +90,7 @@
     },
     {
       name: "openCatalog",
-      description: "Open /catalogo with optional search filters.",
+      description: "Abre /catalogo com filtros opcionais de busca.",
       inputSchema: {
         type: "object",
         properties: {
@@ -112,7 +112,7 @@
     },
     {
       name: "getDiscovery",
-      description: "Return agent-discovery URLs for Mulheres.",
+      description: "Retorna URLs de descoberta para agentes no Mulheres.",
       inputSchema: { type: "object", properties: {} },
       execute: async function () {
         try {
@@ -134,7 +134,7 @@
     },
     {
       name: "getHealth",
-      description: "Check Mulheres API health.",
+      description: "Verifica o status de saúde da API Mulheres.",
       inputSchema: { type: "object", properties: {} },
       execute: async function () {
         try {

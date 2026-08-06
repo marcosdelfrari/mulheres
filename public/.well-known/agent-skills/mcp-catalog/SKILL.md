@@ -1,26 +1,26 @@
 ---
 name: mcp-catalog
-description: Connect to the Mulheres MCP server via its Server Card and Streamable HTTP endpoint. Use when an MCP-capable agent should list tools, search listings, read discovery resources, or run the find_companions prompt.
+description: Conecte-se ao servidor MCP do Mulheres via Server Card e endpoint Streamable HTTP. Use quando um agente com MCP precisar listar tools, buscar anúncios, ler resources de descoberta ou executar o prompt find_companions.
 ---
 
-# MCP catalog
+# Catálogo MCP
 
-## Discover
+## Descobrir
 
 ```http
 GET /.well-known/mcp/server-card.json
 ```
 
-Alternate: `GET /mcp/server-card`.
+Alternativa: `GET /mcp/server-card`.
 
-Card fields to use:
+Campos do card a usar:
 
 - `serverInfo.name` / `serverInfo.version`
 - `transport.type` = `streamable-http`
 - `transport.endpoint` → `https://mulheresdeluxo.com.br/mcp`
-- `capabilities` for tools, resources, prompts
+- `capabilities` para tools, resources e prompts
 
-## Connect
+## Conectar
 
 ```http
 POST /mcp
@@ -28,22 +28,22 @@ Content-Type: application/json
 Accept: application/json
 ```
 
-1. `initialize` with protocol version `2025-03-26`
-2. `notifications/initialized` (no response id)
+1. `initialize` com protocol version `2025-03-26`
+2. `notifications/initialized` (sem id de resposta)
 3. `tools/list` / `tools/call`
-4. Optional: `resources/list`, `prompts/list`
+4. Opcional: `resources/list`, `prompts/list`
 
 ## Tools
 
-| Tool              | Purpose                                       |
-| ----------------- | --------------------------------------------- |
-| `health`          | Service health                                |
-| `search_listings` | Published listings by city / neighborhood / q |
-| `get_discovery`   | Links to OpenAPI, Auth.md, OAuth metadata     |
+| Tool              | Finalidade                                              |
+| ----------------- | ------------------------------------------------------- |
+| `health`          | Saúde do serviço                                        |
+| `search_listings` | Anúncios publicados por cidade / bairro / q             |
+| `get_discovery`   | Links para OpenAPI, Auth.md e metadados OAuth           |
 
 ## Resources / prompts
 
 - Resources: OpenAPI, `llms.txt`, `auth.md`
-- Prompt: `find_companions` with optional `city` / `neighborhood`
+- Prompt: `find_companions` com `city` / `neighborhood` opcionais
 
-Optional OAuth Bearer header for future protected MCP operations — see `agent-auth` skill and `/auth.md`.
+Header Bearer OAuth opcional para operações MCP protegidas no futuro — veja a skill `agent-auth` e `/auth.md`.

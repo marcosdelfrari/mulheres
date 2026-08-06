@@ -90,7 +90,7 @@ export async function buildAgentSkillsIndex() {
     const meta = parseFrontmatter(text);
     const description =
       meta.description?.slice(0, 1024) ||
-      `Mulheres agent skill: ${name}`;
+      `Mulheres — skill de agente: ${name}`;
 
     skills.push({
       name: meta.name && isValidSkillName(meta.name) ? meta.name : name,

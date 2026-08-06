@@ -1,6 +1,6 @@
 # Mulheres — Catálogo de Acompanhantes
 
-> Plataforma de acompanhantes verificadas em Belo Horizonte e todo o Brasil. Contato direto via WhatsApp, filtros por bairro e perfis com fotos reais.
+> Plataforma de acompanhantes de luxo verificadas em Belo Horizonte e no Brasil. Contato direto via WhatsApp, filtros por bairro e perfis com fotos reais. Conteúdo destinado a maiores de 18 anos.
 
 ## Páginas principais
 
@@ -28,28 +28,28 @@
 
 ## Descoberta para agentes
 
-- [API catalog (RFC 9727)](https://mulheresdeluxo.com.br/.well-known/api-catalog)
+- [Catálogo de APIs (RFC 9727)](https://mulheresdeluxo.com.br/.well-known/api-catalog)
 - [OpenAPI](https://mulheresdeluxo.com.br/openapi.json)
 - [MCP Server Card](https://mulheresdeluxo.com.br/.well-known/mcp/server-card.json)
 - [MCP Streamable HTTP](https://mulheresdeluxo.com.br/mcp)
-- [Agent Skills index](https://mulheresdeluxo.com.br/.well-known/agent-skills/index.json)
+- [Índice de Agent Skills](https://mulheresdeluxo.com.br/.well-known/agent-skills/index.json)
 - [Agent card](https://mulheresdeluxo.com.br/.well-known/agent-card.json)
-- [Agent index (DNS-AID)](https://mulheresdeluxo.com.br/.well-known/agents)
+- [Índice de agentes (DNS-AID)](https://mulheresdeluxo.com.br/.well-known/agents)
 - [Como funciona](https://mulheresdeluxo.com.br/guias/como-funciona)
 
-DNS-AID zone template: see `/dns/dnsaid.zone` in the repository (publish under `_index._agents` / `_a2a._agents` with DNSSEC).
+Modelo de zona DNS-AID: veja `/dns/dnsaid.zone` no repositório (publique sob `_index._agents` / `_a2a._agents` com DNSSEC).
 
-Pages also support `Accept: text/markdown` content negotiation (Markdown for Agents).
+As páginas também aceitam negociação `Accept: text/markdown` (Markdown for Agents).
 
-WebMCP: browser agents get tools via `navigator.modelContext` (`/webmcp.js` on page load) — `searchListings`, `openCatalog`, `navigateTo`, `getDiscovery`, `getHealth`.
+WebMCP: agentes no navegador recebem tools via `navigator.modelContext` (`/webmcp.js` no carregamento da página) — `searchListings`, `openCatalog`, `navigateTo`, `getDiscovery`, `getHealth`.
 
-OAuth/OIDC discovery: `/.well-known/openid-configuration` and `/.well-known/oauth-authorization-server`.
+Descoberta OAuth/OIDC: `/.well-known/openid-configuration` e `/.well-known/oauth-authorization-server`.
 
-Agent registration (Auth.md): [auth.md](https://mulheresdeluxo.com.br/auth.md) — register at `/agent/identity`, claim at `/agent/identity/claim`.
+Registro de agentes (Auth.md): [auth.md](https://mulheresdeluxo.com.br/auth.md) — registre em `/agent/identity`, reivindique em `/agent/identity/claim`.
 
 ## Sobre
 
-O Mulheres é catálogo de acompanhantes com perfis verificados, interface limpa e filtros por bairro, preço e serviços. Contato direto via WhatsApp, sem intermediários.
+O Mulheres é um catálogo de acompanhantes de luxo com perfis verificados, interface limpa e filtros por bairro, preço e serviços. Contato direto via WhatsApp, sem intermediários.
 
 ## Política de citação
 

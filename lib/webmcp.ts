@@ -41,29 +41,29 @@ function buildTools(): WebMcpTool[] {
     {
       name: "searchListings",
       description:
-        "Search Mulheres companion listings by city, neighborhood, or free text. Returns published profiles with title, price, location, and URL.",
+        "Busca anúncios de acompanhantes no Mulheres por cidade, bairro ou texto livre. Retorna perfis publicados com título, preço, localização e URL.",
       annotations: { readOnlyHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",
         properties: {
           city: {
             type: "string",
-            description: "City name (e.g. Belo Horizonte)",
+            description: "Nome da cidade (ex.: Belo Horizonte)",
           },
           neighborhood: {
             type: "string",
-            description: "Neighborhood / bairro (e.g. Savassi)",
+            description: "Bairro (ex.: Savassi)",
           },
           q: {
             type: "string",
-            description: "Free-text query against title or description",
+            description: "Busca livre no título ou descrição",
           },
           limit: {
             type: "integer",
             minimum: 1,
             maximum: 50,
             default: 10,
-            description: "Maximum results (default 10)",
+            description: "Máximo de resultados (padrão 10)",
           },
         },
         additionalProperties: false,
@@ -86,7 +86,7 @@ function buildTools(): WebMcpTool[] {
     {
       name: "navigateTo",
       description:
-        "Navigate the browser to a Mulheres site path or absolute URL on this origin (catalog, city hubs, guides, auth, account).",
+        "Navega o navegador para um caminho do Mulheres ou URL absoluta neste origin (catálogo, hubs de cidade, guias, auth, conta).",
       annotations: { readOnlyHint: false, openWorldHint: false },
       inputSchema: {
         type: "object",
@@ -94,7 +94,7 @@ function buildTools(): WebMcpTool[] {
           path: {
             type: "string",
             description:
-              "Path or URL, e.g. /catalogo, /minas-gerais/belo-horizonte, /guias/como-funciona",
+              "Caminho ou URL, ex.: /catalogo, /minas-gerais/belo-horizonte, /guias/como-funciona",
           },
         },
         required: ["path"],
@@ -117,22 +117,22 @@ function buildTools(): WebMcpTool[] {
     {
       name: "openCatalog",
       description:
-        "Open the companion catalog with optional search/city filters applied in the URL.",
+        "Abre o catálogo de acompanhantes com filtros opcionais de busca/cidade aplicados na URL.",
       annotations: { readOnlyHint: false, openWorldHint: false },
       inputSchema: {
         type: "object",
         properties: {
           search: {
             type: "string",
-            description: "Search query for the catalog",
+            description: "Consulta de busca para o catálogo",
           },
           city: {
             type: "string",
-            description: "City filter",
+            description: "Filtro de cidade",
           },
           neighborhood: {
             type: "string",
-            description: "Neighborhood filter",
+            description: "Filtro de bairro",
           },
         },
         additionalProperties: false,
@@ -157,7 +157,7 @@ function buildTools(): WebMcpTool[] {
     {
       name: "getDiscovery",
       description:
-        "Return Mulheres agent-discovery links (OpenAPI, API catalog, Auth.md, MCP Server Card, Agent Skills, OAuth metadata, health).",
+        "Retorna links de descoberta para agentes no Mulheres (OpenAPI, catálogo de APIs, Auth.md, MCP Server Card, Agent Skills, metadados OAuth, health).",
       annotations: { readOnlyHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",
@@ -190,7 +190,7 @@ function buildTools(): WebMcpTool[] {
     },
     {
       name: "getHealth",
-      description: "Check Mulheres API health status.",
+      description: "Verifica o status de saúde da API Mulheres.",
       annotations: { readOnlyHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",

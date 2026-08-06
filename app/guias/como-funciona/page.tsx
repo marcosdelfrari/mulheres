@@ -9,7 +9,7 @@ import {
 } from "@/lib/seo";
 
 const PAGE_DESCRIPTION =
-  "Saiba como encontrar acompanhantes verificadas no Mulheres. Filtros por bairro, contato via WhatsApp e perfis com fotos reais.";
+  "Saiba como encontrar acompanhantes de luxo verificadas no Mulheres. Filtros por bairro, contato via WhatsApp e perfis com fotos reais.";
 
 export const metadata = buildGuideMetadata({
   title: "Como funciona o Mulheres",
@@ -71,8 +71,8 @@ export default function ComoFuncionaPage() {
             Como funciona o Mulheres
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
-            O Mulheres é um catálogo de acompanhantes com perfis verificados,
-            filtros por bairro e contato direto via WhatsApp.
+            O Mulheres é um catálogo de acompanhantes de luxo com perfis
+            verificados, filtros por bairro e contato direto via WhatsApp.
           </p>
         </header>
 

@@ -26,7 +26,7 @@ type JsonRpcResponse = {
 const TOOLS = [
   {
     name: "health",
-    description: "Service health check for Mulheres.",
+    description: "Verifica o status de saúde do serviço Mulheres.",
     inputSchema: {
       type: "object",
       properties: {},
@@ -36,19 +36,28 @@ const TOOLS = [
   {
     name: "search_listings",
     description:
-      "Search published companion listings by city, neighborhood, or free text.",
+      "Busca anúncios publicados de acompanhantes por cidade, bairro ou texto livre.",
     inputSchema: {
       type: "object",
       properties: {
-        city: { type: "string", description: "City name (e.g. Belo Horizonte)" },
-        neighborhood: { type: "string", description: "Neighborhood / bairro" },
-        q: { type: "string", description: "Free-text query against title/description" },
+        city: {
+          type: "string",
+          description: "Nome da cidade (ex.: Belo Horizonte)",
+        },
+        neighborhood: {
+          type: "string",
+          description: "Bairro (ex.: Savassi)",
+        },
+        q: {
+          type: "string",
+          description: "Busca livre no título ou descrição",
+        },
         limit: {
           type: "integer",
           minimum: 1,
           maximum: 50,
           default: 10,
-          description: "Max results (default 10)",
+          description: "Máximo de resultados (padrão 10)",
         },
       },
       additionalProperties: false,
@@ -57,7 +66,7 @@ const TOOLS = [
   {
     name: "get_discovery",
     description:
-      "Return discovery links (OpenAPI, API catalog, Auth.md, OAuth metadata).",
+      "Retorna links de descoberta (OpenAPI, catálogo de APIs, Auth.md, metadados OAuth).",
     inputSchema: {
       type: "object",
       properties: {},
@@ -242,7 +251,7 @@ export async function handleMcpJsonRpc(
             title: SITE_NAME,
           },
           instructions:
-            "Mulheres companion catalog MCP. Use search_listings, health, and get_discovery tools. Auth via OAuth Bearer when calling protected HTTP APIs.",
+            "MCP do catálogo Mulheres. Use as tools search_listings, health e get_discovery. Para APIs HTTP protegidas, autentique com OAuth Bearer.",
         }),
       );
       continue;
@@ -286,19 +295,19 @@ export async function handleMcpJsonRpc(
             {
               uri: absoluteUrl("/openapi.json"),
               name: "openapi",
-              title: "OpenAPI description",
+              title: "Descrição OpenAPI",
               mimeType: "application/json",
             },
             {
               uri: absoluteUrl("/llms.txt"),
               name: "llms",
-              title: "LLM site summary",
+              title: "Resumo do site para LLMs",
               mimeType: "text/plain",
             },
             {
               uri: absoluteUrl("/auth.md"),
               name: "auth-md",
-              title: "Auth.md agent registration",
+              title: "Registro de agentes (Auth.md)",
               mimeType: "text/markdown",
             },
           ],
@@ -351,16 +360,17 @@ export async function handleMcpJsonRpc(
           prompts: [
             {
               name: "find_companions",
-              description: "Help find companions in a city or neighborhood.",
+              description:
+                "Ajuda a encontrar acompanhantes em uma cidade ou bairro.",
               arguments: [
                 {
                   name: "city",
-                  description: "City to search",
+                  description: "Cidade para buscar",
                   required: false,
                 },
                 {
                   name: "neighborhood",
-                  description: "Neighborhood / bairro",
+                  description: "Bairro",
                   required: false,
                 },
               ],
@@ -385,13 +395,13 @@ export async function handleMcpJsonRpc(
       const neighborhood = args.neighborhood ?? "";
       responses.push(
         ok(id, {
-          description: "Find companions prompt",
+          description: "Prompt para encontrar acompanhantes",
           messages: [
             {
               role: "user",
               content: {
                 type: "text",
-                text: `Search Mulheres for companions in ${city}${neighborhood ? `, neighborhood ${neighborhood}` : ""}. Use the search_listings tool and summarize verified profiles with links.`,
+                text: `Busque no Mulheres acompanhantes em ${city}${neighborhood ? `, bairro ${neighborhood}` : ""}. Use a tool search_listings e resuma perfis verificados com links.`,
               },
             },
           ],

@@ -1,4 +1,4 @@
-import { absoluteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
+import { absoluteUrl, SITE_DESCRIPTION_SHORT, SITE_NAME } from "@/lib/seo";
 
 export const MCP_PROTOCOL_VERSION = "2025-03-26";
 export const MCP_SERVER_VERSION = "1.0.0";
@@ -24,13 +24,13 @@ export function buildMcpServerCard() {
       name: MCP_SERVER_NAME,
       version: MCP_SERVER_VERSION,
       title: SITE_NAME,
-      description: SITE_DESCRIPTION.slice(0, 100),
+      description: SITE_DESCRIPTION_SHORT,
     },
     // Flat identity fields for clients that follow the experimental schema.ts.
     name: MCP_SERVER_NAME,
     version: MCP_SERVER_VERSION,
     title: SITE_NAME,
-    description: SITE_DESCRIPTION.slice(0, 100),
+    description: SITE_DESCRIPTION_SHORT,
     websiteUrl: absoluteUrl("/"),
     transport: {
       type: "streamable-http",
@@ -52,7 +52,7 @@ export function buildMcpServerCard() {
           {
             name: "Authorization",
             description:
-              "Optional Bearer access_token from OAuth (/oauth/token or Auth.md).",
+              "Bearer access_token opcional via OAuth (/oauth/token ou Auth.md).",
             isRequired: false,
             isSecret: true,
           },

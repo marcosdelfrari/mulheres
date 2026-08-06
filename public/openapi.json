@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Mulheres API",
-    "description": "HTTP APIs for authentication, listings and profile verification on Mulheres.",
+    "description": "APIs HTTP para autenticação, anúncios e verificação de perfil no Mulheres — catálogo de acompanhantes de luxo em Belo Horizonte e no Brasil.",
     "version": "1.0.0",
     "contact": {
       "name": "Mulheres",
@@ -13,20 +13,20 @@
   "servers": [
     {
       "url": "https://mulheresdeluxo.com.br",
-      "description": "Production"
+      "description": "Produção"
     }
   ],
   "paths": {
     "/api/auth/me": {
       "get": {
-        "summary": "Current authenticated user",
+        "summary": "Usuário autenticado atual",
         "tags": ["Auth"],
         "responses": {
           "200": {
-            "description": "Session user payload"
+            "description": "Payload do usuário da sessão"
           },
           "401": {
-            "description": "Not authenticated"
+            "description": "Não autenticado"
           }
         }
       }
@@ -37,45 +37,45 @@
         "tags": ["Auth"],
         "responses": {
           "200": {
-            "description": "Logged in"
+            "description": "Login realizado"
           }
         }
       }
     },
     "/api/auth/register": {
       "post": {
-        "summary": "Register account",
+        "summary": "Criar conta",
         "tags": ["Auth"],
         "responses": {
           "201": {
-            "description": "Account created"
+            "description": "Conta criada"
           }
         }
       }
     },
     "/api/listings": {
       "get": {
-        "summary": "List current user ads",
+        "summary": "Listar anúncios do usuário atual",
         "tags": ["Listings"],
         "responses": {
           "200": {
-            "description": "Listings for the authenticated companion"
+            "description": "Anúncios da acompanhante autenticada"
           }
         }
       },
       "post": {
-        "summary": "Create listing with photos (S3)",
+        "summary": "Criar anúncio com fotos (S3)",
         "tags": ["Listings"],
         "responses": {
           "201": {
-            "description": "Listing created"
+            "description": "Anúncio criado"
           }
         }
       }
     },
     "/api/listings/{id}": {
       "patch": {
-        "summary": "Update listing",
+        "summary": "Atualizar anúncio",
         "tags": ["Listings"],
         "parameters": [
           {
@@ -89,38 +89,38 @@
         ],
         "responses": {
           "200": {
-            "description": "Listing updated"
+            "description": "Anúncio atualizado"
           }
         }
       }
     },
     "/api/profile/verify": {
       "post": {
-        "summary": "Submit verification photo",
+        "summary": "Enviar foto de verificação",
         "tags": ["Profile"],
         "responses": {
           "200": {
-            "description": "Profile verified"
+            "description": "Perfil verificado"
           }
         }
       }
     },
     "/api/luxo": {
       "post": {
-        "summary": "Create Luxo PIX payment for listing promotion",
+        "summary": "Criar pagamento PIX Luxo para promoção de anúncio",
         "tags": ["Luxo"],
         "responses": {
           "200": {
-            "description": "PIX payment created"
+            "description": "Pagamento PIX criado"
           }
         }
       },
       "patch": {
-        "summary": "Confirm Luxo payment",
+        "summary": "Confirmar pagamento Luxo",
         "tags": ["Luxo"],
         "responses": {
           "200": {
-            "description": "Listing promoted"
+            "description": "Anúncio promovido"
           }
         }
       }
@@ -131,7 +131,7 @@
         "tags": ["Discovery"],
         "responses": {
           "200": {
-            "description": "Service is healthy"
+            "description": "Serviço saudável"
           }
         }
       }
@@ -142,7 +142,7 @@
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "Protected resource metadata"
+            "description": "Metadados do protected resource"
           }
         }
       }
@@ -153,7 +153,7 @@
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "OIDC provider metadata"
+            "description": "Metadados do provedor OIDC"
           }
         }
       }
@@ -164,73 +164,73 @@
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "OAuth AS metadata including agent_auth"
+            "description": "Metadados do AS OAuth incluindo agent_auth"
           }
         }
       }
     },
     "/auth.md": {
       "get": {
-        "summary": "Auth.md agent registration instructions",
+        "summary": "Instruções Auth.md para registro de agentes",
         "tags": ["OAuth", "Discovery"],
         "responses": {
           "200": {
-            "description": "Markdown Auth.md skill document"
+            "description": "Documento Markdown da skill Auth.md"
           }
         }
       }
     },
     "/agent/identity": {
       "post": {
-        "summary": "Register an agent identity (Auth.md)",
+        "summary": "Registrar identidade de agente (Auth.md)",
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "Registration / identity assertion"
+            "description": "Registro / identity assertion"
           }
         }
       }
     },
     "/agent/identity/claim": {
       "post": {
-        "summary": "Claim ceremony for agent registration",
+        "summary": "Cerimônia de claim para registro de agente",
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "Claim ceremony payload or completed assertion"
+            "description": "Payload da cerimônia de claim ou assertion concluída"
           }
         }
       }
     },
     "/oauth/token": {
       "post": {
-        "summary": "OAuth token endpoint",
+        "summary": "Endpoint de token OAuth",
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "Access token response"
+            "description": "Resposta com access token"
           }
         }
       }
     },
     "/oauth/revoke": {
       "post": {
-        "summary": "OAuth token revocation (RFC 7009)",
+        "summary": "Revogação de token OAuth (RFC 7009)",
         "tags": ["OAuth"],
         "responses": {
           "200": {
-            "description": "Token revoked"
+            "description": "Token revogado"
           }
         }
       }
     },
     "/.well-known/api-catalog": {
       "get": {
-        "summary": "API catalog (RFC 9727 linkset)",
+        "summary": "Catálogo de APIs (linkset RFC 9727)",
         "tags": ["Discovery"],
         "responses": {
           "200": {
-            "description": "Linkset API catalog"
+            "description": "Catálogo de APIs em linkset"
           }
         }
       }
@@ -241,49 +241,49 @@
         "tags": ["Discovery", "MCP"],
         "responses": {
           "200": {
-            "description": "MCP Server Card with serverInfo, transport, capabilities"
+            "description": "MCP Server Card com serverInfo, transport e capabilities"
           }
         }
       }
     },
     "/mcp": {
       "post": {
-        "summary": "MCP Streamable HTTP JSON-RPC endpoint",
+        "summary": "Endpoint MCP Streamable HTTP JSON-RPC",
         "tags": ["MCP"],
         "responses": {
           "200": {
-            "description": "JSON-RPC response"
+            "description": "Resposta JSON-RPC"
           }
         }
       },
       "get": {
-        "summary": "MCP transport discovery hint",
+        "summary": "Dica de descoberta do transporte MCP",
         "tags": ["MCP"],
         "responses": {
           "200": {
-            "description": "How to connect via Streamable HTTP"
+            "description": "Como conectar via Streamable HTTP"
           }
         }
       }
     },
     "/mcp/server-card": {
       "get": {
-        "summary": "MCP Server Card (alternate SEP path)",
+        "summary": "MCP Server Card (caminho SEP alternativo)",
         "tags": ["Discovery", "MCP"],
         "responses": {
           "200": {
-            "description": "Same card as /.well-known/mcp/server-card.json"
+            "description": "Mesmo card de /.well-known/mcp/server-card.json"
           }
         }
       }
     },
     "/.well-known/agent-skills/index.json": {
       "get": {
-        "summary": "Agent Skills Discovery index (RFC v0.2.0)",
+        "summary": "Índice Agent Skills Discovery (RFC v0.2.0)",
         "tags": ["Discovery"],
         "responses": {
           "200": {
-            "description": "Skills index with $schema, skills[], name/type/description/url/digest"
+            "description": "Índice de skills com $schema, skills[], name/type/description/url/digest"
           }
         }
       }

@@ -24,22 +24,22 @@ function buildApiCatalog() {
   const openapi: LinkTarget = {
     href: absoluteUrl("/openapi.json"),
     type: "application/openapi+json",
-    title: "OpenAPI 3.1 description",
+    title: "Descrição OpenAPI 3.1",
   };
   const docs: LinkTarget = {
     href: absoluteUrl("/guias/como-funciona"),
     type: "text/html",
-    title: "Human documentation",
+    title: "Documentação humana",
   };
   const health: LinkTarget = {
     href: absoluteUrl("/api/health"),
     type: "application/json",
-    title: "Service health",
+    title: "Saúde do serviço",
   };
   const llms: LinkTarget = {
     href: absoluteUrl("/llms.txt"),
     type: "text/plain",
-    title: "LLM site summary",
+    title: "Resumo do site para LLMs",
   };
 
   const apis = [

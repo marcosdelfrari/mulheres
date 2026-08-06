@@ -129,7 +129,7 @@ export function getCatalogHeading(filters: CatalogFilters): {
   }
 
   return {
-    title: "Catálogo de Acompanhantes no Brasil",
+    title: "Catálogo de acompanhantes no Brasil",
     description:
       "Navegue pelo catálogo completo de acompanhantes. Filtre por região, cidade, bairro, preço e serviços.",
   };

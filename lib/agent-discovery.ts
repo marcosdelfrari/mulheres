@@ -23,9 +23,9 @@ export function buildAgentCard() {
     skills: [
       {
         id: "catalog-search",
-        name: "Companion catalog",
+        name: "Catálogo de acompanhantes",
         description:
-          "Discover verified companion profiles by city, neighborhood and filters.",
+          "Descubra perfis verificados de acompanhantes por cidade, bairro e filtros.",
         tags: ["catalog", "search", "bh"],
         examples: [
           "Acompanhantes em Belo Horizonte",
@@ -36,10 +36,11 @@ export function buildAgentCard() {
       },
       {
         id: "api-catalog",
-        name: "API catalog",
-        description: "RFC 9727 API catalog and OpenAPI surface.",
+        name: "Catálogo de APIs",
+        description:
+          "Catálogo de APIs (RFC 9727) e superfície OpenAPI do Mulheres.",
         tags: ["api", "discovery"],
-        examples: ["List public HTTP APIs"],
+        examples: ["Listar APIs HTTP públicas"],
         inputModes: ["text"],
         outputModes: ["application/json"],
       },

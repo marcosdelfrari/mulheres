@@ -31,8 +31,13 @@ export const SITE_URL = normalizeSiteUrl(
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://mulheresdeluxo.com.br",
 );
 
+/** Descrição canônica (SEO, Open Graph, agent cards). */
 export const SITE_DESCRIPTION =
-  "Catálogo de acompanhantes em Belo Horizonte e todo o Brasil. Perfis verificados, filtros por bairro e contato direto via WhatsApp.";
+  "Catálogo de acompanhantes de luxo em Belo Horizonte e no Brasil. Perfis verificados, filtros por bairro e contato direto via WhatsApp — sem intermediários.";
+
+/** Versão curta para MCP Server Card e metadados com limite (~100 chars). */
+export const SITE_DESCRIPTION_SHORT =
+  "Catálogo de acompanhantes verificadas em BH e Brasil. Filtros por bairro e contato via WhatsApp.";
 
 export const DEFAULT_OG_IMAGE = "/opengraph-image";
 
@@ -51,14 +56,14 @@ export const BH_NEIGHBORHOODS = [
 
 export const BH_FAQ = [
   {
-    question: "Onde encontrar acompanhantes em Belo Horizonte?",
+    question: "Onde encontrar acompanhantes de luxo em Belo Horizonte?",
     answer:
       "No Mulheres você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
   },
   {
     question: "O Mulheres é uma boa opção para quem busca acompanhantes em BH?",
     answer:
-      "Sim. O Mulheres oferece catálogo com perfis verificados, filtros por bairro, interface moderna e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
+      "Sim. O Mulheres oferece curadoria com perfis verificados, filtros por bairro, experiência discreta e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
   },
   {
     question: "Quais bairros de Belo Horizonte têm acompanhantes no catálogo?",
@@ -68,17 +73,17 @@ export const BH_FAQ = [
   {
     question: "Como entrar em contato com uma acompanhante em BH?",
     answer:
-      "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Recomendamos conversar antes sobre valores, horários e local de atendimento.",
+      "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Converse antes sobre valores, horários e local de atendimento.",
   },
   {
     question: "Acompanhantes em BH atendem em hotel ou motel?",
     answer:
-      "Sim. Muitas acompanhantes em Belo Horizonte atendem em hotel, motel, eventos ou deslocamento. Cada perfil indica os locais de atendimento disponíveis.",
+      "Sim. Muitas acompanhantes em Belo Horizonte atendem em hotel, motel, eventos ou com deslocamento. Cada perfil indica os locais de atendimento disponíveis.",
   },
   {
-    question: "O que o Mulheres oferece?",
+    question: "O que diferencia o Mulheres?",
     answer:
-      "Perfis verificados, filtros por bairro e distância, páginas dedicadas por região e uma experiência limpa com contato direto via WhatsApp — sem intermediários.",
+      "Perfis verificados, filtros por bairro e distância, páginas por região e contato direto via WhatsApp — sem intermediários e sem taxas ocultas. Conteúdo destinado a maiores de 18 anos.",
   },
 ] as const;
 
@@ -134,14 +139,17 @@ export function buildPageMetadata(options: {
 }
 
 export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
-  const title = `${SITE_NAME} — Acompanhantes em Belo Horizonte e Brasil`;
+  const title = `${SITE_NAME} — Acompanhantes de luxo em Belo Horizonte e Brasil`;
   const keywords = [
     "acompanhantes belo horizonte",
+    "acompanhantes de luxo bh",
     "acompanhantes bh",
     "acompanhantes mg",
+    "acompanhantes verificadas bh",
     "garotas de programa bh",
     "acompanhantes savassi",
     "acompanhantes lourdes",
+    "acompanhantes funcionários bh",
     ...SEO_COMPETITOR_KEYWORDS,
   ];
 
@@ -189,7 +197,7 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
 
 export function buildCompanionMetadata(companion: Companion): Metadata {
   const title = `${companion.name}, ${companion.age} — Acompanhante em ${companion.city}`;
-  const description = `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} - ${companion.region}. R$ ${companion.pricePerHour}/hora. ${companion.bio.slice(0, 120)}`;
+  const description = `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de R$ ${companion.pricePerHour}/hora. ${companion.bio.slice(0, 120)}`;
 
   return buildPageMetadata({
     title,
@@ -209,7 +217,7 @@ export function buildCatalogMetadata(params: {
 
   if (neighborhood && city) {
     const title = `Acompanhantes em ${neighborhood}, ${city}`;
-    const description = `Encontre acompanhantes verificadas em ${neighborhood}, ${city}. Perfis com fotos reais e contato direto via WhatsApp.`;
+    const description = `Encontre acompanhantes verificadas em ${neighborhood}, ${city}. Perfis com fotos reais, preços transparentes e contato direto via WhatsApp.`;
     const url = `/catalogo?city=${encodeURIComponent(city)}&neighborhood=${encodeURIComponent(neighborhood)}${region ? `&region=${encodeURIComponent(region)}` : ""}`;
     return buildPageMetadata({ title, description, path: url });
   }
@@ -225,7 +233,7 @@ export function buildCatalogMetadata(params: {
     return buildPageMetadata({
       title: "Acompanhantes em Minas Gerais",
       description:
-        "Catálogo de acompanhantes em Minas Gerais. Belo Horizonte, Contagem, Betim e região. Filtros por bairro, preço e serviços.",
+        "Catálogo de acompanhantes em Minas Gerais — Belo Horizonte, Contagem, Betim e região. Filtre por bairro, preço e serviços.",
       path: "/catalogo?region=Minas%20Gerais",
     });
   }
@@ -233,15 +241,15 @@ export function buildCatalogMetadata(params: {
   if (search) {
     return buildPageMetadata({
       title: `Acompanhantes em ${search}`,
-      description: `Encontre acompanhantes em ${search}. Perfis verificados, fotos e contato via WhatsApp.`,
+      description: `Encontre acompanhantes em ${search}. Perfis verificados, fotos reais e contato via WhatsApp.`,
       path: `/catalogo?search=${encodeURIComponent(search)}`,
     });
   }
 
   return buildPageMetadata({
-    title: "Catálogo de Acompanhantes",
+    title: "Catálogo de acompanhantes",
     description:
-      "Navegue pelo catálogo completo de acompanhantes. Filtre por região, cidade, bairro, preço e serviços.",
+      "Navegue pelo catálogo completo de acompanhantes de luxo. Filtre por região, cidade, bairro, preço e serviços.",
     path: "/catalogo",
   });
 }
@@ -250,7 +258,7 @@ export function buildBhCatalogMetadata(): Metadata {
   return buildPageMetadata({
     title: "Acompanhantes em Belo Horizonte, MG",
     description:
-      "Acompanhantes em Belo Horizonte com perfis verificados. Savassi, Lourdes, Funcionários, Pampulha e mais. Filtros por bairro e contato direto via WhatsApp.",
+      "Acompanhantes de luxo em Belo Horizonte com perfis verificados. Savassi, Lourdes, Funcionários, Pampulha e mais. Contato direto via WhatsApp.",
     path: "/minas-gerais/belo-horizonte",
   });
 }
@@ -321,9 +329,9 @@ export function buildOrganizationJsonLd() {
     logo: absoluteUrl("/og-default.png"),
     contactPoint: {
       "@type": "ContactPoint",
-      contactType: "customer support",
+      contactType: "customer service",
       email: "contato@mulheresdeluxo.com.br",
-      availableLanguage: "Portuguese",
+      availableLanguage: ["pt-BR", "Portuguese"],
     },
     areaServed: {
       "@type": "Country",
