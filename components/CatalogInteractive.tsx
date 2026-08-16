@@ -6,14 +6,14 @@ import {
   catalogFiltersToSearchParams,
   filterCompanions,
 } from "@/lib/catalog-filter";
-import { companions } from "@/lib/mock-data";
 import { useUserLocation } from "@/lib/use-user-location";
-import type { CatalogFilters } from "@/lib/types";
+import type { CatalogFilters, Companion } from "@/lib/types";
 import { CatalogFiltersBar } from "./CatalogFilters";
 import { CatalogGrid } from "./CatalogGrid";
 
 interface CatalogInteractiveProps {
   initialFilters: CatalogFilters;
+  companions: Companion[];
 }
 
 function urlRelevantFilters(filters: CatalogFilters) {
@@ -32,7 +32,10 @@ function urlFiltersEqual(a: CatalogFilters, b: CatalogFilters) {
   return JSON.stringify(keys) === JSON.stringify(other);
 }
 
-export function CatalogInteractive({ initialFilters }: CatalogInteractiveProps) {
+export function CatalogInteractive({
+  initialFilters,
+  companions,
+}: CatalogInteractiveProps) {
   const router = useRouter();
   const [filters, setFilters] = useState(initialFilters);
   const {
@@ -73,7 +76,7 @@ export function CatalogInteractive({ initialFilters }: CatalogInteractiveProps) 
 
   const items = useMemo(
     () => filterCompanions(companions, filters, userLocation),
-    [filters, userLocation],
+    [companions, filters, userLocation],
   );
 
   const locationMode =
@@ -93,6 +96,7 @@ export function CatalogInteractive({ initialFilters }: CatalogInteractiveProps) 
         onRequestLocation={handleRequestLocation}
         locationLoading={locationLoading}
         locationError={locationError}
+        companions={companions}
       />
 
       <CatalogGrid items={items} locationMode={locationMode} />

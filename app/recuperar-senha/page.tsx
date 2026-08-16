@@ -10,14 +10,12 @@ export default function RecuperarSenhaPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [resetUrl, setResetUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setMessage("");
-    setResetUrl("");
     setSubmitting(true);
 
     try {
@@ -29,7 +27,6 @@ export default function RecuperarSenhaPage() {
       const data = (await res.json()) as {
         error?: string;
         message?: string;
-        resetUrl?: string;
       };
 
       if (!res.ok) {
@@ -37,10 +34,10 @@ export default function RecuperarSenhaPage() {
         return;
       }
 
-      setMessage(data.message ?? "Verifique seu e-mail.");
-      if (data.resetUrl) {
-        setResetUrl(data.resetUrl);
-      }
+      setMessage(
+        data.message ??
+          "Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha.",
+      );
     } catch {
       setError("Falha de conexão. Tente novamente.");
     } finally {
@@ -54,7 +51,8 @@ export default function RecuperarSenhaPage() {
         Recuperar senha
       </h1>
       <p className="mt-2 text-base text-white/60">
-        Informe seu e-mail para receber o link.
+        Informe seu e-mail cadastrado. Enviaremos um link seguro para redefinir
+        a senha.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-5 text-left">
@@ -69,6 +67,7 @@ export default function RecuperarSenhaPage() {
             className={inputClass}
             placeholder="seu@email.com"
             required
+            autoComplete="email"
           />
         </div>
 
@@ -79,16 +78,11 @@ export default function RecuperarSenhaPage() {
         )}
 
         {message && (
-          <div className="space-y-3 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-4 text-base text-green-400">
+          <div className="space-y-2 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-4 text-base text-green-400">
             <p>{message}</p>
-            {resetUrl && (
-              <p className="border-t border-green-500/10 pt-2 text-sm italic">
-                Link temporário:{" "}
-                <Link href={resetUrl} className="underline break-all font-bold">
-                  redefinir agora
-                </Link>
-              </p>
-            )}
+            <p className="text-sm text-green-400/70">
+              Confira também a caixa de spam. O link expira em 1 hora.
+            </p>
           </div>
         )}
 
@@ -97,7 +91,7 @@ export default function RecuperarSenhaPage() {
           disabled={submitting}
           className="w-full rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:opacity-60 active:scale-[0.98]"
         >
-          {submitting ? "Enviando…" : "Enviar link"}
+          {submitting ? "Enviando…" : "Enviar link por e-mail"}
         </button>
       </form>
 

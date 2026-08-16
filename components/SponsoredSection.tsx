@@ -1,21 +1,20 @@
 "use client";
 
 import { useMemo } from "react";
-import { getSponsoredCompanions } from "@/lib/mock-data";
 import { getDistanceKm } from "@/lib/geo";
 import { useUserLocation } from "@/lib/use-user-location";
 import type { Companion } from "@/lib/types";
 import { SponsoredCompanionCard } from "./SponsoredCompanionCard";
 
 interface SponsoredSectionProps {
-  companions?: Companion[];
+  companions: Companion[];
   locationMode?: "city" | "neighborhood";
   title?: string;
   subtitle?: string;
 }
 
 export function SponsoredSection({
-  companions: companionsProp,
+  companions,
   locationMode,
   title = "Super Tops",
   subtitle = "Perfis em destaque na plataforma.",
@@ -23,8 +22,7 @@ export function SponsoredSection({
   const { location } = useUserLocation();
 
   const items = useMemo(() => {
-    const list = companionsProp ?? getSponsoredCompanions();
-    return list.map((companion) => ({
+    return companions.map((companion) => ({
       companion,
       distanceKm: location
         ? getDistanceKm(location, {
@@ -33,18 +31,20 @@ export function SponsoredSection({
           })
         : undefined,
     }));
-  }, [companionsProp, location]);
+  }, [companions, location]);
 
   if (items.length === 0) return null;
 
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="font-serif text-xl font-bold italic tracking-tight text-gray-900 sm:text-2xl">
+        <h2 className="text-xl font-light tracking-wide text-gray-900 sm:text-2xl">
           {title}{" "}
           <span className="text-luxury-accent">em Destaque</span>
         </h2>
-        <p className="mt-1 text-sm text-gray-600 sm:text-base">{subtitle}</p>
+        <p className="mt-1 text-sm font-light text-gray-600 sm:text-base">
+          {subtitle}
+        </p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

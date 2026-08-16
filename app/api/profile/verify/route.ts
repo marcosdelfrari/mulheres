@@ -29,12 +29,15 @@ export async function POST(request: Request) {
       return jsonError("Envie uma foto para confirmar o cadastro.");
     }
 
-    const photoUrl = await uploadImageToS3(
+    const uploaded = await uploadImageToS3(
       file,
       method === "documento"
         ? `verification/${user.id}/document`
         : `verification/${user.id}/profile`,
+      2_500_000,
+      { classifyNsfw: false },
     );
+    const photoUrl = uploaded.url;
 
     const updated = await prisma.user.update({
       where: { id: user.id },

@@ -8,6 +8,11 @@ interface AgeRestrictedMediaProps {
   className?: string;
   /** Quando true, o clique abre o gate se ainda não verificado */
   interactive?: boolean;
+  /**
+   * Se false, renderiza a mídia sem blur (foto sem nudez).
+   * Default true para compatibilidade.
+   */
+  restricted?: boolean;
 }
 
 /**
@@ -18,6 +23,7 @@ export function AgeRestrictedMedia({
   children,
   className = "",
   interactive = true,
+  restricted = true,
 }: AgeRestrictedMediaProps) {
   const { verified, requestVerification } = useAgeGate();
 
@@ -28,7 +34,7 @@ export function AgeRestrictedMedia({
     requestVerification();
   };
 
-  if (verified) {
+  if (!restricted || verified) {
     return <div className={className}>{children}</div>;
   }
 

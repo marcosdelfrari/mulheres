@@ -1,5 +1,4 @@
-import type { Region } from "./types";
-import { getCompanionsByCity } from "./mock-data";
+import type { Companion, Region } from "./types";
 import { slugify } from "./slug";
 
 export interface NeighborhoodHub {
@@ -245,11 +244,14 @@ export function neighborhoodHubPath(
 }
 
 export function getNeighborhoodCompanions(
+  companions: Companion[],
   city: string,
   neighborhood: string,
 ) {
-  return getCompanionsByCity(city).filter(
-    (c) => c.neighborhood.toLowerCase() === neighborhood.toLowerCase(),
+  return companions.filter(
+    (c) =>
+      c.city.toLowerCase() === city.toLowerCase() &&
+      c.neighborhood.toLowerCase() === neighborhood.toLowerCase(),
   );
 }
 
@@ -257,8 +259,13 @@ export function neighborhoodSlugFromName(name: string): string {
   return slugify(name);
 }
 
-export function getPublishedNeighborhoodHubs(hub: CityHub): NeighborhoodHub[] {
-  return hub.neighborhoods.filter(
-    (n) => getNeighborhoodCompanions(hub.city, n.name).length >= 1,
+export function getPublishedNeighborhoodHubs(
+  hub: CityHub,
+  cityCompanions: Companion[],
+): NeighborhoodHub[] {
+  return hub.neighborhoods.filter((n) =>
+    cityCompanions.some(
+      (c) => c.neighborhood.toLowerCase() === n.name.toLowerCase(),
+    ),
   );
 }

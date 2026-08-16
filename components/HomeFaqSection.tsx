@@ -12,7 +12,7 @@ export function HomeFaqSection() {
         <div className="max-w-3xl">
           <h2
             id="home-faq"
-            className="font-serif text-2xl font-bold italic text-gray-900"
+            className="text-2xl font-light tracking-wide text-gray-900"
           >
             Perguntas frequentes
           </h2>
@@ -22,10 +22,8 @@ export function HomeFaqSection() {
                 key={faq.question}
                 className="rounded-3xl border border-gray-100 bg-gray-50 p-5"
               >
-                <dt className="font-serif font-semibold text-gray-900">
-                  {faq.question}
-                </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-gray-600">
+                <dt className="font-light text-gray-900">{faq.question}</dt>
+                <dd className="mt-2 text-sm font-light leading-relaxed text-gray-600">
                   {faq.answer}
                 </dd>
               </div>

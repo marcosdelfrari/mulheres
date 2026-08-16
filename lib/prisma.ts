@@ -5,15 +5,25 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function createPrismaClient() {
-  const connectionString =
+export function getDatabaseUrl() {
+  return (
     process.env.DATABASE_URL ??
     process.env.PRISMA_DATABASE_URL ??
-    process.env.POSTGRES_URL;
+    process.env.POSTGRES_URL ??
+    null
+  );
+}
+
+export function hasDatabaseUrl() {
+  return Boolean(getDatabaseUrl());
+}
+
+function createPrismaClient() {
+  const connectionString = getDatabaseUrl();
 
   if (!connectionString) {
     throw new Error(
-      "DATABASE_URL (ou PRISMA_DATABASE_URL / POSTGRES_URL) não configurada."
+      "DATABASE_URL (ou PRISMA_DATABASE_URL / POSTGRES_URL) não configurada.",
     );
   }
 
@@ -21,8 +31,18 @@ function createPrismaClient() {
   return new PrismaClient({ adapter });
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+export function getPrisma() {
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+  }
+  return globalForPrisma.prisma;
 }
+
+/** Client lazy — só conecta na primeira query (não quebra o build sem DATABASE_URL). */
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop, receiver) {
+    const client = getPrisma();
+    const value = Reflect.get(client, prop, receiver);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});

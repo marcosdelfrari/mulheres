@@ -147,7 +147,15 @@ export async function PATCH(request: Request, context: RouteContext) {
       ? await uploadImagesToS3(newPhotoFiles, `listings/${user.id}`)
       : [];
 
-    const photos = [...kept, ...uploaded].slice(0, 5);
+    const uploadedUrls = uploaded.map((item) => item.url);
+    const photos = [...kept, ...uploadedUrls].slice(0, 5);
+    const keptNsfw = kept.filter((url) => existing.nsfwPhotos.includes(url));
+    const uploadedNsfw = uploaded
+      .filter((item) => item.isNsfw)
+      .map((item) => item.url);
+    const nsfwPhotos = [...keptNsfw, ...uploadedNsfw].filter((url) =>
+      photos.includes(url),
+    );
 
     const listing = await prisma.listing.update({
       where: { id: existing.id },
@@ -168,6 +176,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         status: parsed.status,
         photoUrl: photos[0] ?? null,
         photos,
+        nsfwPhotos,
       },
     });
 

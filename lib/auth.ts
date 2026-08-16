@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { AuthUser, ListingSummary } from "@/lib/auth-types";
 import type { Listing, User } from "@/lib/generated/prisma/client";
+import { isOnlineFromLastLogin } from "@/lib/online";
 
 export type { AuthUser, ListingSummary } from "@/lib/auth-types";
 
@@ -12,19 +13,12 @@ export const SESSION_DAYS = 30;
 export const LUXO_PRICE_CENTS = 1990;
 /** Duração do destaque após pagamento confirmado. */
 export const LUXO_HOURS = 4;
-/** Considerada online se o último login foi há menos deste intervalo. */
-export const ONLINE_WINDOW_MS = 30 * 60 * 1000;
 export const PIX_KEY = process.env.PIX_KEY ?? "contato@mulheresdeluxo.com.br";
 
-export function isOnlineFromLastLogin(
-  lastLoginAt: Date | string | null | undefined,
-) {
-  if (!lastLoginAt) return false;
-  const at =
-    typeof lastLoginAt === "string" ? new Date(lastLoginAt) : lastLoginAt;
-  if (Number.isNaN(at.getTime())) return false;
-  return Date.now() - at.getTime() < ONLINE_WINDOW_MS;
-}
+export {
+  ONLINE_WINDOW_MS,
+  isOnlineFromLastLogin,
+} from "@/lib/online";
 
 export async function markUserLogin(userId: string) {
   const now = new Date();
@@ -84,6 +78,7 @@ export function toListingSummary(
     online,
     photoUrl: listing.photoUrl,
     photos: listing.photos ?? [],
+    nsfwPhotos: listing.nsfwPhotos ?? [],
     createdAt: listing.createdAt.toISOString(),
   };
 }

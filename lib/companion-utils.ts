@@ -1,5 +1,4 @@
-import { companions, getCompanionById } from "./mock-data";
-import type { Companion } from "./types";
+import type { Companion } from "@/lib/types";
 import { cityShortSlug, slugify } from "./slug";
 
 export function buildCompanionSlug(companion: Companion): string {
@@ -10,23 +9,19 @@ export function companionProfilePath(companion: Companion): string {
   return `/acompanhante/${buildCompanionSlug(companion)}`;
 }
 
-export function getCompanionBySlugOrId(slugOrId: string): Companion | undefined {
-  const byId = getCompanionById(slugOrId);
-  if (byId) return byId;
-
-  const bySuffix = companions.find((c) => buildCompanionSlug(c) === slugOrId);
-  if (bySuffix) return bySuffix;
-
-  const idMatch = slugOrId.match(/-(\d+)$/);
-  if (idMatch) return getCompanionById(idMatch[1]);
-
-  return undefined;
-}
-
 export function formatVerifiedDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
+}
+
+/** Indica se a URL está marcada como nudez (blur + gate). */
+export function isNsfwPhoto(
+  nsfwPhotos: string[] | undefined,
+  photoUrl: string | undefined | null,
+) {
+  if (!photoUrl || !nsfwPhotos?.length) return false;
+  return nsfwPhotos.includes(photoUrl);
 }

@@ -10,7 +10,7 @@ import {
   FILTER_SERVICES,
   FILTER_SERVICES_FOR,
 } from "@/lib/catalog-locations";
-import { REGIONS } from "@/lib/mock-data";
+import { REGIONS } from "@/lib/regions";
 
 type LuxoPayment = {
   id: string;

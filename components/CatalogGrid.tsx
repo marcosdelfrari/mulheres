@@ -35,7 +35,7 @@ export function CatalogGrid({ items, locationMode }: CatalogGridProps) {
       {regular.length > 0 && (
         <div>
           {sponsored.length > 0 && (
-            <h2 className="mb-4 font-serif text-lg font-bold italic tracking-tight text-gray-900">
+            <h2 className="mb-4 text-lg font-light tracking-wide text-gray-900">
               Todas as acompanhantes
             </h2>
           )}

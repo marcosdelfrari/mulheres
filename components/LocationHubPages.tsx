@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CompanionCard } from "@/components/CompanionCard";
 import { JsonLd } from "@/components/JsonLd";
-import { getCompanionsByCity } from "@/lib/mock-data";
+import { getCompanionsByCity } from "@/lib/listings";
 import type { CityHub, NeighborhoodHub } from "@/lib/location-hubs";
 import {
   cityHubPath,
@@ -22,10 +22,10 @@ interface CityHubPageProps {
   hub: CityHub;
 }
 
-export function CityHubPage({ hub }: CityHubPageProps) {
-  const cityCompanions = getCompanionsByCity(hub.city);
+export async function CityHubPage({ hub }: CityHubPageProps) {
+  const cityCompanions = await getCompanionsByCity(hub.city);
   const faqs = hub.faq.length > 0 ? hub.faq : BH_FAQ;
-  const neighborhoods = getPublishedNeighborhoodHubs(hub);
+  const neighborhoods = getPublishedNeighborhoodHubs(hub, cityCompanions);
 
   return (
     <>
@@ -100,7 +100,7 @@ export function CityHubPage({ hub }: CityHubPageProps) {
 
         <section className="mt-10">
           <div className="mb-6 flex items-end justify-between gap-4">
-            <h2 className="font-serif text-2xl font-bold italic text-gray-900">
+            <h2 className="text-2xl font-light tracking-wide text-gray-900">
               {cityCompanions.length} acompanhantes em{" "}
               {hub.city === "Belo Horizonte" ? "BH" : hub.city}
             </h2>
@@ -112,20 +112,26 @@ export function CityHubPage({ hub }: CityHubPageProps) {
             </Link>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {cityCompanions.map((c) => (
-              <CompanionCard
-                key={c.id}
-                companion={c}
-                locationMode="neighborhood"
-              />
-            ))}
-          </div>
+          {cityCompanions.length === 0 ? (
+            <p className="rounded-2xl border border-gray-100 bg-gray-50 px-5 py-8 text-gray-600">
+              Nenhum perfil publicado nesta cidade no momento.
+            </p>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {cityCompanions.map((c) => (
+                <CompanionCard
+                  key={c.id}
+                  companion={c}
+                  locationMode="neighborhood"
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         {hub.city === "Belo Horizonte" && (
           <section className="mt-14 max-w-3xl">
-            <h2 className="font-serif text-2xl font-bold italic text-gray-900">
+            <h2 className="text-2xl font-light tracking-wide text-gray-900">
               Por que escolher o Mulheres em Belo Horizonte?
             </h2>
             <div className="mt-4 space-y-4 leading-relaxed text-gray-600">
@@ -142,7 +148,7 @@ export function CityHubPage({ hub }: CityHubPageProps) {
         <section className="mt-14 max-w-3xl" aria-labelledby="faq-heading">
           <h2
             id="faq-heading"
-            className="font-serif text-2xl font-bold italic text-gray-900"
+            className="text-2xl font-light tracking-wide text-gray-900"
           >
             Perguntas frequentes — {hub.city}
           </h2>
@@ -152,7 +158,7 @@ export function CityHubPage({ hub }: CityHubPageProps) {
                 key={faq.question}
                 className="rounded-2xl border border-gray-100 bg-white p-5"
               >
-                <dt className="font-serif font-semibold text-gray-900">
+                <dt className="font-light text-gray-900">
                   {faq.question}
                 </dt>
                 <dd className="mt-2 leading-relaxed text-gray-600">
@@ -172,11 +178,16 @@ interface NeighborhoodHubPageProps {
   neighborhood: NeighborhoodHub;
 }
 
-export function NeighborhoodHubPage({
+export async function NeighborhoodHubPage({
   hub,
   neighborhood,
 }: NeighborhoodHubPageProps) {
-  const companions = getNeighborhoodCompanions(hub.city, neighborhood.name);
+  const cityCompanions = await getCompanionsByCity(hub.city);
+  const companions = getNeighborhoodCompanions(
+    cityCompanions,
+    hub.city,
+    neighborhood.name,
+  );
 
   return (
     <>
@@ -234,7 +245,7 @@ export function NeighborhoodHubPage({
 
         <section className="mt-10">
           <div className="mb-6 flex items-end justify-between gap-4">
-            <h2 className="font-serif text-2xl font-bold italic text-gray-900">
+            <h2 className="text-2xl font-light tracking-wide text-gray-900">
               {companions.length}{" "}
               {companions.length === 1 ? "acompanhante" : "acompanhantes"} em{" "}
               {neighborhood.name}
@@ -273,7 +284,7 @@ export function NeighborhoodHubPage({
         <section className="mt-14 max-w-3xl" aria-labelledby="faq-neighborhood">
           <h2
             id="faq-neighborhood"
-            className="font-serif text-2xl font-bold italic text-gray-900"
+            className="text-2xl font-light tracking-wide text-gray-900"
           >
             Perguntas frequentes — {neighborhood.name}
           </h2>
@@ -283,7 +294,7 @@ export function NeighborhoodHubPage({
                 key={faq.question}
                 className="rounded-2xl border border-gray-100 bg-white p-5"
               >
-                <dt className="font-serif font-semibold text-gray-900">
+                <dt className="font-light text-gray-900">
                   {faq.question}
                 </dt>
                 <dd className="mt-2 leading-relaxed text-gray-600">

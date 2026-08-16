@@ -6,11 +6,12 @@ import {
   getNeighborhoodCompanions,
   neighborhoodHubPath,
 } from "@/lib/location-hubs";
-import { companions } from "@/lib/mock-data";
+import { getPublishedCompanions } from "@/lib/listings";
 import { absoluteUrl } from "@/lib/seo";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const companions = await getPublishedCompanions().catch(() => []);
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -76,16 +77,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: hub.city === "Belo Horizonte" ? 0.95 : 0.75,
   }));
 
-  const neighborhoodPages: MetadataRoute.Sitemap = CITY_HUBS.flatMap((hub) =>
-    hub.neighborhoods
-      .filter((n) => getNeighborhoodCompanions(hub.city, n.name).length >= 1)
+  const neighborhoodPages: MetadataRoute.Sitemap = CITY_HUBS.flatMap((hub) => {
+    const cityCompanions = companions.filter(
+      (c) => c.city.toLowerCase() === hub.city.toLowerCase(),
+    );
+    return hub.neighborhoods
+      .filter(
+        (n) =>
+          getNeighborhoodCompanions(cityCompanions, hub.city, n.name).length >=
+          1,
+      )
       .map((n) => ({
         url: absoluteUrl(neighborhoodHubPath(hub, n)),
         lastModified: now,
         changeFrequency: "daily" as const,
         priority: 0.85,
-      })),
-  );
+      }));
+  });
 
   const profilePages: MetadataRoute.Sitemap = companions
     .filter((c) => c.verified)

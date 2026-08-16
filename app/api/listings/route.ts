@@ -138,10 +138,14 @@ export async function POST(request: Request) {
       return jsonError("No máximo 5 fotos por anúncio.");
     }
 
-    const photos = await uploadImagesToS3(
+    const uploaded = await uploadImagesToS3(
       photoFiles.slice(0, 5),
       `listings/${user.id}`,
     );
+    const photos = uploaded.map((item) => item.url);
+    const nsfwPhotos = uploaded
+      .filter((item) => item.isNsfw)
+      .map((item) => item.url);
 
     const listing = await prisma.listing.create({
       data: {
@@ -163,6 +167,7 @@ export async function POST(request: Request) {
         status: parsed.status,
         photoUrl: photos[0] ?? null,
         photos,
+        nsfwPhotos,
       },
     });
 

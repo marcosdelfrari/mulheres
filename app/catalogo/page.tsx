@@ -1,17 +1,19 @@
 import { Suspense } from "react";
 import { CatalogInteractive } from "@/components/CatalogInteractive";
 import { JsonLd } from "@/components/JsonLd";
-import { companions } from "@/lib/mock-data";
 import {
   filterCompanions,
   getCatalogHeading,
   parseCatalogSearchParams,
 } from "@/lib/catalog-filter";
+import { getPublishedCompanions } from "@/lib/listings";
 import {
   absoluteUrl,
   buildCatalogMetadata,
   buildCollectionPageJsonLd,
 } from "@/lib/seo";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -31,6 +33,7 @@ export async function generateMetadata({ searchParams }: PageProps) {
 export default async function CatalogPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const filters = parseCatalogSearchParams(params);
+  const companions = await getPublishedCompanions();
   const items = filterCompanions(companions, filters);
   const heading = getCatalogHeading(filters);
   const canonicalPath = (() => {
@@ -69,7 +72,10 @@ export default async function CatalogPage({ searchParams }: PageProps) {
         </header>
 
         <Suspense>
-          <CatalogInteractive initialFilters={filters} />
+          <CatalogInteractive
+            initialFilters={filters}
+            companions={companions}
+          />
         </Suspense>
       </div>
     </>

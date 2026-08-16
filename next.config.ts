@@ -1,14 +1,4 @@
 import type { NextConfig } from "next";
-import { companions } from "./lib/mock-data";
-import { buildCompanionSlug } from "./lib/companion-utils";
-
-const profileRedirects = companions.flatMap((c) => [
-  {
-    source: `/acompanhante/${c.id}`,
-    destination: `/acompanhante/${buildCompanionSlug(c)}`,
-    permanent: true,
-  },
-]);
 
 const AGENT_LINK_HEADER = [
   '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
@@ -25,7 +15,12 @@ const AGENT_LINK_HEADER = [
 ].join(", ");
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@vladmandic/face-api"],
+  serverExternalPackages: [
+    "@vladmandic/face-api",
+    "@tensorflow/tfjs",
+    "nsfwjs",
+    "sharp",
+  ],
   images: {
     remotePatterns: [
       {
@@ -104,7 +99,6 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      ...profileRedirects,
       {
         source: "/catalogo",
         has: [{ type: "query", key: "search", value: "Belo Horizonte" }],

@@ -51,6 +51,8 @@ export interface Companion {
   avatarColor: string;
   coverPhoto: string;
   photos: string[];
+  /** URLs com nudez detectada (subconjunto de `photos`). */
+  nsfwPhotos: string[];
   adId: string;
   publishedAt: string;
   verifiedAt?: string;

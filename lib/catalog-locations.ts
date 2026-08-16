@@ -1,20 +1,26 @@
-import type { Region } from "./types";
-import { companions } from "./mock-data";
+import type { Companion, Region } from "./types";
 
-export function getCitiesByRegion(region: Region): string[] {
+export function getCitiesByRegion(
+  companions: Companion[],
+  region: Region,
+): string[] {
   return [
     ...new Set(
-      companions.filter((c) => c.region === region).map((c) => c.city)
+      companions.filter((c) => c.region === region).map((c) => c.city),
     ),
   ].sort();
 }
 
-export function getNeighborhoodsByCity(region: Region, city: string): string[] {
+export function getNeighborhoodsByCity(
+  companions: Companion[],
+  region: Region,
+  city: string,
+): string[] {
   return [
     ...new Set(
       companions
         .filter((c) => c.region === region && c.city === city)
-        .map((c) => c.neighborhood)
+        .map((c) => c.neighborhood),
     ),
   ].sort();
 }

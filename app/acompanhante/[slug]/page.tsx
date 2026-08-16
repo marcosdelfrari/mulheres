@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { companions } from "@/lib/mock-data";
 import {
   buildCompanionSlug,
   companionProfilePath,
-  getCompanionBySlugOrId,
 } from "@/lib/companion-utils";
+import {
+  getCompanionBySlugOrId,
+  getPublishedCompanions,
+} from "@/lib/listings";
 import { CompanionContactBar } from "@/components/CompanionContactBar";
 import { CompanionProfileBreadcrumb } from "@/components/CompanionProfileBreadcrumb";
 import { CompanionProfileHero } from "@/components/CompanionProfileHero";
@@ -19,26 +21,33 @@ import {
 } from "@/lib/seo";
 import { CITY_HUBS, cityHubPath } from "@/lib/location-hubs";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return companions.map((c) => ({ slug: buildCompanionSlug(c) }));
+export async function generateStaticParams() {
+  try {
+    const companions = await getPublishedCompanions();
+    return companions.map((c) => ({ slug: buildCompanionSlug(c) }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const companion = getCompanionBySlugOrId(slug);
+  const companion = await getCompanionBySlugOrId(slug);
   if (!companion) return { title: "Perfil não encontrado" };
   return buildCompanionMetadata(companion);
 }
 
 export default async function CompanionProfilePage({ params }: PageProps) {
   const { slug } = await params;
-  const companion = getCompanionBySlugOrId(slug);
+  const companion = await getCompanionBySlugOrId(slug);
 
   if (!companion) {
     notFound();
@@ -55,7 +64,12 @@ export default async function CompanionProfilePage({ params }: PageProps) {
   const breadcrumbItems = cityHub
     ? [
         { name: "Início", url: absoluteUrl("/") },
-        { name: companion.region, url: absoluteUrl(`/catalogo?region=${encodeURIComponent(companion.region)}`) },
+        {
+          name: companion.region,
+          url: absoluteUrl(
+            `/catalogo?region=${encodeURIComponent(companion.region)}`,
+          ),
+        },
         { name: companion.city, url: absoluteUrl(cityHubPath(cityHub)) },
         {
           name: companion.name,

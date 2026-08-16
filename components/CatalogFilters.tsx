@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { CatalogFilters, Region } from "@/lib/types";
+import { REGIONS } from "@/lib/regions";
+import type { CatalogFilters, Companion, Region } from "@/lib/types";
 import { DEFAULT_CATALOG_FILTERS } from "@/lib/types";
-import { REGIONS } from "@/lib/mock-data";
 import {
   FILTER_GENDERS,
   FILTER_LOCATIONS,
@@ -21,6 +21,7 @@ interface CatalogFiltersProps {
   onRequestLocation: () => void;
   locationLoading: boolean;
   locationError: string | null;
+  companions: Companion[];
 }
 
 const MAX_PRICE = 500;
@@ -122,6 +123,7 @@ export function CatalogFiltersBar({
   onRequestLocation,
   locationLoading,
   locationError,
+  companions,
 }: CatalogFiltersProps) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<CatalogFilters>(filters);
@@ -131,16 +133,19 @@ export function CatalogFiltersBar({
   }, [open, filters]);
 
   const cities = useMemo(
-    () => (draft.region !== "all" ? getCitiesByRegion(draft.region) : []),
-    [draft.region]
+    () =>
+      draft.region !== "all"
+        ? getCitiesByRegion(companions, draft.region)
+        : [],
+    [companions, draft.region],
   );
 
   const neighborhoods = useMemo(
     () =>
       draft.region !== "all" && draft.city
-        ? getNeighborhoodsByCity(draft.region, draft.city)
+        ? getNeighborhoodsByCity(companions, draft.region, draft.city)
         : [],
-    [draft.region, draft.city]
+    [companions, draft.region, draft.city],
   );
 
   const updateDraft = (partial: Partial<CatalogFilters>) => {

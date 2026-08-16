@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createToken, hashToken, jsonError } from "@/lib/auth";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 const schema = z.object({
   email: z.string().trim().email("E-mail inválido."),
@@ -35,15 +36,14 @@ export async function POST(request: Request) {
       },
     });
 
-    const origin = new URL(request.url).origin;
-    const resetUrl = `${origin}/redefinir-senha?token=${rawToken}`;
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+      new URL(request.url).origin;
+    const resetUrl = `${siteUrl}/redefinir-senha?token=${rawToken}`;
 
-    // Sem provedor de e-mail configurado: devolvemos o link para o fluxo funcionar.
-    // Em produção, envie por e-mail e remova resetUrl da resposta.
-    return Response.json({
-      ...generic,
-      resetUrl,
-    });
+    await sendPasswordResetEmail({ to: email, resetUrl });
+
+    return Response.json(generic);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return jsonError(error.issues[0]?.message ?? "Dados inválidos.");

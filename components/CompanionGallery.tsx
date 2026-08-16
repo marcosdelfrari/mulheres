@@ -2,17 +2,20 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { isNsfwPhoto } from "@/lib/companion-utils";
 import { useAgeGate } from "@/lib/age-gate-context";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 
 interface CompanionGalleryProps {
   photos: string[];
+  nsfwPhotos?: string[];
   name: string;
   variant?: "default" | "embedded";
 }
 
 export function CompanionGallery({
   photos,
+  nsfwPhotos = [],
   name,
   variant = "default",
 }: CompanionGalleryProps) {
@@ -23,13 +26,24 @@ export function CompanionGallery({
   if (photos.length === 0) return null;
 
   const isEmbedded = variant === "embedded";
+  const activePhoto = photos[activeIndex]!;
+  const activeRestricted = isNsfwPhoto(nsfwPhotos, activePhoto);
 
   const openFullscreen = () => {
-    if (!verified) {
+    if (activeRestricted && !verified) {
       requestVerification();
       return;
     }
     setFullscreen(true);
+  };
+
+  const selectPhoto = (index: number) => {
+    const next = photos[index];
+    if (isNsfwPhoto(nsfwPhotos, next) && !verified) {
+      requestVerification();
+      return;
+    }
+    setActiveIndex(index);
   };
 
   return (
@@ -43,10 +57,10 @@ export function CompanionGallery({
       >
         {!isEmbedded && (
           <div className="border-b border-gray-100 px-5 py-4 sm:px-6">
-            <h2 className="font-serif text-sm font-semibold italic tracking-tight text-gray-500">
+            <h2 className="text-sm font-light tracking-wide text-gray-500">
               Galeria de fotos
             </h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm font-light text-gray-500">
               {photos.length} foto{photos.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -59,14 +73,18 @@ export function CompanionGallery({
             isEmbedded ? "max-h-[480px] rounded-2xl" : "max-h-[520px]"
           }`}
           aria-label={
-            verified
-              ? `Ampliar foto de ${name}`
-              : "Verificar idade para ver a foto"
+            activeRestricted && !verified
+              ? "Verificar idade para ver a foto"
+              : `Ampliar foto de ${name}`
           }
         >
-          <AgeRestrictedMedia className="absolute inset-0" interactive={false}>
+          <AgeRestrictedMedia
+            className="absolute inset-0"
+            interactive={false}
+            restricted={activeRestricted}
+          >
             <Image
-              src={photos[activeIndex]}
+              src={activePhoto}
               alt={`${name} — foto ${activeIndex + 1}`}
               fill
               className="object-cover"
@@ -77,39 +95,40 @@ export function CompanionGallery({
         </button>
 
         <div className={`flex gap-2 overflow-x-auto ${isEmbedded ? "pt-4" : "p-4 sm:p-5"}`}>
-          {photos.map((photo, index) => (
-            <button
-              key={photo}
-              type="button"
-              onClick={() => {
-                if (!verified) {
-                  requestVerification();
-                  return;
-                }
-                setActiveIndex(index);
-              }}
-              className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors ${
-                index === activeIndex
-                  ? "border-luxury-accent"
-                  : "border-transparent opacity-70 hover:opacity-100"
-              }`}
-              aria-label={`Ver foto ${index + 1} de ${name}`}
-            >
-              <AgeRestrictedMedia className="absolute inset-0" interactive={false}>
-                <Image
-                  src={photo}
-                  alt={`${name} — miniatura ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
-                />
-              </AgeRestrictedMedia>
-            </button>
-          ))}
+          {photos.map((photo, index) => {
+            const restricted = isNsfwPhoto(nsfwPhotos, photo);
+            return (
+              <button
+                key={photo}
+                type="button"
+                onClick={() => selectPhoto(index)}
+                className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors ${
+                  index === activeIndex
+                    ? "border-luxury-accent"
+                    : "border-transparent opacity-70 hover:opacity-100"
+                }`}
+                aria-label={`Ver foto ${index + 1} de ${name}`}
+              >
+                <AgeRestrictedMedia
+                  className="absolute inset-0"
+                  interactive={false}
+                  restricted={restricted}
+                >
+                  <Image
+                    src={photo}
+                    alt={`${name} — miniatura ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                </AgeRestrictedMedia>
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      {fullscreen && verified && (
+      {fullscreen && (!activeRestricted || verified) && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => setFullscreen(false)}
@@ -130,7 +149,7 @@ export function CompanionGallery({
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={photos[activeIndex]}
+              src={activePhoto}
               alt={`${name} — foto ${activeIndex + 1}`}
               fill
               className="object-contain"
@@ -146,6 +165,10 @@ export function CompanionGallery({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (isNsfwPhoto(nsfwPhotos, photo) && !verified) {
+                      requestVerification();
+                      return;
+                    }
                     setActiveIndex(index);
                   }}
                   className={`h-2 w-2 rounded-full ${

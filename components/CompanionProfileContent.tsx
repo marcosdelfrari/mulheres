@@ -35,6 +35,7 @@ export function CompanionProfileContent({
         <div className="mt-4">
           <CompanionGallery
             photos={companion.photos}
+            nsfwPhotos={companion.nsfwPhotos}
             name={companion.name}
             variant="embedded"
           />

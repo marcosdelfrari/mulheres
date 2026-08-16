@@ -2,14 +2,25 @@ import { HomeHero } from "@/components/HomeHero";
 import { HomeSeoSection } from "@/components/HomeSeoSection";
 import { HomeFaqSection } from "@/components/HomeFaqSection";
 import { TopCompanions } from "@/components/TopCompanions";
+import {
+  getSponsoredCompanions,
+  getTopCompanions,
+} from "@/lib/listings";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const [tops, sponsored] = await Promise.all([
+    getTopCompanions(6),
+    getSponsoredCompanions(),
+  ]);
+
   return (
     <>
       <div className="luxury-shell">
         <HomeHero />
       </div>
-      <TopCompanions />
+      <TopCompanions tops={tops} sponsored={sponsored} />
       <HomeSeoSection />
       <HomeFaqSection />
     </>

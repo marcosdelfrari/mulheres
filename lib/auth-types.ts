@@ -32,5 +32,6 @@ export type ListingSummary = {
   online: boolean;
   photoUrl: string | null;
   photos: string[];
+  nsfwPhotos: string[];
   createdAt: string;
 };

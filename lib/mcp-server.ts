@@ -1,5 +1,6 @@
 import { absoluteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
 import { prisma } from "@/lib/prisma";
+import { cityShortSlug, slugify } from "@/lib/slug";
 import {
   MCP_PROTOCOL_VERSION,
   MCP_SERVER_NAME,
@@ -183,20 +184,30 @@ async function callTool(name: string, args: Record<string, unknown>) {
       },
     });
 
-    const results = listings.map((item) => ({
-      id: item.id,
-      title: item.title,
-      city: item.city,
-      neighborhood: item.neighborhood,
-      region: item.region,
-      pricePerHour: item.pricePerHour,
-      age: item.age,
-      gender: item.gender,
-      online: item.online,
-      isLuxo: item.isLuxo,
-      photo: item.photoUrl ?? item.photos?.[0] ?? null,
-      url: absoluteUrl(`/acompanhante/${item.id}`),
-    }));
+    const results = listings.map((item) => {
+      const photos =
+        item.photos?.length > 0
+          ? item.photos
+          : item.photoUrl
+            ? [item.photoUrl]
+            : [];
+      const slug = `${slugify(item.title)}-${slugify(item.neighborhood)}-${cityShortSlug(item.city)}-${item.id}`;
+
+      return {
+        id: item.id,
+        title: item.title,
+        city: item.city,
+        neighborhood: item.neighborhood,
+        region: item.region,
+        pricePerHour: item.pricePerHour,
+        age: item.age,
+        gender: item.gender,
+        online: item.online,
+        isLuxo: item.isLuxo,
+        photo: item.photoUrl ?? photos[0] ?? null,
+        url: absoluteUrl(`/acompanhante/${slug}`),
+      };
+    });
 
     return {
       content: [

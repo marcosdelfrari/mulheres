@@ -4,9 +4,10 @@ import {
   CITY_HUBS,
   getCityHub,
   getNeighborhoodHub,
-  getNeighborhoodCompanions,
 } from "@/lib/location-hubs";
 import { buildNeighborhoodMetadata } from "@/lib/seo";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ estado: string; cidade: string; bairro: string }>;
@@ -14,13 +15,11 @@ interface PageProps {
 
 export function generateStaticParams() {
   return CITY_HUBS.flatMap((hub) =>
-    hub.neighborhoods
-      .filter((n) => getNeighborhoodCompanions(hub.city, n.name).length >= 1)
-      .map((n) => ({
-        estado: hub.stateSlug,
-        cidade: hub.citySlug,
-        bairro: n.slug,
-      })),
+    hub.neighborhoods.map((n) => ({
+      estado: hub.stateSlug,
+      cidade: hub.citySlug,
+      bairro: n.slug,
+    })),
   );
 }
 

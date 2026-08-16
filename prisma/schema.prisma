@@ -107,6 +107,8 @@ model Listing {
   online           Boolean       @default(true)
   photoUrl         String?
   photos           String[]      @default([])
+  /** URLs de fotos com nudez detectada (subconjunto de `photos`). */
+  nsfwPhotos       String[]      @default([])
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
