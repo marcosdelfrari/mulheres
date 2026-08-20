@@ -95,6 +95,22 @@ export function AccountVerification({
         Use a câmera do celular para tirar a foto agora.
       </p>
 
+      <div className="rounded-3xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm leading-relaxed text-emerald-950">
+        <p className="font-semibold text-emerald-900">
+          Sua privacidade é prioridade
+        </p>
+        <p className="mt-2">
+          Essa foto <strong>não será publicada</strong> no anúncio nem aparece
+          para visitantes do site. Serve só para confirmação interna do
+          cadastro — inclusive se você não mostra o rosto nas fotos públicas.
+        </p>
+        <p className="mt-2">
+          O acesso é restrito e protegido pela{" "}
+          <strong>Lei Geral de Proteção de Dados (LGPD)</strong>. Ninguém
+          externo tem acesso a essa imagem.
+        </p>
+      </div>
+
       <div className="grid grid-cols-2 gap-2 rounded-full border border-gray-200 p-1">
         <button
           type="button"

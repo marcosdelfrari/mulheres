@@ -31,7 +31,7 @@ export function SponsoredCompanionCard({
     >
       <div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-black/40 sm:aspect-auto sm:h-auto sm:w-48 sm:min-h-[12rem] sm:self-stretch">
         <AgeRestrictedMedia
-          className="absolute inset-0 h-full w-full"
+          className="absolute inset-0"
           interactive={false}
           restricted={isNsfwPhoto(companion.nsfwPhotos, photo)}
         >

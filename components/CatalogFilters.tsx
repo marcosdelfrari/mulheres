@@ -190,15 +190,20 @@ export function CatalogFiltersBar({
   return (
     <>
       <section className="space-y-2">
-        <div className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-4 py-3 sm:px-5 sm:py-3.5">
-          <svg className="h-5 w-5 shrink-0 text-purple-800" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <div className="flex items-center gap-2.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
+          <svg
+            className="h-4 w-4 shrink-0 text-purple-800 sm:h-[1.125rem] sm:w-[1.125rem]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden
+          >
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
           </svg>
 
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="min-w-0 flex-1 truncate text-left text-base font-medium text-purple-900 hover:text-purple-800 sm:text-lg"
+            className="min-w-0 flex-1 truncate py-1 text-left text-sm font-medium text-purple-900 hover:text-purple-800 sm:text-[0.95rem]"
           >
             {getLocationLabel(filters)}
           </button>
@@ -206,10 +211,10 @@ export function CatalogFiltersBar({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0c0414] text-white hover:bg-purple-900"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0c0414] text-white hover:bg-purple-900 sm:h-10 sm:w-10"
             aria-label="Abrir filtros"
           >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4 sm:h-[1.125rem] sm:w-[1.125rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>

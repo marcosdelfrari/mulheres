@@ -37,7 +37,7 @@ export function CompanionCard({
         }`}
       >
         <AgeRestrictedMedia
-          className="absolute inset-0 h-full w-full"
+          className="absolute inset-0"
           interactive={false}
           restricted={isNsfwPhoto(companion.nsfwPhotos, photo)}
         >

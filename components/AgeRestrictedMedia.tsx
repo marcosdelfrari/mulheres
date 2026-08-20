@@ -18,6 +18,9 @@ interface AgeRestrictedMediaProps {
 /**
  * Aplica blur em mídia adulta até a verificação etária.
  * Clique (se interactive) abre o popup ECA.
+ *
+ * O tamanho (h/w/absolute inset) deve vir só de `className` —
+ * não força h-full (quebra Image fill em avatares/galeria).
  */
 export function AgeRestrictedMedia({
   children,
@@ -35,14 +38,12 @@ export function AgeRestrictedMedia({
   };
 
   if (!restricted || verified) {
-    return (
-      <div className={`relative h-full w-full ${className}`}>{children}</div>
-    );
+    return <div className={`relative ${className}`}>{children}</div>;
   }
 
   return (
     <div
-      className={`relative isolate h-full w-full overflow-hidden ${className}`}
+      className={`relative isolate overflow-hidden ${className}`}
       onClick={interactive ? onActivate : undefined}
       onKeyDown={
         interactive
@@ -63,7 +64,6 @@ export function AgeRestrictedMedia({
           : undefined
       }
     >
-      {/* Camada com tamanho explícito — sem isso o blur colapsa e a foto some (fica preto). */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 scale-110 select-none blur-[18px] brightness-90 contrast-95 saturate-50"
