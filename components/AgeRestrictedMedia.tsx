@@ -9,22 +9,20 @@ interface AgeRestrictedMediaProps {
   /** Quando true, o clique abre o gate se ainda não verificado */
   interactive?: boolean;
   /**
-   * Se false, renderiza a mídia sem blur (ex.: avatar sem foto).
+   * Se false, renderiza a mídia sem blur.
    * Default true — conteúdo adulto fica borrado até a verificação facial.
    */
   restricted?: boolean;
 }
 
 /**
- * Aplica blur em mídia adulta até a verificação etária.
- * Clique (se interactive) abre o popup ECA.
- *
- * O tamanho (h/w/absolute inset) deve vir só de `className` —
- * não força h-full (quebra Image fill em avatares/galeria).
+ * Wrapper de mídia com blur +18.
+ * `className` define o box (ex.: `absolute inset-0` ou `relative h-20 w-20`).
+ * Não injeta `relative`/`h-full` — isso conflita com Image fill.
  */
 export function AgeRestrictedMedia({
   children,
-  className = "",
+  className = "relative h-full w-full",
   interactive = true,
   restricted = true,
 }: AgeRestrictedMediaProps) {
@@ -38,12 +36,12 @@ export function AgeRestrictedMedia({
   };
 
   if (!restricted || verified) {
-    return <div className={`relative ${className}`}>{children}</div>;
+    return <div className={className}>{children}</div>;
   }
 
   return (
     <div
-      className={`relative isolate overflow-hidden ${className}`}
+      className={`isolate overflow-hidden ${className}`}
       onClick={interactive ? onActivate : undefined}
       onKeyDown={
         interactive
