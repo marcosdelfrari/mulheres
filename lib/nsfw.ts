@@ -1,6 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
 import * as nsfwjs from "nsfwjs";
-import sharp from "sharp";
 
 /** Soma Porn+Hentai acima disso → NSFW. */
 const EXPLICIT_THRESHOLD = 0.5;
@@ -29,6 +28,7 @@ export async function isImageNsfw(buffer: Buffer): Promise<boolean> {
   let imageTensor: tf.Tensor3D | null = null;
 
   try {
+    const sharp = (await import("sharp")).default;
     const model = await getModel();
     const { data, info } = await sharp(buffer)
       .rotate()

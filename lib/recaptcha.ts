@@ -9,20 +9,23 @@ type RecaptchaVerifyResponse = {
   "error-codes"?: string[];
 };
 
+function isRecaptchaEnabled() {
+  return process.env.NODE_ENV === "production";
+}
+
 /**
  * Valida token reCAPTCHA v3 no servidor (siteverify).
- * Se a secret não estiver configurada fora de produção, ignora (dev local).
+ * Desativado fora de produção (dev/local).
  */
 export async function assertRecaptcha(
   token: string | undefined,
   expectedAction: string,
 ) {
+  if (!isRecaptchaEnabled()) return;
+
   const secret = process.env.RECAPTCHA_SECRET_KEY?.trim();
   if (!secret) {
-    if (process.env.NODE_ENV === "production") {
-      throw new Error("reCAPTCHA não configurado no servidor.");
-    }
-    return;
+    throw new Error("reCAPTCHA não configurado no servidor.");
   }
 
   if (!token?.trim()) {

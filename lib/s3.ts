@@ -1,6 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { randomBytes } from "crypto";
-import { isImageNsfw } from "@/lib/nsfw";
 
 const region = process.env.AWS_REGION ?? "us-east-2";
 const bucket = process.env.AWS_S3_BUCKET ?? "";
@@ -9,6 +8,17 @@ export type UploadedImage = {
   url: string;
   isNsfw: boolean;
 };
+
+/** Import dinâmico — evita carregar sharp/nsfwjs no GET /api/listings. */
+async function classifyImageNsfw(buffer: Buffer): Promise<boolean> {
+  try {
+    const { isImageNsfw } = await import("@/lib/nsfw");
+    return await isImageNsfw(buffer);
+  } catch (error) {
+    console.error("[s3] NSFW classify unavailable:", error);
+    return false;
+  }
+}
 
 function getClient() {
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
@@ -52,7 +62,7 @@ export async function uploadImageToS3(
   const classifyNsfw = options.classifyNsfw ?? true;
 
   const [isNsfw] = await Promise.all([
-    classifyNsfw ? isImageNsfw(buffer) : Promise.resolve(false),
+    classifyNsfw ? classifyImageNsfw(buffer) : Promise.resolve(false),
     getClient().send(
       new PutObjectCommand({
         Bucket: bucket,

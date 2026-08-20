@@ -1,8 +1,9 @@
 import Script from "next/script";
+import { getRecaptchaSiteKey } from "@/lib/recaptcha-client";
 
-/** Carrega o script do reCAPTCHA v3 quando a site key está configurada. */
+/** Carrega o script do reCAPTCHA v3 (só em produção). */
 export function RecaptchaScript() {
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
+  const siteKey = getRecaptchaSiteKey();
   if (!siteKey) return null;
 
   return (

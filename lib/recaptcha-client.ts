@@ -10,7 +10,12 @@ declare global {
   }
 }
 
+export function isRecaptchaEnabled() {
+  return process.env.NODE_ENV === "production";
+}
+
 export function getRecaptchaSiteKey() {
+  if (!isRecaptchaEnabled()) return "";
   return process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
 }
 

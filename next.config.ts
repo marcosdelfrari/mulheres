@@ -21,6 +21,13 @@ const nextConfig: NextConfig = {
     "nsfwjs",
     "sharp",
   ],
+  // sharp@0.35+ precisa do libvips no bundle; NFT/Turbopack às vezes não traça.
+  outputFileTracingIncludes: {
+    "/*": [
+      "./node_modules/@img/sharp-libvips-linux-x64/**/*",
+      "./node_modules/@img/sharp-linux-x64/**/*",
+    ],
+  },
   images: {
     remotePatterns: [
       {
