@@ -54,7 +54,7 @@ function LoginForm() {
         Use e-mail e senha da sua conta de anúncios.
       </p>
       <p className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-relaxed text-white/50">
-        Clientes não precisam de login — navegue no catálogo e entre em contato
+        Clientes não precisam de login — navegue pelas modelos e entre em contato
         direto pelo WhatsApp ou telefone.
       </p>
 
@@ -97,7 +97,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:opacity-60 active:scale-[0.98]"
+          className="w-full cursor-pointer rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]"
         >
           {submitting ? "Aguarde…" : "Entrar"}
         </button>
@@ -127,7 +127,7 @@ function LoginForm() {
           href="/"
           className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
         >
-          ← Voltar ao catálogo
+          ← Voltar às modelos
         </Link>
       </p>
     </>

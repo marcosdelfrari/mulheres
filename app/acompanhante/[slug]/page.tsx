@@ -67,7 +67,7 @@ export default async function CompanionProfilePage({ params }: PageProps) {
         {
           name: companion.region,
           url: absoluteUrl(
-            `/catalogo?region=${encodeURIComponent(companion.region)}`,
+            `/acompanhantes?region=${encodeURIComponent(companion.region)}`,
           ),
         },
         { name: companion.city, url: absoluteUrl(cityHubPath(cityHub)) },
@@ -78,7 +78,7 @@ export default async function CompanionProfilePage({ params }: PageProps) {
       ]
     : [
         { name: "Início", url: absoluteUrl("/") },
-        { name: "Catálogo", url: absoluteUrl("/catalogo") },
+        { name: "As modelos", url: absoluteUrl("/acompanhantes") },
         {
           name: companion.name,
           url: absoluteUrl(companionProfilePath(companion)),

@@ -14,4 +14,6 @@ export const SEO_COMPETITOR_KEYWORDS = [
   "skokka bh",
   "alternativa classificados bh",
   "acompanhantes luxo bh",
+  "acompanhantes luxo brasil",
+  "acompanhantes verificadas brasil",
 ] as const;

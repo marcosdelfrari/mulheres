@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import type { Companion, Region } from "@/lib/types";
 import { isNsfwPhoto } from "@/lib/companion-utils";
+import type { Companion, Region } from "@/lib/types";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 import { CompanionDistance } from "./CompanionDistance";
 import { VerifiedBadge, OnlineBadge } from "./VerifiedBadge";
@@ -30,7 +30,6 @@ interface CompanionProfileHeroProps {
 
 export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
   const profilePhoto = companion.photos[0];
-  const restricted = isNsfwPhoto(companion.nsfwPhotos, profilePhoto);
   const uf = REGION_UF[companion.region];
   const hasLocal = companion.serviceLocations.includes("Em casa");
 
@@ -40,7 +39,7 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
         <AgeRestrictedMedia
           className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 sm:h-24 sm:w-24"
           interactive={false}
-          restricted={restricted}
+          restricted={isNsfwPhoto(companion.nsfwPhotos, profilePhoto)}
         >
           {profilePhoto ? (
             <Image

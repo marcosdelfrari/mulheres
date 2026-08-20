@@ -27,7 +27,7 @@ export default function MaisDe18Page() {
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
-          href="/catalogo"
+          href="/acompanhantes"
           className="rounded-full bg-[#0c0414] px-6 py-3 text-sm font-bold text-white hover:bg-purple-900"
         >
           Tenho 18 anos ou mais — continuar

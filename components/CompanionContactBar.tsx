@@ -1,5 +1,3 @@
-"use client";
-
 interface CompanionContactBarProps {
   phone: string;
   whatsappUrl: string;
@@ -37,7 +35,10 @@ function WhatsAppIcon() {
   );
 }
 
-export function CompanionContactBar({ phone, whatsappUrl }: CompanionContactBarProps) {
+export function CompanionContactBar({
+  phone,
+  whatsappUrl,
+}: CompanionContactBarProps) {
   const tel = phone.replace(/\D/g, "");
 
   return (

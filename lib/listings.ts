@@ -31,6 +31,12 @@ const listingUserSelect = {
   lastLoginAt: true,
 } as const;
 
+/** Anúncios públicos: publicados e conta não banida. */
+const publishedWhere = {
+  status: "published" as const,
+  user: { bannedAt: null },
+};
+
 function avatarColorFromId(id: string) {
   let hash = 0;
   for (let i = 0; i < id.length; i += 1) {
@@ -109,7 +115,7 @@ export async function getPublishedCompanions(): Promise<Companion[]> {
   if (!hasDatabaseUrl()) return [];
 
   const listings = await prisma.listing.findMany({
-    where: { status: "published" },
+    where: publishedWhere,
     include: { user: { select: listingUserSelect } },
     orderBy: [{ isLuxo: "desc" }, { updatedAt: "desc" }],
   });
@@ -123,7 +129,7 @@ export async function getPublishedCompanionById(
   if (!hasDatabaseUrl()) return undefined;
 
   const listing = await prisma.listing.findFirst({
-    where: { id, status: "published" },
+    where: { id, ...publishedWhere },
     include: { user: { select: listingUserSelect } },
   });
   return listing ? listingToCompanion(listing) : undefined;
@@ -134,8 +140,24 @@ export async function getCompanionsByCity(city: string): Promise<Companion[]> {
 
   const listings = await prisma.listing.findMany({
     where: {
-      status: "published",
+      ...publishedWhere,
       city: { equals: city, mode: "insensitive" },
+    },
+    include: { user: { select: listingUserSelect } },
+    orderBy: [{ isLuxo: "desc" }, { updatedAt: "desc" }],
+  });
+  return listings.map(listingToCompanion);
+}
+
+export async function getCompanionsByRegion(
+  region: string,
+): Promise<Companion[]> {
+  if (!hasDatabaseUrl()) return [];
+
+  const listings = await prisma.listing.findMany({
+    where: {
+      ...publishedWhere,
+      region: { equals: region, mode: "insensitive" },
     },
     include: { user: { select: listingUserSelect } },
     orderBy: [{ isLuxo: "desc" }, { updatedAt: "desc" }],
@@ -149,7 +171,7 @@ export async function getSponsoredCompanions(): Promise<Companion[]> {
   const now = new Date();
   const listings = await prisma.listing.findMany({
     where: {
-      status: "published",
+      ...publishedWhere,
       isLuxo: true,
       OR: [{ luxoUntil: null }, { luxoUntil: { gt: now } }],
     },
@@ -164,8 +186,8 @@ export async function getTopCompanions(limit = 6): Promise<Companion[]> {
 
   const listings = await prisma.listing.findMany({
     where: {
-      status: "published",
-      user: { verificationStatus: "verified" },
+      ...publishedWhere,
+      user: { bannedAt: null, verificationStatus: "verified" },
       NOT: {
         AND: [
           { isLuxo: true },

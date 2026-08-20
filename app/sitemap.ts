@@ -5,6 +5,8 @@ import {
   cityHubPath,
   getNeighborhoodCompanions,
   neighborhoodHubPath,
+  STATE_HUBS,
+  stateHubPath,
 } from "@/lib/location-hubs";
 import { getPublishedCompanions } from "@/lib/listings";
 import { absoluteUrl } from "@/lib/seo";
@@ -21,16 +23,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: absoluteUrl("/catalogo"),
+      url: absoluteUrl("/acompanhantes"),
       lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
-    },
-    {
-      url: absoluteUrl("/catalogo?region=Minas%20Gerais"),
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.85,
     },
     {
       url: absoluteUrl("/guias/como-funciona"),
@@ -42,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: absoluteUrl("/guias/alternativas-em-bh"),
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.65,
     },
     {
       url: absoluteUrl("/contato"),
@@ -70,11 +66,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  const statePages: MetadataRoute.Sitemap = STATE_HUBS.map((hub) => ({
+    url: absoluteUrl(stateHubPath(hub)),
+    lastModified: now,
+    changeFrequency: "daily" as const,
+    priority: 0.88,
+  }));
+
   const cityPages: MetadataRoute.Sitemap = CITY_HUBS.map((hub) => ({
     url: absoluteUrl(cityHubPath(hub)),
     lastModified: now,
     changeFrequency: "daily" as const,
-    priority: hub.city === "Belo Horizonte" ? 0.95 : 0.75,
+    priority: hub.city === "Belo Horizonte" ? 0.95 : 0.8,
   }));
 
   const neighborhoodPages: MetadataRoute.Sitemap = CITY_HUBS.flatMap((hub) => {
@@ -106,6 +109,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticPages,
+    ...statePages,
     ...cityPages,
     ...neighborhoodPages,
     ...profilePages,

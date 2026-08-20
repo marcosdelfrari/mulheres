@@ -44,7 +44,7 @@ export default async function CatalogPage({ searchParams }: PageProps) {
     if (filters.neighborhood !== "all")
       qs.set("neighborhood", filters.neighborhood);
     const q = qs.toString();
-    return q ? `/catalogo?${q}` : "/catalogo";
+    return q ? `/acompanhantes?${q}` : "/acompanhantes";
   })();
 
   return (
@@ -59,7 +59,7 @@ export default async function CatalogPage({ searchParams }: PageProps) {
       />
 
       <div
-        id="catalogo"
+        id="acompanhantes"
         className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6"
       >
         <header>

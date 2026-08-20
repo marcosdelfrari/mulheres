@@ -73,7 +73,7 @@ function CriarContaForm() {
         <span className="text-white">acompanhantes</span> que querem anunciar.
       </p>
       <p className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-relaxed text-white/50">
-        Clientes não precisam de conta — use o catálogo e fale direto pelo
+        Clientes não precisam de conta — veja as modelos e fale direto pelo
         WhatsApp ou telefone.
       </p>
       <p className="mt-4 text-center text-sm text-luxury-accent/80 italic">
@@ -166,7 +166,7 @@ function CriarContaForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:opacity-60 active:scale-[0.98]"
+          className="w-full cursor-pointer rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]"
         >
           {submitting ? "Criando conta…" : "Criar conta"}
         </button>
@@ -187,7 +187,7 @@ function CriarContaForm() {
           href="/"
           className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
         >
-          ← Voltar ao catálogo
+          ← Voltar às modelos
         </Link>
       </p>
     </>

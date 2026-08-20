@@ -110,7 +110,7 @@ export function getCatalogHeading(filters: CatalogFilters): {
   if (filters.search && filters.region !== "all") {
     return {
       title: `Acompanhantes em ${filters.search}, ${filters.region}`,
-      description: `Catálogo de acompanhantes em ${filters.search}. Filtros por bairro, preço e serviços. Contato direto via WhatsApp.`,
+      description: `Modelos e acompanhantes em ${filters.search}. Filtros por bairro, preço e serviços. Contato direto via WhatsApp.`,
     };
   }
 
@@ -124,14 +124,14 @@ export function getCatalogHeading(filters: CatalogFilters): {
   if (filters.region !== "all") {
     return {
       title: `Acompanhantes em ${filters.region}`,
-      description: `Navegue pelo catálogo de acompanhantes em ${filters.region}. Filtros por cidade, bairro, preço e serviços.`,
+      description: `Explore as modelos em ${filters.region}. Filtre por cidade, bairro, preço e serviços.`,
     };
   }
 
   return {
-    title: "Catálogo de acompanhantes no Brasil",
+    title: "As modelos em todo o Brasil",
     description:
-      "Navegue pelo catálogo completo de acompanhantes. Filtre por região, cidade, bairro, preço e serviços.",
+      "Explore todas as modelos. Filtre por região, cidade, bairro, preço e serviços.",
   };
 }
 

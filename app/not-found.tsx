@@ -9,7 +9,7 @@ export default function NotFound() {
         href="/"
         className="mt-6 rounded-full bg-[#0c0414] px-6 py-3 text-base font-medium text-white hover:bg-purple-900"
       >
-        Voltar ao catálogo
+        Voltar às modelos
       </Link>
     </div>
   );

@@ -1,6 +1,7 @@
 import type { Companion } from "@/lib/types";
 import { CompanionGallery } from "./CompanionGallery";
 import { CompanionProfileDetails } from "./CompanionProfileDetails";
+import { ReportListingButton } from "./ReportListingButton";
 
 interface CompanionProfileContentProps {
   companion: Companion;
@@ -60,6 +61,13 @@ export function CompanionProfileContent({
           payments={companion.payments}
         />
       </section>
+
+      <div className="border-t border-gray-100 pb-2 pt-6">
+        <ReportListingButton
+          listingId={companion.id}
+          listingName={companion.name}
+        />
+      </div>
     </div>
   );
 }

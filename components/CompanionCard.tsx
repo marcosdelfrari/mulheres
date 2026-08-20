@@ -20,26 +20,34 @@ export function CompanionCard({
   locationMode,
 }: CompanionCardProps) {
   const photo = companion.photos[0];
-  const restricted = isNsfwPhoto(companion.nsfwPhotos, photo);
+  const premium = companion.sponsored;
 
   return (
     <Link
       href={companionProfilePath(companion)}
-      className="flex flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white transition-colors hover:border-luxury-accent/40"
+      className={`flex w-full flex-col overflow-hidden rounded-3xl border bg-white transition-colors ${
+        premium
+          ? "border-luxury-accent/40 hover:border-luxury-accent/70"
+          : "border-gray-200 hover:border-luxury-accent/40"
+      }`}
     >
-      <div className="relative aspect-[3/4] max-h-56 overflow-hidden bg-gray-100">
+      <div
+        className={`relative w-full overflow-hidden bg-gray-100 ${
+          premium ? "aspect-[3/4]" : "aspect-[16/10]"
+        }`}
+      >
         <AgeRestrictedMedia
-          className="absolute inset-0"
+          className="absolute inset-0 h-full w-full"
           interactive={false}
-          restricted={restricted}
+          restricted={isNsfwPhoto(companion.nsfwPhotos, photo)}
         >
           {photo ? (
             <Image
               src={photo}
               alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
               fill
-              className="object-cover"
-              sizes="(max-width: 640px) 50vw, 320px"
+              className="object-cover object-center"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
             />
           ) : (
             <div
@@ -52,6 +60,11 @@ export function CompanionCard({
             </div>
           )}
         </AgeRestrictedMedia>
+        {premium ? (
+          <span className="pointer-events-none absolute left-2 top-2 z-10 rounded-full bg-luxury-accent px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#0c0414]">
+            ★ Premium
+          </span>
+        ) : null}
         {distanceKm !== undefined && (
           <span className="pointer-events-none absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">
             {formatDistance(distanceKm)} de você
@@ -59,7 +72,7 @@ export function CompanionCard({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-1.5">
             <VerifiedBadge verified={companion.verified} size="sm" />

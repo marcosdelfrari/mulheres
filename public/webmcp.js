@@ -90,7 +90,7 @@
     },
     {
       name: "openCatalog",
-      description: "Abre /catalogo com filtros opcionais de busca.",
+      description: "Abre /acompanhantes com filtros opcionais de busca.",
       inputSchema: {
         type: "object",
         properties: {
@@ -105,7 +105,7 @@
         if (args.city) params.set("city", String(args.city));
         if (args.neighborhood) params.set("neighborhood", String(args.neighborhood));
         var qs = params.toString();
-        var path = qs ? "/catalogo?" + qs : "/catalogo";
+        var path = qs ? "/acompanhantes?" + qs : "/acompanhantes";
         location.assign(path);
         return textResult({ navigatedTo: path });
       },

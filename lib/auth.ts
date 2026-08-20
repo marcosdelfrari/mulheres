@@ -47,6 +47,7 @@ export function toAuthUser(user: User): AuthUser {
     documentPhotoUrl: user.documentPhotoUrl,
     profilePhotoUrl: user.profilePhotoUrl,
     verifiedAt: user.verifiedAt?.toISOString() ?? null,
+    bannedAt: user.bannedAt?.toISOString() ?? null,
   };
 }
 
@@ -149,6 +150,11 @@ export async function getUserFromToken(token: string | undefined) {
         .delete({ where: { id: session.id } })
         .catch(() => {});
     }
+    return null;
+  }
+
+  if (session.user.bannedAt) {
+    await prisma.session.delete({ where: { id: session.id } }).catch(() => {});
     return null;
   }
 

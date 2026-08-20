@@ -25,6 +25,7 @@ export interface User {
   documentPhotoUrl?: string | null;
   profilePhotoUrl?: string | null;
   verifiedAt?: string | null;
+  isAdmin?: boolean;
 }
 
 export interface Companion {

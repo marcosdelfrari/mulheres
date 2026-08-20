@@ -210,8 +210,8 @@ export function CompanionListingPrompt() {
             {isWelcome
               ? "Sua conta está liberada. Crie seu primeiro anúncio e comece a receber contatos."
               : pendingTitle
-                ? `Você tem “${pendingTitle}” aguardando. Publique ou reative para aparecer no catálogo.`
-                : "Você tem anúncio aguardando. Publique ou reative para aparecer no catálogo."}
+                ? `Você tem “${pendingTitle}” aguardando. Publique ou reative para aparecer entre as modelos.`
+                : "Você tem anúncio aguardando. Publique ou reative para aparecer entre as modelos."}
           </p>
         </div>
 

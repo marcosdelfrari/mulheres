@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
-import { BH_FAQ, buildFaqJsonLd } from "@/lib/seo";
+import { BR_FAQ, buildFaqJsonLd } from "@/lib/seo";
 
 export function HomeFaqSection() {
-  const faqs = BH_FAQ.slice(0, 4);
+  const faqs = BR_FAQ.slice(0, 4);
 
   return (
     <section className="border-t border-gray-100 bg-white" aria-labelledby="home-faq">

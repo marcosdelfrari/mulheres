@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { AccountVerification } from "@/components/AccountVerification";
@@ -10,7 +11,12 @@ import {
   FILTER_SERVICES,
   FILTER_SERVICES_FOR,
 } from "@/lib/catalog-locations";
+import { cityShortSlug, slugify } from "@/lib/slug";
 import { REGIONS } from "@/lib/regions";
+
+function listingPublicPath(listing: ListingSummary) {
+  return `/acompanhante/${slugify(listing.title)}-${slugify(listing.neighborhood)}-${cityShortSlug(listing.city)}-${listing.id}`;
+}
 
 type LuxoPayment = {
   id: string;
@@ -76,13 +82,13 @@ const pillTextarea =
   "w-full rounded-3xl border border-gray-300 bg-white px-5 py-4 text-base text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10";
 
 const pillBtn =
-  "inline-flex items-center justify-center rounded-full px-6 py-3.5 text-base font-semibold transition-colors disabled:opacity-60";
+  "inline-flex cursor-pointer items-center justify-center rounded-full px-6 py-3.5 text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60";
 
 const cardActionBtn =
-  "inline-flex h-11 w-full items-center justify-center rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-60";
+  "inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60";
 
 const pillSelect =
-  "w-full appearance-none rounded-full border border-gray-300 bg-white px-5 py-3.5 text-base text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10";
+  "w-full cursor-pointer appearance-none rounded-full border border-gray-300 bg-white px-5 py-3.5 text-base text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10";
 
 function isLuxoActive(listing: ListingSummary) {
   return (
@@ -1088,17 +1094,72 @@ export default function ContaPage() {
                   </div>
 
                   <div className="space-y-2 border-t border-gray-100 px-4 py-3">
+                    {listing.status === "published" ? (
+                      <Link
+                        href={listingPublicPath(listing)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${cardActionBtn} border border-gray-300 bg-white text-gray-900 hover:bg-gray-50`}
+                      >
+                        Ver anúncio
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className={`${cardActionBtn} cursor-not-allowed border border-gray-200 bg-gray-50 text-gray-400`}
+                        title="Publique o anúncio para ver a página pública"
+                      >
+                        Ver anúncio
+                      </button>
+                    )}
+
                     <button
                       type="button"
                       onClick={() => startLuxo(listing.id)}
                       disabled={luxoLoading || listing.status !== "published"}
-                      className={`${cardActionBtn} ${
+                      className={`group relative w-full overflow-hidden rounded-2xl text-left transition-all disabled:opacity-60 active:scale-[0.99] ${
                         luxoActive
-                          ? "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50"
-                          : "bg-amber-500 text-gray-900 hover:bg-amber-400"
+                          ? "border border-amber-300/80 bg-gradient-to-br from-amber-50 via-white to-amber-50/80 hover:border-amber-400"
+                          : "border border-amber-400/60 bg-gradient-to-br from-[#fff8e7] via-amber-50 to-[#ffe8a3] shadow-[0_8px_24px_-12px_rgba(217,119,6,0.55)] hover:border-amber-500 hover:shadow-[0_12px_28px_-12px_rgba(217,119,6,0.7)]"
                       }`}
                     >
-                      {luxoActive ? "Renovar destaque" : "Destaque · R$ 19,90"}
+                      <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-amber-300/30 blur-2xl transition-opacity group-hover:opacity-80" />
+                      <div className="relative flex items-center gap-3 px-4 py-3.5">
+                        <div className="flex min-w-0 flex-1 flex-col gap-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="rounded-full bg-[#0c0414] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-luxury-accent">
+                              {luxoActive ? "Ativo" : "Oferta"}
+                            </span>
+                            {!luxoActive && (
+                              <span className="text-[11px] font-semibold uppercase tracking-wide text-amber-800/80">
+                                4 horas no topo
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm font-bold leading-snug text-gray-900 sm:text-[15px]">
+                            {luxoActive
+                              ? "Renovar destaque"
+                              : "Apareça primeiro na lista"}
+                          </p>
+                          <p className="text-xs leading-snug text-amber-950/70">
+                            {luxoActive
+                              ? "Mais 4h no topo · mais visualizações"
+                              : "Mais visualizações e contatos no WhatsApp"}
+                          </p>
+                        </div>
+                        <div className="shrink-0 text-right">
+                          <p className="text-[11px] font-medium text-amber-900/50 line-through">
+                            R$ 39,80
+                          </p>
+                          <p className="text-lg font-black leading-none tracking-tight text-amber-950 sm:text-xl">
+                            R$ 19,90
+                          </p>
+                          <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-amber-800/70">
+                            {luxoActive ? "Renovar" : "por 4h"}
+                          </p>
+                        </div>
+                      </div>
                     </button>
 
                     <div className="grid grid-cols-2 gap-2">

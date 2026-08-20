@@ -112,6 +112,23 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "Belo Horizonte" }],
+        destination: "/minas-gerais/belo-horizonte",
+        permanent: true,
+      },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "bh" }],
+        destination: "/minas-gerais/belo-horizonte",
+        permanent: true,
+      },
+      {
+        source: "/catalogo",
+        destination: "/acompanhantes",
+        permanent: true,
+      },
+      {
         source: "/guias/mulheres-vs-fatal-model",
         destination: "/guias/alternativas-em-bh",
         permanent: true,

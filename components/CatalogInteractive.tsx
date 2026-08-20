@@ -68,7 +68,7 @@ export function CatalogInteractive({
       if (!urlFiltersEqual(next, initialFilters)) {
         const params = catalogFiltersToSearchParams(next);
         const query = params.toString();
-        router.push(query ? `/catalogo?${query}` : "/catalogo");
+        router.push(query ? `/acompanhantes?${query}` : "/acompanhantes");
       }
     },
     [router, initialFilters],

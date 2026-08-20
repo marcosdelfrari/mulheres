@@ -43,10 +43,10 @@ export function TopCompanions({ tops, sponsored }: TopCompanionsProps) {
             </p>
           </div>
           <Link
-            href="/catalogo"
+            href="/acompanhantes"
             className="hidden text-sm font-black uppercase tracking-widest text-purple-800 hover:text-luxury-accent sm:block"
           >
-            Ver todas →
+            Ver as modelos →
           </Link>
         </div>
 
@@ -68,10 +68,10 @@ export function TopCompanions({ tops, sponsored }: TopCompanionsProps) {
 
         <div className="mt-10 text-center sm:hidden">
           <Link
-            href="/catalogo"
+            href="/acompanhantes"
             className="inline-block rounded-full bg-gray-900 px-8 py-4 text-base font-bold text-white hover:bg-black"
           >
-            Ver catálogo completo
+            Ver todas as modelos
           </Link>
         </div>
       </div>

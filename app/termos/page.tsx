@@ -31,7 +31,7 @@ export default function TermosPage() {
             2. Responsabilidade
           </h2>
           <p className="mt-2">
-            O Mulheres funciona como catálogo de anúncios. A negociação e
+            O Mulheres reúne modelos e anúncios. A negociação e
             encontro ocorrem diretamente entre cliente e acompanhante. Não nos
             responsabilizamos por acordos feitos fora da plataforma.
           </p>

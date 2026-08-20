@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import type { User, UserRole } from "./types";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 interface AuthContextValue {
   user: User | null;
@@ -61,11 +62,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
 
   const login = useCallback(async (email: string, password: string) => {
+    const captchaToken = await getRecaptchaToken("login");
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, captchaToken }),
     });
 
     if (!res.ok) {
@@ -100,7 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(data.user);
       return data.user;
     },
-    []
+    [],
   );
 
   const logout = useCallback(async () => {

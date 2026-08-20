@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Mulheres — Acompanhantes em Belo Horizonte e Brasil";
+export const alt = "Mulheres — Acompanhantes de luxo em todo o Brasil";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -24,10 +24,10 @@ export default function OpenGraphImage() {
           Mulheres
         </div>
         <div style={{ fontSize: 36, marginTop: 24, opacity: 0.95, maxWidth: 900 }}>
-          Acompanhantes em Belo Horizonte e todo o Brasil
+          Acompanhantes de luxo em todo o Brasil
         </div>
         <div style={{ fontSize: 24, marginTop: 32, opacity: 0.85 }}>
-          Perfis verificados · Filtros por bairro · WhatsApp direto
+          Perfis verificados · Capitais e bairros · WhatsApp direto
         </div>
       </div>
     ),

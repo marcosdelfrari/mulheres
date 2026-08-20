@@ -9,8 +9,8 @@ interface AgeRestrictedMediaProps {
   /** Quando true, o clique abre o gate se ainda não verificado */
   interactive?: boolean;
   /**
-   * Se false, renderiza a mídia sem blur (foto sem nudez).
-   * Default true para compatibilidade.
+   * Se false, renderiza a mídia sem blur (ex.: avatar sem foto).
+   * Default true — conteúdo adulto fica borrado até a verificação facial.
    */
   restricted?: boolean;
 }
@@ -35,12 +35,14 @@ export function AgeRestrictedMedia({
   };
 
   if (!restricted || verified) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div className={`relative h-full w-full ${className}`}>{children}</div>
+    );
   }
 
   return (
     <div
-      className={`isolate overflow-hidden ${className}`}
+      className={`relative isolate h-full w-full overflow-hidden ${className}`}
       onClick={interactive ? onActivate : undefined}
       onKeyDown={
         interactive

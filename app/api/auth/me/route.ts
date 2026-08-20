@@ -1,4 +1,5 @@
-import { getCurrentUser, jsonError, toAuthUser } from "@/lib/auth";
+import { toAdminAuthUser } from "@/lib/admin";
+import { getCurrentUser, jsonError } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -6,7 +7,7 @@ export async function GET() {
     if (!user) {
       return Response.json({ user: null });
     }
-    return Response.json({ user: toAuthUser(user) });
+    return Response.json({ user: toAdminAuthUser(user) });
   } catch (error) {
     console.error(error);
     return jsonError("Falha ao carregar sessão.", 500);

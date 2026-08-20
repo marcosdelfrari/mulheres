@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GENERIC_PLATFORMS_PHRASE } from "@/lib/brand-copy";
-import { BH_NEIGHBORHOODS, SITE_NAME } from "@/lib/seo";
+import { SITE_NAME } from "@/lib/seo";
 import { TrademarkDisclaimer } from "@/components/TrademarkDisclaimer";
-import { neighborhoodHubPath, getCityHub } from "@/lib/location-hubs";
+import {
+  CITY_HUBS,
+  cityHubPath,
+  STATE_HUBS,
+  stateHubPath,
+} from "@/lib/location-hubs";
 import { isLuxuryPath } from "@/lib/luxury-theme";
-
-const bhHub = getCityHub("minas-gerais", "belo-horizonte");
 
 export function Footer() {
   const pathname = usePathname();
@@ -41,9 +44,9 @@ export function Footer() {
                 luxury ? "text-white/40" : "text-gray-600"
               }`}
             >
-              Catálogo de acompanhantes em Belo Horizonte e todo o Brasil.
-              Perfis verificados, filtros por bairro e contato direto.
-              Opção para quem busca em {platforms}.
+              As modelos e acompanhantes em todo o Brasil. Perfis verificados,
+              filtros por cidade e bairro e contato direto. Opção para quem
+              busca em {platforms}.
             </p>
           </div>
 
@@ -53,48 +56,54 @@ export function Footer() {
                 luxury ? "text-white" : "text-gray-900"
               }`}
             >
-              Belo Horizonte — MG
+              Capitais
             </h2>
             <ul
               className={`mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-sm ${
                 luxury ? "text-white/40" : "text-gray-600"
               }`}
             >
-              <li>
-                <Link
-                  href="/minas-gerais/belo-horizonte"
-                  className={
-                    luxury
-                      ? "font-semibold text-white/60 hover:text-luxury-accent hover:underline"
-                      : "font-semibold text-purple-800 hover:text-luxury-accent hover:underline"
-                  }
-                >
-                  Acompanhantes em BH
-                </Link>
-              </li>
-              {bhHub &&
-                BH_NEIGHBORHOODS.slice(0, 6).map((bairro) => {
-                  const hood = bhHub.neighborhoods.find(
-                    (n) => n.name === bairro,
-                  );
-                  const href = hood
-                    ? neighborhoodHubPath(bhHub, hood)
-                    : `/catalogo?region=Minas%20Gerais&search=${encodeURIComponent(bairro)}`;
-                  return (
-                    <li key={bairro}>
-                      <Link
-                        href={href}
-                        className={
-                          luxury
-                            ? "hover:text-luxury-accent hover:underline"
-                            : "hover:text-luxury-accent hover:underline"
-                        }
-                      >
-                        {bairro}
-                      </Link>
-                    </li>
-                  );
-                })}
+              {CITY_HUBS.map((hub) => (
+                <li key={cityHubPath(hub)}>
+                  <Link
+                    href={cityHubPath(hub)}
+                    className={
+                      luxury
+                        ? "hover:text-luxury-accent hover:underline"
+                        : "hover:text-luxury-accent hover:underline"
+                    }
+                  >
+                    {hub.shortName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <h2
+              className={`mt-5 font-serif text-sm font-semibold italic tracking-tight ${
+                luxury ? "text-white" : "text-gray-900"
+              }`}
+            >
+              Estados
+            </h2>
+            <ul
+              className={`mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-sm ${
+                luxury ? "text-white/40" : "text-gray-600"
+              }`}
+            >
+              {STATE_HUBS.map((hub) => (
+                <li key={hub.stateSlug}>
+                  <Link
+                    href={stateHubPath(hub)}
+                    className={
+                      luxury
+                        ? "hover:text-luxury-accent hover:underline"
+                        : "hover:text-luxury-accent hover:underline"
+                    }
+                  >
+                    {hub.uf}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -114,8 +123,8 @@ export function Footer() {
               {[
                 ["/guias/como-funciona", "Como funciona"],
                 ["/guias/alternativas-em-bh", "Alternativas em BH"],
-                ["/catalogo", "Catálogo completo"],
-                ["/sao-paulo/sao-paulo", "Acompanhantes em SP"],
+                ["/acompanhantes", "Todas as modelos"],
+                ["/minas-gerais/belo-horizonte", "Acompanhantes em BH"],
               ].map(([href, label]) => (
                 <li key={href}>
                   <Link

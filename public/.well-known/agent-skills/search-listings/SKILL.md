@@ -36,7 +36,7 @@ Inicialize antes com `method: "initialize"` se o cliente exigir handshake de ses
 
 - Hub de cidade: `/minas-gerais/belo-horizonte`
 - Bairro: `/minas-gerais/belo-horizonte/savassi`
-- Catálogo completo: `/catalogo`
+- Listagem completa: `/acompanhantes`
 - Prefira `Accept: text/markdown` para páginas HTML legíveis por máquina.
 
 3. **OpenAPI**

@@ -89,7 +89,7 @@ export default function RecuperarSenhaPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:opacity-60 active:scale-[0.98]"
+          className="w-full cursor-pointer rounded-full bg-luxury-accent py-4 text-base font-bold text-[#0c0414] transition-all hover:bg-luxury-accent-hover disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]"
         >
           {submitting ? "Enviando…" : "Enviar link por e-mail"}
         </button>

@@ -3,7 +3,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  prismaSchemaVersion?: number;
 };
+
+/** Subir quando o schema mudar para invalidar client em hot-reload. */
+const PRISMA_SCHEMA_VERSION = 3;
 
 export function getDatabaseUrl() {
   return (
@@ -32,8 +36,12 @@ function createPrismaClient() {
 }
 
 export function getPrisma() {
-  if (!globalForPrisma.prisma) {
+  if (
+    !globalForPrisma.prisma ||
+    globalForPrisma.prismaSchemaVersion !== PRISMA_SCHEMA_VERSION
+  ) {
     globalForPrisma.prisma = createPrismaClient();
+    globalForPrisma.prismaSchemaVersion = PRISMA_SCHEMA_VERSION;
   }
   return globalForPrisma.prisma;
 }

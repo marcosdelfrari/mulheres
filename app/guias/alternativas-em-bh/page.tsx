@@ -50,10 +50,10 @@ const FAQ = [
   {
     question: "O Mulheres cobra taxa de intermediação?",
     answer:
-      "Não. O contato é direto entre você e a acompanhante. O Mulheres funciona como catálogo de anúncios.",
+      "Não. O contato é direto entre você e a acompanhante. O Mulheres reúne modelos e anúncios verificados.",
   },
   {
-    question: "Quais bairros de BH estão no catálogo?",
+    question: "Quais bairros de BH estão entre as modelos?",
     answer:
       "Savassi, Lourdes, Funcionários, Centro, Pampulha, Buritis e outros. Cada bairro com perfis disponíveis tem página dedicada.",
   },
@@ -90,7 +90,7 @@ export default function AlternativasBhPage() {
             Como encontrar acompanhantes em Belo Horizonte
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
-            Se você já usa {GENERIC_PLATFORMS_PHRASE}, conheça o Mulheres: catálogo
+            Se você já usa {GENERIC_PLATFORMS_PHRASE}, conheça o Mulheres: modelos
             com perfis verificados, filtros por bairro e contato direto via
             WhatsApp em BH.
           </p>

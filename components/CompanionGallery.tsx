@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { isNsfwPhoto } from "@/lib/companion-utils";
 import { useAgeGate } from "@/lib/age-gate-context";
+import { isNsfwPhoto } from "@/lib/companion-utils";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 
 interface CompanionGalleryProps {
@@ -15,7 +15,7 @@ interface CompanionGalleryProps {
 
 export function CompanionGallery({
   photos,
-  nsfwPhotos = [],
+  nsfwPhotos,
   name,
   variant = "default",
 }: CompanionGalleryProps) {
@@ -27,10 +27,10 @@ export function CompanionGallery({
 
   const isEmbedded = variant === "embedded";
   const activePhoto = photos[activeIndex]!;
-  const activeRestricted = isNsfwPhoto(nsfwPhotos, activePhoto);
+  const activeIsNsfw = isNsfwPhoto(nsfwPhotos, activePhoto);
 
   const openFullscreen = () => {
-    if (activeRestricted && !verified) {
+    if (activeIsNsfw && !verified) {
       requestVerification();
       return;
     }
@@ -38,8 +38,8 @@ export function CompanionGallery({
   };
 
   const selectPhoto = (index: number) => {
-    const next = photos[index];
-    if (isNsfwPhoto(nsfwPhotos, next) && !verified) {
+    const photo = photos[index];
+    if (isNsfwPhoto(nsfwPhotos, photo) && !verified) {
       requestVerification();
       return;
     }
@@ -70,10 +70,10 @@ export function CompanionGallery({
           type="button"
           onClick={openFullscreen}
           className={`relative block aspect-[4/5] w-full overflow-hidden bg-gray-100 ${
-            isEmbedded ? "max-h-[480px] rounded-2xl" : "max-h-[520px]"
+            isEmbedded ? "rounded-2xl" : ""
           }`}
           aria-label={
-            activeRestricted && !verified
+            activeIsNsfw && !verified
               ? "Verificar idade para ver a foto"
               : `Ampliar foto de ${name}`
           }
@@ -81,7 +81,7 @@ export function CompanionGallery({
           <AgeRestrictedMedia
             className="absolute inset-0"
             interactive={false}
-            restricted={activeRestricted}
+            restricted={activeIsNsfw}
           >
             <Image
               src={activePhoto}
@@ -94,41 +94,40 @@ export function CompanionGallery({
           </AgeRestrictedMedia>
         </button>
 
-        <div className={`flex gap-2 overflow-x-auto ${isEmbedded ? "pt-4" : "p-4 sm:p-5"}`}>
-          {photos.map((photo, index) => {
-            const restricted = isNsfwPhoto(nsfwPhotos, photo);
-            return (
-              <button
-                key={photo}
-                type="button"
-                onClick={() => selectPhoto(index)}
-                className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors ${
-                  index === activeIndex
-                    ? "border-luxury-accent"
-                    : "border-transparent opacity-70 hover:opacity-100"
-                }`}
-                aria-label={`Ver foto ${index + 1} de ${name}`}
+        <div
+          className={`flex gap-2 overflow-x-auto ${isEmbedded ? "pt-4" : "p-4 sm:p-5"}`}
+        >
+          {photos.map((photo, index) => (
+            <button
+              key={photo}
+              type="button"
+              onClick={() => selectPhoto(index)}
+              className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl border-2 transition-colors ${
+                index === activeIndex
+                  ? "border-luxury-accent"
+                  : "border-transparent opacity-70 hover:opacity-100"
+              }`}
+              aria-label={`Ver foto ${index + 1} de ${name}`}
+            >
+              <AgeRestrictedMedia
+                className="absolute inset-0"
+                interactive={false}
+                restricted={isNsfwPhoto(nsfwPhotos, photo)}
               >
-                <AgeRestrictedMedia
-                  className="absolute inset-0"
-                  interactive={false}
-                  restricted={restricted}
-                >
-                  <Image
-                    src={photo}
-                    alt={`${name} — miniatura ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="64px"
-                  />
-                </AgeRestrictedMedia>
-              </button>
-            );
-          })}
+                <Image
+                  src={photo}
+                  alt={`${name} — miniatura ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="64px"
+                />
+              </AgeRestrictedMedia>
+            </button>
+          ))}
         </div>
       </section>
 
-      {fullscreen && (!activeRestricted || verified) && (
+      {fullscreen && !(activeIsNsfw && !verified) && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => setFullscreen(false)}

@@ -94,7 +94,7 @@ function buildTools(): WebMcpTool[] {
           path: {
             type: "string",
             description:
-              "Caminho ou URL, ex.: /catalogo, /minas-gerais/belo-horizonte, /guias/como-funciona",
+              "Caminho ou URL, ex.: /acompanhantes, /minas-gerais/belo-horizonte, /guias/como-funciona",
           },
         },
         required: ["path"],
@@ -149,7 +149,7 @@ function buildTools(): WebMcpTool[] {
           params.set("neighborhood", args.neighborhood.trim());
         }
         const qs = params.toString();
-        const path = qs ? `/catalogo?${qs}` : "/catalogo";
+        const path = qs ? `/acompanhantes?${qs}` : "/acompanhantes";
         window.location.assign(path);
         return textResult({ navigatedTo: path });
       },

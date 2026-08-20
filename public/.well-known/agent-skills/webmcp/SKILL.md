@@ -22,7 +22,7 @@ Faça feature-detect com `"modelContext" in navigator` (HTTPS / secure context).
 |------|------------|
 | `searchListings` | Busca anúncios publicados (via `/mcp`) |
 | `navigateTo` | Navegação same-origin |
-| `openCatalog` | Abre `/catalogo` com filtros |
+| `openCatalog` | Abre `/acompanhantes` com filtros |
 | `getDiscovery` | URLs de descoberta |
 | `getHealth` | `/api/health` |
 

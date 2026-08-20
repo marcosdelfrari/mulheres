@@ -26,9 +26,10 @@ export function buildAgentCard() {
         name: "Catálogo de acompanhantes",
         description:
           "Descubra perfis verificados de acompanhantes por cidade, bairro e filtros.",
-        tags: ["catalog", "search", "bh"],
+        tags: ["catalog", "search", "brasil", "capitais"],
         examples: [
           "Acompanhantes em Belo Horizonte",
+          "Acompanhantes em São Paulo",
           "Perfis em Savassi",
         ],
         inputModes: ["text"],
@@ -54,7 +55,7 @@ export function buildAgentCard() {
       mcp: absoluteUrl("/mcp"),
       agentSkills: absoluteUrl("/.well-known/agent-skills/index.json"),
       contact: absoluteUrl("/contato"),
-      catalog: absoluteUrl("/catalogo"),
+      catalog: absoluteUrl("/acompanhantes"),
     },
   };
 }

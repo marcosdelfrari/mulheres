@@ -74,6 +74,11 @@ Allow: /.well-known/
 Allow: /openapi.json
 Allow: /guias/
 Allow: /minas-gerais/
+Allow: /sao-paulo/
+Allow: /rio-de-janeiro/
+Allow: /parana/
+Allow: /distrito-federal/
+Allow: /bahia/
 ${disallowBlock(PRIVATE_PATHS)}
 
 User-agent: ChatGPT-User
@@ -85,6 +90,11 @@ Allow: /.well-known/
 Allow: /openapi.json
 Allow: /guias/
 Allow: /minas-gerais/
+Allow: /sao-paulo/
+Allow: /rio-de-janeiro/
+Allow: /parana/
+Allow: /distrito-federal/
+Allow: /bahia/
 ${disallowBlock(PRIVATE_PATHS)}
 
 User-agent: ClaudeBot
@@ -96,6 +106,11 @@ Allow: /.well-known/
 Allow: /openapi.json
 Allow: /guias/
 Allow: /minas-gerais/
+Allow: /sao-paulo/
+Allow: /rio-de-janeiro/
+Allow: /parana/
+Allow: /distrito-federal/
+Allow: /bahia/
 ${disallowBlock(PRIVATE_PATHS)}
 
 User-agent: PerplexityBot

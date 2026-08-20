@@ -23,28 +23,38 @@ export function SponsoredCompanionCard({
   priority = false,
 }: SponsoredCompanionCardProps) {
   const photo = companion.photos[0];
-  const restricted = isNsfwPhoto(companion.nsfwPhotos, photo);
 
   return (
     <Link
       href={companionProfilePath(companion)}
-      className="group flex flex-col overflow-hidden rounded-3xl border border-luxury-accent/35 bg-[#0c0414] transition-colors hover:border-luxury-accent/70 sm:flex-row sm:items-stretch"
+      className="group flex w-full flex-col overflow-hidden rounded-3xl border border-luxury-accent/35 bg-[#0c0414] transition-colors hover:border-luxury-accent/70 sm:flex-row sm:items-stretch"
     >
-      <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-black/40 sm:aspect-auto sm:h-auto sm:w-48 sm:self-stretch sm:min-h-[12rem]">
+      <div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-black/40 sm:aspect-auto sm:h-auto sm:w-48 sm:min-h-[12rem] sm:self-stretch">
         <AgeRestrictedMedia
-          className="absolute inset-0"
+          className="absolute inset-0 h-full w-full"
           interactive={false}
-          restricted={restricted}
+          restricted={isNsfwPhoto(companion.nsfwPhotos, photo)}
         >
-          <Image
-            src={photo}
-            alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
-            fill
-            className="object-cover transition-transform group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, 192px"
-            priority={priority}
-            fetchPriority={priority ? "high" : "auto"}
-          />
+          {photo ? (
+            <Image
+              src={photo}
+              alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
+              fill
+              className="object-cover object-center transition-transform group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, 192px"
+              priority={priority}
+              fetchPriority={priority ? "high" : "auto"}
+            />
+          ) : (
+            <div
+              className="flex h-full w-full items-center justify-center text-2xl font-black text-white"
+              style={{
+                background: `linear-gradient(135deg, ${companion.avatarColor}, #3d1a5c)`,
+              }}
+            >
+              {companion.name.slice(0, 1)}
+            </div>
+          )}
         </AgeRestrictedMedia>
         {distanceKm !== undefined && (
           <span className="pointer-events-none absolute right-2 top-2 z-10 rounded-full bg-black/65 px-2.5 py-1 text-xs font-bold text-luxury-accent backdrop-blur-sm">

@@ -12,7 +12,11 @@ export function CreateListingFab() {
   if (isLoading || !user) return null;
   if (user.role !== "acompanhante") return null;
   if (user.verificationStatus !== "verified") return null;
-  if (pathname.startsWith("/login") || pathname.startsWith("/cadastro")) {
+  if (
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/cadastro") ||
+    pathname.startsWith("/admin")
+  ) {
     return null;
   }
 

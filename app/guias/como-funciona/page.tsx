@@ -21,7 +21,7 @@ const FAQ = [
   {
     question: "Como encontrar acompanhantes no Mulheres?",
     answer:
-      "Acesse o catálogo, filtre por região, cidade ou bairro e navegue pelos perfis verificados. Cada anúncio exibe fotos, preços, serviços e WhatsApp para contato direto.",
+      "Acesse as modelos, filtre por região, cidade ou bairro e navegue pelos perfis verificados. Cada anúncio exibe fotos, preços, serviços e WhatsApp para contato direto.",
   },
   {
     question: "O Mulheres cobra taxa de intermediação?",
@@ -31,12 +31,12 @@ const FAQ = [
   {
     question: "O que significa perfil verificado?",
     answer:
-      "Perfis verificados passaram por checagem de identidade e fotos. O selo verde indica maior confiabilidade no catálogo.",
+      "Perfis verificados passaram por checagem de identidade e fotos. O selo verde indica maior confiabilidade entre as modelos.",
   },
   {
     question: "Posso filtrar por bairro em Belo Horizonte?",
     answer:
-      "Sim. Use a página de BH ou filtros do catálogo para Savassi, Lourdes, Funcionários, Centro, Pampulha e outros bairros.",
+      "Sim. Use a página de BH ou os filtros das modelos para Savassi, Lourdes, Funcionários, Centro, Pampulha e outros bairros.",
   },
 ] as const;
 
@@ -71,7 +71,7 @@ export default function ComoFuncionaPage() {
             Como funciona o Mulheres
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
-            O Mulheres é um catálogo de acompanhantes de luxo com perfis
+            O Mulheres reúne modelos e acompanhantes de luxo com perfis
             verificados, filtros por bairro e contato direto via WhatsApp.
           </p>
         </header>
@@ -87,8 +87,8 @@ export default function ComoFuncionaPage() {
                 página de Belo Horizonte
               </Link>{" "}
               ou use o{" "}
-              <Link href="/catalogo" className="text-purple-800 hover:text-luxury-accent hover:underline">
-                catálogo completo
+              <Link href="/acompanhantes" className="text-purple-800 hover:text-luxury-accent hover:underline">
+                todas as modelos
               </Link>{" "}
               para filtrar por estado, cidade e bairro.
             </p>

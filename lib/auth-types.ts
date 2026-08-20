@@ -9,6 +9,8 @@ export type AuthUser = {
   documentPhotoUrl: string | null;
   profilePhotoUrl: string | null;
   verifiedAt: string | null;
+  bannedAt?: string | null;
+  isAdmin?: boolean;
 };
 
 export type ListingSummary = {

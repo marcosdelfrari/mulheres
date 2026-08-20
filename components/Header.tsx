@@ -4,18 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { isLuxuryPath } from "@/lib/luxury-theme";
+import { isLocationHubPath, isLuxuryPath } from "@/lib/luxury-theme";
 
 export function Header() {
   const { user } = useAuth();
   const pathname = usePathname();
   const luxury = isLuxuryPath(pathname);
-  const home = pathname === "/";
+  const homeLike = pathname === "/" || isLocationHubPath(pathname);
 
   return (
     <header
       className={
-        home
+        homeLike
           ? "absolute inset-x-0 top-0 z-50 border-b border-transparent bg-transparent"
           : luxury
             ? "relative z-50 border-b border-white/5 bg-[#0c0414]/80 backdrop-blur-md"
@@ -42,10 +42,20 @@ export function Header() {
         </Link>
 
         <nav
-          className={`hidden items-center gap-8 text-sm font-black uppercase tracking-widest sm:flex ${
+          className={`hidden items-center gap-8 text-sm font-thin uppercase tracking-widest sm:flex ${
             luxury ? "text-white/60" : "text-gray-500"
           }`}
         >
+          <Link
+            href="/acompanhantes"
+            className={
+              luxury
+                ? "hover:text-luxury-accent transition-colors"
+                : "hover:text-purple-800 transition-colors"
+            }
+          >
+            As modelos
+          </Link>
           <Link
             href="/minas-gerais/belo-horizonte"
             className={
@@ -57,14 +67,14 @@ export function Header() {
             BH
           </Link>
           <Link
-            href="/catalogo"
+            href="/sao-paulo/sao-paulo"
             className={
               luxury
                 ? "hover:text-luxury-accent transition-colors"
                 : "hover:text-purple-800 transition-colors"
             }
           >
-            Catálogo
+            SP
           </Link>
           <Link
             href="/contato"

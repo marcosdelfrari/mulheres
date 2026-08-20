@@ -132,6 +132,15 @@ export function CatalogFiltersBar({
     if (open) setDraft(filters);
   }, [open, filters]);
 
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
   const cities = useMemo(
     () =>
       draft.region !== "all"
@@ -222,16 +231,16 @@ export function CatalogFiltersBar({
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex justify-end bg-black/40"
+          className="fixed inset-0 z-[70] flex justify-end bg-black/40"
           onClick={() => setOpen(false)}
           role="dialog"
           aria-modal="true"
         >
           <div
-            className="flex h-full w-full max-w-md flex-col bg-white sm:max-h-[100vh]"
+            className="flex h-dvh max-h-dvh w-full max-w-md flex-col bg-white"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex-1 overflow-y-auto px-5 pt-5">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pt-5 pb-4">
               <div className="space-y-3">
                 <select
                   value={draft.category}
@@ -392,25 +401,27 @@ export function CatalogFiltersBar({
               </div>
             </div>
 
-            <div className="flex items-center justify-between border-t border-gray-200 px-5 py-4">
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="text-sm font-black uppercase tracking-wide text-purple-800 hover:text-luxury-accent"
-              >
-                Excluir tudo
-              </button>
+            <div className="shrink-0 border-t border-gray-200 bg-white px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="text-sm font-black uppercase tracking-wide text-purple-800 hover:text-luxury-accent"
+                >
+                  Excluir tudo
+                </button>
 
-              <button
-                type="button"
-                onClick={applyFilters}
-                className="flex items-center gap-2 rounded-full bg-[#0c0414] px-6 py-3 text-sm font-black uppercase tracking-wide text-white hover:bg-purple-900"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Pesquisar
-              </button>
+                <button
+                  type="button"
+                  onClick={applyFilters}
+                  className="flex items-center gap-2 rounded-full bg-[#0c0414] px-6 py-3 text-sm font-black uppercase tracking-wide text-white hover:bg-purple-900"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Pesquisar
+                </button>
+              </div>
             </div>
           </div>
         </div>
