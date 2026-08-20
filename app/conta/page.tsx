@@ -18,18 +18,6 @@ function listingPublicPath(listing: ListingSummary) {
   return `/acompanhante/${slugify(listing.title)}-${slugify(listing.neighborhood)}-${cityShortSlug(listing.city)}-${listing.id}`;
 }
 
-type LuxoPayment = {
-  id: string;
-  amount: number;
-  amountLabel: string;
-  hours?: number;
-  days?: number;
-  pixCode: string;
-  pixKey: string;
-  expiresAt: string;
-  status: string;
-};
-
 type ListingLimits = {
   maxActive: number;
   activeCount: number;
@@ -38,6 +26,13 @@ type ListingLimits = {
   nextCreateAt: string | null;
   cooldownHours: number;
 };
+
+const PREMIUM_WHATSAPP_URL =
+  "https://wa.me/5531975325100?text=Oi%2C%20gostaria%20de%20virar%20destaque.";
+
+function premiumWhatsAppUrl() {
+  return PREMIUM_WHATSAPP_URL;
+}
 
 function statusLabel(status: string) {
   if (status === "published") return "Ativo";
@@ -274,10 +269,6 @@ export default function ContaPage() {
   const [form, setForm] = useState<ListingFormState>(() => emptyForm());
   const [saving, setSaving] = useState(false);
 
-  const [luxoListingId, setLuxoListingId] = useState<string | null>(null);
-  const [payment, setPayment] = useState<LuxoPayment | null>(null);
-  const [luxoLoading, setLuxoLoading] = useState(false);
-
   const luxoCount = useMemo(
     () => listings.filter(isLuxoActive).length,
     [listings],
@@ -502,61 +493,8 @@ export default function ContaPage() {
     }
   };
 
-  const startLuxo = async (listingId: string) => {
-    setError("");
-    setMessage("");
-    setLuxoLoading(true);
-    setLuxoListingId(listingId);
-    setPayment(null);
-
-    try {
-      const res = await fetch("/api/luxo", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ listingId, hours: 4 }),
-      });
-      const data = (await res.json()) as {
-        error?: string;
-        payment?: LuxoPayment;
-      };
-      if (!res.ok) {
-        setError(data.error ?? "Não foi possível gerar o PIX.");
-        return;
-      }
-      setPayment(data.payment ?? null);
-    } catch {
-      setError("Falha de conexão ao gerar PIX.");
-    } finally {
-      setLuxoLoading(false);
-    }
-  };
-
-  const confirmLuxo = async () => {
-    if (!payment) return;
-    setLuxoLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/luxo", {
-        method: "PATCH",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paymentId: payment.id }),
-      });
-      const data = (await res.json()) as { error?: string; message?: string };
-      if (!res.ok) {
-        setError(data.error ?? "Pagamento não confirmado.");
-        return;
-      }
-      setMessage(data.message ?? "Seu anúncio está no topo!");
-      setPayment(null);
-      setLuxoListingId(null);
-      await loadListings();
-    } catch {
-      setError("Falha ao confirmar pagamento.");
-    } finally {
-      setLuxoLoading(false);
-    }
+  const startLuxo = () => {
+    window.open(premiumWhatsAppUrl(), "_blank", "noopener,noreferrer");
   };
 
   const setListingStatus = async (
@@ -1036,8 +974,6 @@ export default function ContaPage() {
               const luxoActive = isLuxoActive(listing);
               const cover =
                 listing.photos?.[0] || listing.photoUrl || null;
-              const payingThis =
-                luxoListingId === listing.id && payment !== null;
 
               return (
                 <li
@@ -1116,8 +1052,8 @@ export default function ContaPage() {
 
                     <button
                       type="button"
-                      onClick={() => startLuxo(listing.id)}
-                      disabled={luxoLoading || listing.status !== "published"}
+                      onClick={() => startLuxo()}
+                      disabled={listing.status !== "published"}
                       className={`group relative w-full overflow-hidden rounded-2xl text-left transition-all disabled:opacity-60 active:scale-[0.99] ${
                         luxoActive
                           ? "border border-amber-300/80 bg-gradient-to-br from-amber-50 via-white to-amber-50/80 hover:border-amber-400"
@@ -1144,8 +1080,8 @@ export default function ContaPage() {
                           </p>
                           <p className="text-xs leading-snug text-amber-950/70">
                             {luxoActive
-                              ? "Mais 4h no topo · mais visualizações"
-                              : "Mais visualizações e contatos no WhatsApp"}
+                              ? "Fale no WhatsApp para renovar"
+                              : "Fale no WhatsApp para ativar o destaque"}
                           </p>
                         </div>
                         <div className="shrink-0 text-right">
@@ -1156,7 +1092,7 @@ export default function ContaPage() {
                             R$ 19,90
                           </p>
                           <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-amber-800/70">
-                            {luxoActive ? "Renovar" : "por 4h"}
+                            {luxoActive ? "Renovar" : "WhatsApp"}
                           </p>
                         </div>
                       </div>
@@ -1209,34 +1145,6 @@ export default function ContaPage() {
                       {actionId === listing.id ? "…" : "Excluir"}
                     </button>
                   </div>
-
-                  {payingThis && payment && (
-                    <div className="space-y-3 border-t border-gray-100 bg-gray-50 p-4">
-                      <p className="text-base font-bold text-gray-900">
-                        PIX · {payment.amountLabel} · 4h
-                      </p>
-                      <p className="break-all rounded-2xl bg-white p-3 font-mono text-xs leading-relaxed text-gray-800 sm:text-sm">
-                        {payment.pixCode}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          void navigator.clipboard.writeText(payment.pixCode)
-                        }
-                        className={`${cardActionBtn} border border-gray-300 bg-white text-gray-900 hover:bg-gray-50`}
-                      >
-                        Copiar código PIX
-                      </button>
-                      <button
-                        type="button"
-                        onClick={confirmLuxo}
-                        disabled={luxoLoading}
-                        className={`${cardActionBtn} bg-gray-900 text-white hover:bg-black`}
-                      >
-                        {luxoLoading ? "Confirmando…" : "Já paguei"}
-                      </button>
-                    </div>
-                  )}
                 </li>
               );
             })}
