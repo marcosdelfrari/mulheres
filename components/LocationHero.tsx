@@ -96,7 +96,7 @@ export function LocationHero({
               href="/criar-conta?role=acompanhante"
               className="transition-colors hover:text-white/70"
             >
-              Anunciar perfil
+              Crie seu anúncio
             </Link>
           </p>
         </div>
