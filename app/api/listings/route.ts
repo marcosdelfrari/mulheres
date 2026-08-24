@@ -10,7 +10,7 @@ import {
   assertCanPublishListing,
   getListingLimits,
 } from "@/lib/listing-limits";
-import { listingWriteSchema } from "@/lib/listing-form";
+import { listingWriteSchema, resolveListingContact } from "@/lib/listing-form";
 import { resolveOwnedListingPhotos } from "@/lib/listing-photos";
 import { prisma } from "@/lib/prisma";
 
@@ -66,6 +66,7 @@ export async function POST(request: Request) {
       user.id,
       { avatar: parsed.photoUrl },
     );
+    const contact = resolveListingContact(parsed, user.phone);
 
     const listing = await prisma.listing.create({
       data: {
@@ -78,8 +79,8 @@ export async function POST(request: Request) {
         region: parsed.region,
         city: parsed.city,
         neighborhood: parsed.neighborhood,
-        phone: parsed.phone || user.phone,
-        whatsapp: parsed.whatsapp || user.phone,
+        phone: contact.phone,
+        whatsapp: contact.whatsapp,
         services: parsed.services,
         servicesFor: parsed.servicesFor,
         serviceLocations: parsed.serviceLocations,

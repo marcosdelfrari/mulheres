@@ -69,9 +69,10 @@ export function listingToCompanion(listing: ListingWithUser): Companion {
         ? [listing.photoUrl]
         : [];
   const coverPhoto = listing.photoUrl ?? photos[0] ?? "";
-  const phone =
-    listing.phone || listing.user?.phone || "";
-  const whatsappRaw = listing.whatsapp || phone;
+  const contact =
+    listing.whatsapp || listing.phone || listing.user?.phone || "";
+  const phone = contact;
+  const whatsappRaw = contact;
   const coords = coordsForCity(listing.city);
   const verified = listing.user?.verificationStatus === "verified";
   const online = listing.user

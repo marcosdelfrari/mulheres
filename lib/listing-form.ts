@@ -26,3 +26,16 @@ export const listingWriteSchema = z.object({
 });
 
 export type ListingWriteInput = z.infer<typeof listingWriteSchema>;
+
+/** Telefone do anúncio: prioriza o WhatsApp informado no formulário. */
+export function resolveListingContact(
+  parsed: Pick<ListingWriteInput, "phone" | "whatsapp">,
+  userPhone: string | null | undefined,
+) {
+  const contact =
+    parsed.whatsapp?.trim() ||
+    parsed.phone?.trim() ||
+    userPhone?.trim() ||
+    null;
+  return { phone: contact, whatsapp: contact };
+}
