@@ -26,7 +26,7 @@ export function SponsoredCompanionCard({
   locationMode,
   priority = false,
 }: SponsoredCompanionCardProps) {
-  const photo = companion.photos[0] || companion.coverPhoto;
+  const photo = companion.coverPhoto || companion.photos[0];
 
   return (
     <Link
@@ -44,7 +44,7 @@ export function SponsoredCompanionCard({
               src={photo}
               alt={companionPhotoAlt(companion)}
               fill
-              className="object-cover object-center transition-transform group-hover:scale-105"
+              className="object-cover object-top transition-transform group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, 192px"
               priority={priority}
               fetchPriority={priority ? "high" : "auto"}

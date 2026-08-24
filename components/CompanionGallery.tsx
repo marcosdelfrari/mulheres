@@ -20,7 +20,11 @@ export function CompanionGallery({
   companion,
   variant = "default",
 }: CompanionGalleryProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const initialIndex = (() => {
+    const i = photos.indexOf(companion.coverPhoto);
+    return i >= 0 ? i : 0;
+  })();
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [fullscreen, setFullscreen] = useState(false);
   const { verified, requestVerification } = useAgeGate();
 
@@ -75,7 +79,7 @@ export function CompanionGallery({
         <button
           type="button"
           onClick={openFullscreen}
-          className={`relative block aspect-[4/5] w-full overflow-hidden bg-gray-100 ${
+          className={`relative mx-auto block aspect-[3/4] w-full max-w-[260px] overflow-hidden bg-gray-100 sm:max-w-[300px] ${
             isEmbedded ? "rounded-2xl" : ""
           }`}
           aria-label={
@@ -94,14 +98,14 @@ export function CompanionGallery({
               alt={photoAlt(activeIndex)}
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, 720px"
+              sizes="300px"
               priority
             />
           </AgeRestrictedMedia>
         </button>
 
         <div
-          className={`flex gap-2 overflow-x-auto ${isEmbedded ? "pt-4" : "p-4 sm:p-5"}`}
+          className={`flex justify-center gap-2 overflow-x-auto ${isEmbedded ? "pt-4" : "p-4 sm:p-5"}`}
         >
           {photos.map((photo, index) => (
             <button

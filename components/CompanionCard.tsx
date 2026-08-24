@@ -23,7 +23,7 @@ export function CompanionCard({
   distanceKm,
   locationMode,
 }: CompanionCardProps) {
-  const photo = companion.photos[0] || companion.coverPhoto;
+  const photo = companion.coverPhoto || companion.photos[0];
   const premium = companion.sponsored;
 
   return (
@@ -50,7 +50,7 @@ export function CompanionCard({
               src={photo}
               alt={companionPhotoAlt(companion)}
               fill
-              className="object-cover object-center"
+              className="object-cover object-top"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
             />
           ) : (

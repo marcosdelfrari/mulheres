@@ -232,7 +232,7 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
 export function buildCompanionMetadata(companion: Companion): Metadata {
   const title = `${companion.name}, ${companion.age} — Acompanhante em ${companion.city}`;
   const description = `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de R$ ${companion.pricePerHour}/hora. ${companion.bio.slice(0, 120)}`;
-  const photo = companion.photos[0] || companion.coverPhoto;
+  const photo = companion.coverPhoto || companion.photos[0];
   const imageAlt = companionPhotoAlt(companion);
   const metadata = buildPageMetadata({
     title,

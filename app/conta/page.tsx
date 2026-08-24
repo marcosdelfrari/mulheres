@@ -752,8 +752,8 @@ export default function ContaPage() {
               Fotos do perfil ({totalPhotos}/5)
             </label>
             <p className="text-base text-gray-600">
-              A ordem vale na galeria e na capa da listagem. O avatar é a foto
-              redonda do perfil. Envie 3 a 5 fotos.
+              A ordem vale na galeria. A foto marcada como avatar é a capa do
+              anúncio e a foto redonda do perfil. Envie 3 a 5 fotos.
             </p>
             <label
               className={`${pillBtn} w-full cursor-pointer border border-dashed border-gray-400 bg-gray-50 text-gray-800 hover:bg-gray-100`}
@@ -1084,7 +1084,7 @@ export default function ContaPage() {
             {listings.map((listing) => {
               const luxoActive = isLuxoActive(listing);
               const cover =
-                listing.photos?.[0] || listing.photoUrl || null;
+                listing.photoUrl || listing.photos?.[0] || null;
 
               return (
                 <li
