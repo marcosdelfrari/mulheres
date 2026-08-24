@@ -1,11 +1,11 @@
 ---
 name: webmcp
-description: Expõe ações do site Mulheres a agentes de IA no navegador via API WebMCP (navigator.modelContext.registerTool / provideContext). Use ao verificar ou estender o registro de tools no browser.
+description: Expõe ações do site Mulheres de Luxo a agentes de IA no navegador via API WebMCP (navigator.modelContext.registerTool / provideContext). Use ao verificar ou estender o registro de tools no browser.
 ---
 
 # WebMCP
 
-O Mulheres registra tools WebMCP em cada carregamento de página via `/webmcp.js` e o componente React `WebMcp`.
+O Mulheres de Luxo registra tools WebMCP em cada carregamento de página via `/webmcp.js` e o componente React `WebMcp`.
 
 ## Detecção
 

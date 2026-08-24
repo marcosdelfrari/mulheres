@@ -15,7 +15,7 @@ function htmlPage(body: string) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Autorizar acesso — Mulheres</title>
+  <title>Autorizar acesso — Mulheres de Luxo</title>
   <style>
     body{font-family:system-ui,sans-serif;background:#0c0414;color:#fff;margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}
     .card{width:100%;max-width:420px;background:#160a24;border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:28px}
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
   const body = `
   <div class="card">
     <h1>Autorizar agente</h1>
-    <p>O cliente <strong>${escapeHtml(clientId)}</strong> pede acesso à sua conta Mulheres.</p>
+    <p>O cliente <strong>${escapeHtml(clientId)}</strong> pede acesso à sua conta Mulheres de Luxo.</p>
     <form method="post">
       <input type="hidden" name="client_id" value="${escapeHtml(clientId)}" />
       <input type="hidden" name="redirect_uri" value="${escapeHtml(redirectUri)}" />

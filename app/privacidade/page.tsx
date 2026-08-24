@@ -3,7 +3,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata = buildPageMetadata({
   title: "Política de Privacidade",
   description:
-    "Política de privacidade do Mulheres. Saiba como tratamos seus dados pessoais.",
+    "Política de privacidade do Mulheres de Luxo. Saiba como tratamos seus dados pessoais.",
   path: "/privacidade",
 });
 

@@ -3,7 +3,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata = buildPageMetadata({
   title: "Termos de Uso",
   description:
-    "Termos de uso do Mulheres. Regras para clientes e acompanhantes na plataforma.",
+    "Termos de uso do Mulheres de Luxo. Regras para clientes e acompanhantes na plataforma.",
   path: "/termos",
 });
 
@@ -21,7 +21,7 @@ export default function TermosPage() {
             1. Elegibilidade
           </h2>
           <p className="mt-2">
-            O Mulheres é destinado exclusivamente a maiores de 18 anos. Ao usar a
+            O Mulheres de Luxo é destinado exclusivamente a maiores de 18 anos. Ao usar a
             plataforma, você confirma ter idade legal.
           </p>
         </section>
@@ -31,7 +31,7 @@ export default function TermosPage() {
             2. Responsabilidade
           </h2>
           <p className="mt-2">
-            O Mulheres reúne modelos e anúncios. A negociação e
+            O Mulheres de Luxo reúne modelos e anúncios. A negociação e
             encontro ocorrem diretamente entre cliente e acompanhante. Não nos
             responsabilizamos por acordos feitos fora da plataforma.
           </p>

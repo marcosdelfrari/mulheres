@@ -10,7 +10,7 @@ import {
 } from "@/lib/seo";
 
 const PAGE_DESCRIPTION =
-  "Guia para escolher um site seguro de acompanhantes: perfis verificados, fotos reais, contato direto via WhatsApp e sem taxas ocultas no Mulheres.";
+  "Guia para escolher um site seguro de acompanhantes: perfis verificados, fotos reais, contato direto via WhatsApp e sem taxas ocultas no Mulheres de Luxo.";
 
 export const metadata = buildGuideMetadata({
   title: "Qual site é mais seguro para encontrar acompanhantes?",
@@ -45,12 +45,12 @@ const FAQ = [
   {
     question: "Qual site é mais seguro para encontrar acompanhantes?",
     answer:
-      "Prefira plataformas com verificação de identidade, fotos reais, contato direto via WhatsApp e política clara de privacidade. No Mulheres não há taxa de intermediação — você fala direto com a acompanhante.",
+      "Prefira plataformas com verificação de identidade, fotos reais, contato direto via WhatsApp e política clara de privacidade. No Mulheres de Luxo não há taxa de intermediação — você fala direto com a acompanhante.",
   },
   {
-    question: "O Mulheres cobra taxa ou comissão?",
+    question: "O Mulheres de Luxo cobra taxa ou comissão?",
     answer:
-      "Não. O contato é direto entre você e a acompanhante. O Mulheres reúne anúncios verificados; valores e combinações são acertados no WhatsApp.",
+      "Não. O contato é direto entre você e a acompanhante. O Mulheres de Luxo reúne anúncios verificados; valores e combinações são acertados no WhatsApp.",
   },
   {
     question: "Como saber se um perfil é confiável?",
@@ -63,7 +63,7 @@ const FAQ = [
       "Sim, desde que você confirme que está falando com a pessoa do perfil, combine tudo por escrito e evite enviar dados bancários ou pagamentos adiantados a desconhecidos.",
   },
   {
-    question: "O Mulheres funciona em quais cidades?",
+    question: "O Mulheres de Luxo funciona em quais cidades?",
     answer:
       "Belo Horizonte, Salvador, São Paulo, Rio de Janeiro, Curitiba, Brasília e outras cidades conforme anúncios publicados. Cada capital tem página dedicada com perfis locais.",
   },
@@ -105,7 +105,7 @@ export default function SiteSeguroPage() {
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
             Critérios objetivos para escolher uma plataforma confiável — e como o
-            Mulheres aplica verificação, contato direto e transparência em todo o
+            Mulheres de Luxo aplica verificação, contato direto e transparência em todo o
             Brasil.
           </p>
         </header>

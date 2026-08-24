@@ -61,7 +61,7 @@ export function renderLocationOgImage({ eyebrow, headline, subtitle }: LocationO
           {subtitle}
         </div>
         <div style={{ fontSize: 22, marginTop: 36, opacity: 0.85 }}>
-          Mulheres · Perfis verificados · WhatsApp direto
+          Mulheres de Luxo · Perfis verificados · WhatsApp direto
         </div>
       </div>
     ),

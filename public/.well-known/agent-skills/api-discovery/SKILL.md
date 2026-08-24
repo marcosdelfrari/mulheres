@@ -1,11 +1,11 @@
 ---
 name: api-discovery
-description: Descubra e chame as APIs HTTP do Mulheres usando o catálogo RFC 9727, OpenAPI, metadados OAuth protected-resource e status de saúde. Use ao integrar de forma programática ou depurar conectividade de agentes.
+description: Descubra e chame as APIs HTTP do Mulheres de Luxo usando o catálogo RFC 9727, OpenAPI, metadados OAuth protected-resource e status de saúde. Use ao integrar de forma programática ou depurar conectividade de agentes.
 ---
 
 # Descoberta de APIs
 
-Use esta skill para localizar as interfaces máquina do Mulheres antes de chamá-las.
+Use esta skill para localizar as interfaces máquina do Mulheres de Luxo antes de chamá-las.
 
 ## Ordem de bootstrap
 

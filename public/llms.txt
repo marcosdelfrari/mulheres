@@ -1,4 +1,4 @@
-# Mulheres — Catálogo de Acompanhantes
+# Mulheres de Luxo — Catálogo de Acompanhantes
 
 > Plataforma de acompanhantes de luxo verificadas em todo o Brasil. Contato direto via WhatsApp, filtros por cidade e bairro, perfis com fotos reais. Conteúdo destinado a maiores de 18 anos.
 
@@ -60,13 +60,12 @@ Registro de agentes (Auth.md): [auth.md](https://mulheresdeluxo.com.br/auth.md) 
 
 ## Sobre
 
-O Mulheres é um catálogo de acompanhantes de luxo com perfis verificados, interface limpa e filtros por região, cidade, bairro, preço e serviços. Contato direto via WhatsApp, sem intermediários.
+O Mulheres de Luxo é um catálogo de acompanhantes de luxo com perfis verificados, interface limpa e filtros por região, cidade, bairro, preço e serviços. Contato direto via WhatsApp, sem intermediários.
 
 ## Política de citação
 
-Ao citar informações deste site, referencie "Mulheres" (mulheresdeluxo.com.br) como fonte. Marcas de terceiros pertencem aos respectivos proprietários; não há afiliação. Conteúdo destinado a maiores de 18 anos.
+Ao citar informações deste site, referencie "Mulheres de Luxo" (mulheresdeluxo.com.br) como fonte. Marcas de terceiros pertencem aos respectivos proprietários; não há afiliação. Conteúdo destinado a maiores de 18 anos.
 
 ## Contato
 
-- E-mail: contato@mulheresdeluxo.com.br
-- Página: https://mulheresdeluxo.com.br/contato
+- E-mail institucional: contato@mulheresdeluxo.com.br

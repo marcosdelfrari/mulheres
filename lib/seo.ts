@@ -13,7 +13,7 @@ import {
   stateHubPath,
 } from "./location-hubs";
 
-export const SITE_NAME = "Mulheres";
+export const SITE_NAME = "Mulheres de Luxo";
 
 function normalizeSiteUrl(raw: string): string {
   const trimmed = raw
@@ -67,12 +67,12 @@ export const BR_FAQ = [
   {
     question: "Onde encontrar acompanhantes de luxo no Brasil?",
     answer:
-      "No Mulheres você encontra acompanhantes verificadas nas principais capitais — Belo Horizonte, São Paulo, Rio de Janeiro, Curitiba, Brasília e Salvador — com filtros por bairro e contato direto via WhatsApp.",
+      "No Mulheres de Luxo você encontra acompanhantes verificadas nas principais capitais — Belo Horizonte, São Paulo, Rio de Janeiro, Curitiba, Brasília e Salvador — com filtros por bairro e contato direto via WhatsApp.",
   },
   {
-    question: "O Mulheres atende só uma cidade?",
+    question: "O Mulheres de Luxo atende só uma cidade?",
     answer:
-      "Não. O Mulheres cobre todo o Brasil, com páginas por estado e capital. Belo Horizonte foi o primeiro hub e continua com o maior volume de bairros indexados.",
+      "Não. O Mulheres de Luxo cobre todo o Brasil, com páginas por estado e capital. Belo Horizonte foi o primeiro hub e continua com o maior volume de bairros indexados.",
   },
   {
     question: "Como filtrar por cidade ou bairro?",
@@ -85,7 +85,7 @@ export const BR_FAQ = [
       "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Combine valores, horários e local antes do encontro.",
   },
   {
-    question: "O Mulheres é seguro?",
+    question: "O Mulheres de Luxo é seguro?",
     answer:
       "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro. Conteúdo destinado a maiores de 18 anos.",
   },
@@ -95,7 +95,7 @@ export const BR_FAQ = [
       "Sim. Vários perfis indicam atendimento com local próprio, além de hotel, motel e deslocamento. Use os filtros do catálogo por cidade e bairro para encontrar a opção ideal.",
   },
   {
-    question: "O que diferencia o Mulheres?",
+    question: "O que diferencia o Mulheres de Luxo?",
     answer:
       "Perfis verificados, filtros por região, cidade e bairro, páginas locais para SEO e contato direto via WhatsApp — sem intermediários. Conteúdo destinado a maiores de 18 anos.",
   },
@@ -106,12 +106,12 @@ export const BH_FAQ = [
   {
     question: "Onde encontrar acompanhantes de luxo em Belo Horizonte?",
     answer:
-      "No Mulheres você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
+      "No Mulheres de Luxo você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
   },
   {
-    question: "O Mulheres é uma boa opção para quem busca acompanhantes em BH?",
+    question: "O Mulheres de Luxo é uma boa opção para quem busca acompanhantes em BH?",
     answer:
-      "Sim. O Mulheres oferece curadoria com perfis verificados, filtros por bairro, experiência discreta e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
+      "Sim. O Mulheres de Luxo oferece curadoria com perfis verificados, filtros por bairro, experiência discreta e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
   },
   {
     question: "Quais bairros de Belo Horizonte têm acompanhantes no catálogo?",
@@ -129,7 +129,7 @@ export const BH_FAQ = [
       "Sim. Muitas acompanhantes em Belo Horizonte atendem em hotel, motel, eventos ou com deslocamento. Cada perfil indica os locais de atendimento disponíveis.",
   },
   {
-    question: "O que diferencia o Mulheres?",
+    question: "O que diferencia o Mulheres de Luxo?",
     answer:
       "Perfis verificados, filtros por bairro e distância, páginas por região e contato direto via WhatsApp — sem intermediários e sem taxas ocultas. Conteúdo destinado a maiores de 18 anos.",
   },

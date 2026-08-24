@@ -9,22 +9,22 @@ import {
 } from "@/lib/seo";
 
 const PAGE_DESCRIPTION =
-  "Saiba como encontrar acompanhantes de luxo verificadas no Mulheres. Filtros por bairro, contato via WhatsApp e perfis com fotos reais.";
+  "Saiba como encontrar acompanhantes de luxo verificadas no Mulheres de Luxo. Filtros por bairro, contato via WhatsApp e perfis com fotos reais.";
 
 export const metadata = buildGuideMetadata({
-  title: "Como funciona o Mulheres",
+  title: "Como funciona o Mulheres de Luxo",
   description: PAGE_DESCRIPTION,
   slug: "como-funciona",
 });
 
 const FAQ = [
   {
-    question: "Como encontrar acompanhantes no Mulheres?",
+    question: "Como encontrar acompanhantes no Mulheres de Luxo?",
     answer:
       "Acesse as modelos, filtre por região, cidade ou bairro e navegue pelos perfis verificados. Cada anúncio exibe fotos, preços, serviços e WhatsApp para contato direto.",
   },
   {
-    question: "O Mulheres cobra taxa de intermediação?",
+    question: "O Mulheres de Luxo cobra taxa de intermediação?",
     answer:
       "Não. O contato é direto entre você e a acompanhante via WhatsApp ou telefone. Sem intermediários e sem taxas ocultas.",
   },
@@ -48,7 +48,7 @@ export default function ComoFuncionaPage() {
       <JsonLd
         data={[
           buildArticleJsonLd({
-            title: "Como funciona o Mulheres",
+            title: "Como funciona o Mulheres de Luxo",
             description: PAGE_DESCRIPTION,
             url,
             datePublished: "2026-06-01T10:00:00.000Z",
@@ -68,10 +68,10 @@ export default function ComoFuncionaPage() {
 
         <header className="mt-6">
           <h1 className="font-serif text-3xl font-bold italic text-gray-900">
-            Como funciona o Mulheres
+            Como funciona o Mulheres de Luxo
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
-            O Mulheres reúne modelos e acompanhantes de luxo com perfis
+            O Mulheres de Luxo reúne modelos e acompanhantes de luxo com perfis
             verificados, filtros por bairro e contato direto via WhatsApp.
           </p>
         </header>

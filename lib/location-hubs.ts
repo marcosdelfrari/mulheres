@@ -54,12 +54,12 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
     slug: "savassi",
     name: "Savassi",
     intro:
-      "O Savassi concentra bares, restaurantes e vida noturna — um dos bairros com maior demanda por acompanhantes em Belo Horizonte. No Mulheres você encontra perfis verificados com contato direto via WhatsApp.",
+      "O Savassi concentra bares, restaurantes e vida noturna — um dos bairros com maior demanda por acompanhantes em Belo Horizonte. No Mulheres de Luxo você encontra perfis verificados com contato direto via WhatsApp.",
     faq: [
       {
         question: "Onde encontrar acompanhantes no Savassi, BH?",
         answer:
-          "No Mulheres você encontra acompanhantes no Savassi com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por preço, serviços e disponibilidade.",
+          "No Mulheres de Luxo você encontra acompanhantes no Savassi com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por preço, serviços e disponibilidade.",
       },
       {
         question: "Tem acompanhantes com local no Savassi?",
@@ -77,12 +77,12 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
     slug: "lourdes",
     name: "Lourdes",
     intro:
-      "Lourdes é um bairro tradicional e sofisticado de BH, ideal para encontros discretos e eventos. Confira acompanhantes verificadas no Mulheres com atendimento no bairro e região.",
+      "Lourdes é um bairro tradicional e sofisticado de BH, ideal para encontros discretos e eventos. Confira acompanhantes verificadas no Mulheres de Luxo com atendimento no bairro e região.",
     faq: [
       {
         question: "Tem acompanhantes no Lourdes, BH?",
         answer:
-          "Sim. O Mulheres lista acompanhantes no Lourdes com perfis verificados, preços transparentes e contato direto via WhatsApp.",
+          "Sim. O Mulheres de Luxo lista acompanhantes no Lourdes com perfis verificados, preços transparentes e contato direto via WhatsApp.",
       },
       {
         question: "Acompanhantes com local no Lourdes, Belo Horizonte?",
@@ -100,7 +100,7 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       {
         question: "Como encontrar acompanhantes no Funcionários, BH?",
         answer:
-          "Acesse o catálogo do Mulheres filtrado por Funcionários. Perfis verificados com fotos, serviços e WhatsApp para contato imediato.",
+          "Acesse o catálogo do Mulheres de Luxo filtrado por Funcionários. Perfis verificados com fotos, serviços e WhatsApp para contato imediato.",
       },
       {
         question: "Tem acompanhantes com local no Funcionários?",
@@ -118,7 +118,7 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       {
         question: "Acompanhantes no Centro de BH — como funciona?",
         answer:
-          "No Mulheres você navega por acompanhantes no Centro de Belo Horizonte, compara preços e entra em contato direto via WhatsApp, sem intermediários.",
+          "No Mulheres de Luxo você navega por acompanhantes no Centro de Belo Horizonte, compara preços e entra em contato direto via WhatsApp, sem intermediários.",
       },
       {
         question: "Tem acompanhantes com local no Centro de BH?",
@@ -136,7 +136,7 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       {
         question: "Há acompanhantes na Pampulha, BH?",
         answer:
-          "Sim. O Mulheres lista acompanhantes na Pampulha e entorno com perfis verificados e contato direto via WhatsApp.",
+          "Sim. O Mulheres de Luxo lista acompanhantes na Pampulha e entorno com perfis verificados e contato direto via WhatsApp.",
       },
       {
         question: "Acompanhantes com local na Pampulha?",
@@ -154,7 +154,7 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       {
         question: "Onde achar acompanhantes no Buritis, BH?",
         answer:
-          "No catálogo Mulheres, filtre por Buritis em Belo Horizonte. Perfis com fotos reais e contato via WhatsApp.",
+          "No catálogo Mulheres de Luxo, filtre por Buritis em Belo Horizonte. Perfis com fotos reais e contato via WhatsApp.",
       },
       {
         question: "Tem acompanhantes com local no Buritis?",
@@ -177,10 +177,10 @@ export const CITY_HUBS: CityHub[] = [
     heroLocation: "Belo Horizonte",
     heroSub:
       "Descubra perfis selecionados na capital mineira e região. Uma curadoria focada em discrição, sofisticação e atendimento de alto nível.",
-    intro: `Encontre acompanhantes de luxo em BH com perfis verificados, fotos reais e contato direto via WhatsApp. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres oferece filtros por bairro, distância e serviços.`,
+    intro: `Encontre acompanhantes de luxo em BH com perfis verificados, fotos reais e contato direto via WhatsApp. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres de Luxo oferece filtros por bairro, distância e serviços.`,
     seoHeading: "Acompanhantes de luxo em Belo Horizonte — MG",
     whySection:
-      "Belo Horizonte concentra milhares de buscas por acompanhantes todos os meses. O Mulheres reúne perfis verificados, interface rápida e filtros precisos por bairros como Savassi, Lourdes e Funcionários — com contato direto via WhatsApp.",
+      "Belo Horizonte concentra milhares de buscas por acompanhantes todos os meses. O Mulheres de Luxo reúne perfis verificados, interface rápida e filtros precisos por bairros como Savassi, Lourdes e Funcionários — com contato direto via WhatsApp.",
     tags: [
       "acompanhantes belo horizonte",
       "acompanhantes bh",
@@ -194,12 +194,12 @@ export const CITY_HUBS: CityHub[] = [
       {
         question: "Onde encontrar acompanhantes de luxo em Belo Horizonte?",
         answer:
-          "No Mulheres você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
+          "No Mulheres de Luxo você encontra acompanhantes em Belo Horizonte com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro como Savassi, Lourdes, Funcionários e Pampulha.",
       },
       {
-        question: "O Mulheres é uma boa opção para quem busca acompanhantes em BH?",
+        question: "O Mulheres de Luxo é uma boa opção para quem busca acompanhantes em BH?",
         answer:
-          "Sim. O Mulheres oferece curadoria com perfis verificados, filtros por bairro, experiência discreta e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
+          "Sim. O Mulheres de Luxo oferece curadoria com perfis verificados, filtros por bairro, experiência discreta e contato direto via WhatsApp em Belo Horizonte e região metropolitana.",
       },
       {
         question: "Quais bairros de Belo Horizonte têm acompanhantes no catálogo?",
@@ -217,12 +217,12 @@ export const CITY_HUBS: CityHub[] = [
           "Sim. Muitas acompanhantes em Belo Horizonte atendem em hotel, motel, eventos ou com deslocamento. Cada perfil indica os locais de atendimento disponíveis.",
       },
       {
-        question: "O que diferencia o Mulheres em Belo Horizonte?",
+        question: "O que diferencia o Mulheres de Luxo em Belo Horizonte?",
         answer:
           "Perfis verificados, filtros por bairro e distância, páginas por região e contato direto via WhatsApp — sem intermediários e sem taxas ocultas. Conteúdo destinado a maiores de 18 anos.",
       },
       {
-        question: "O Mulheres é seguro para encontrar acompanhantes em BH?",
+        question: "O Mulheres de Luxo é seguro para encontrar acompanhantes em BH?",
         answer:
           "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro.",
       },
@@ -245,10 +245,10 @@ export const CITY_HUBS: CityHub[] = [
     heroLocation: "São Paulo",
     heroSub:
       "Descubra perfis selecionados na capital paulista. Curadoria focada em discrição, sofisticação e atendimento de alto nível.",
-    intro: `Catálogo de acompanhantes em São Paulo com perfis verificados. Pinheiros, Moema, Vila Madalena e toda a capital paulista. Contato direto via WhatsApp. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres oferece filtros precisos e experiência moderna.`,
+    intro: `Catálogo de acompanhantes em São Paulo com perfis verificados. Pinheiros, Moema, Vila Madalena e toda a capital paulista. Contato direto via WhatsApp. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres de Luxo oferece filtros precisos e experiência moderna.`,
     seoHeading: "Acompanhantes de luxo em São Paulo — SP",
     whySection:
-      "São Paulo é o maior mercado de buscas por acompanhantes no Brasil. O Mulheres reúne perfis verificados, filtros por bairro e contato direto via WhatsApp — sem intermediários.",
+      "São Paulo é o maior mercado de buscas por acompanhantes no Brasil. O Mulheres de Luxo reúne perfis verificados, filtros por bairro e contato direto via WhatsApp — sem intermediários.",
     tags: [
       "acompanhantes são paulo",
       "acompanhantes sp",
@@ -261,10 +261,10 @@ export const CITY_HUBS: CityHub[] = [
       {
         question: "Onde encontrar acompanhantes em São Paulo?",
         answer:
-          "No Mulheres você encontra acompanhantes em São Paulo com perfis verificados, filtros por bairro e contato direto via WhatsApp.",
+          "No Mulheres de Luxo você encontra acompanhantes em São Paulo com perfis verificados, filtros por bairro e contato direto via WhatsApp.",
       },
       {
-        question: "Quais regiões de SP têm acompanhantes no Mulheres?",
+        question: "Quais regiões de SP têm acompanhantes no Mulheres de Luxo?",
         answer:
           "Pinheiros, Moema, Vila Madalena, Jardins e outras regiões da capital. Use os filtros do catálogo para refinar por bairro.",
       },
@@ -290,7 +290,7 @@ export const CITY_HUBS: CityHub[] = [
     intro: `Acompanhantes no Rio de Janeiro — Copacabana, Barra da Tijuca e Zona Sul. Perfis verificados com fotos e contato direto. Alternativa moderna a ${ALTERNATIVES_TEXT}.`,
     seoHeading: "Acompanhantes de luxo no Rio de Janeiro — RJ",
     whySection:
-      "O Rio concentra alta demanda por acompanhantes em Copacabana, Ipanema, Barra e Zona Sul. O Mulheres oferece perfis verificados e contato direto via WhatsApp.",
+      "O Rio concentra alta demanda por acompanhantes em Copacabana, Ipanema, Barra e Zona Sul. O Mulheres de Luxo oferece perfis verificados e contato direto via WhatsApp.",
     tags: [
       "acompanhantes rio de janeiro",
       "acompanhantes rj",
@@ -304,7 +304,7 @@ export const CITY_HUBS: CityHub[] = [
       {
         question: "Como encontrar acompanhantes no Rio de Janeiro?",
         answer:
-          "Navegue pelo catálogo Mulheres filtrado para o Rio de Janeiro. Perfis verificados com preços, serviços e WhatsApp.",
+          "Navegue pelo catálogo Mulheres de Luxo filtrado para o Rio de Janeiro. Perfis verificados com preços, serviços e WhatsApp.",
       },
       {
         question: "Quais bairros do RJ têm acompanhantes?",
@@ -325,10 +325,10 @@ export const CITY_HUBS: CityHub[] = [
     heroLocation: "Curitiba",
     heroSub:
       "Perfis selecionados no Batel e região. Curadoria focada em discrição, sofisticação e atendimento de alto nível.",
-    intro: `Acompanhantes em Curitiba com atendimento sofisticado no Batel e região. Perfis verificados no Mulheres, com contato direto via WhatsApp.`,
+    intro: `Acompanhantes em Curitiba com atendimento sofisticado no Batel e região. Perfis verificados no Mulheres de Luxo, com contato direto via WhatsApp.`,
     seoHeading: "Acompanhantes de luxo em Curitiba — PR",
     whySection:
-      "Curitiba busca discrição e qualidade. O Mulheres reúne acompanhantes verificadas com filtros claros e contato direto — sem intermediários.",
+      "Curitiba busca discrição e qualidade. O Mulheres de Luxo reúne acompanhantes verificadas com filtros claros e contato direto — sem intermediários.",
     tags: [
       "acompanhantes curitiba",
       "acompanhantes pr",
@@ -337,9 +337,9 @@ export const CITY_HUBS: CityHub[] = [
     ],
     faq: [
       {
-        question: "Tem acompanhantes em Curitiba no Mulheres?",
+        question: "Tem acompanhantes em Curitiba no Mulheres de Luxo?",
         answer:
-          "Sim. O Mulheres lista acompanhantes em Curitiba com perfis verificados e contato direto via WhatsApp.",
+          "Sim. O Mulheres de Luxo lista acompanhantes em Curitiba com perfis verificados e contato direto via WhatsApp.",
       },
       {
         question: "Como filtrar acompanhantes em Curitiba?",
@@ -364,7 +364,7 @@ export const CITY_HUBS: CityHub[] = [
       "Acompanhantes em Brasília para eventos corporativos e encontros discretos. Asa Sul e região administrativa, com perfis verificados e WhatsApp direto.",
     seoHeading: "Acompanhantes de luxo em Brasília — DF",
     whySection:
-      "Brasília concentra demanda corporativa e encontros discretos. O Mulheres oferece perfis verificados, filtros por região e contato direto via WhatsApp.",
+      "Brasília concentra demanda corporativa e encontros discretos. O Mulheres de Luxo oferece perfis verificados, filtros por região e contato direto via WhatsApp.",
     tags: [
       "acompanhantes brasília",
       "acompanhantes df",
@@ -375,7 +375,7 @@ export const CITY_HUBS: CityHub[] = [
       {
         question: "Onde encontrar acompanhantes em Brasília?",
         answer:
-          "No Mulheres você encontra acompanhantes em Brasília com perfis verificados e contato direto via WhatsApp.",
+          "No Mulheres de Luxo você encontra acompanhantes em Brasília com perfis verificados e contato direto via WhatsApp.",
       },
       {
         question: "Acompanhantes em Brasília atendem eventos?",
@@ -400,7 +400,7 @@ export const CITY_HUBS: CityHub[] = [
       "Acompanhantes em Salvador com local, perfis verificados e WhatsApp direto. Barra, Ondina e região metropolitana — sem intermediários.",
     seoHeading: "Acompanhantes de luxo em Salvador — BA",
     whySection:
-      "Salvador une turismo e vida noturna com alta busca por acompanhantes. O Mulheres lista perfis verificados com filtros claros e WhatsApp direto.",
+      "Salvador une turismo e vida noturna com alta busca por acompanhantes. O Mulheres de Luxo lista perfis verificados com filtros claros e WhatsApp direto.",
     tags: [
       "acompanhantes salvador",
       "acompanhantes ba",
@@ -411,12 +411,12 @@ export const CITY_HUBS: CityHub[] = [
       {
         question: "Onde encontrar acompanhantes em Salvador, BA?",
         answer:
-          "No Mulheres, acesse a página de Salvador ou filtre o catálogo por Bahia. Perfis verificados com fotos, preços e WhatsApp para contato direto.",
+          "No Mulheres de Luxo, acesse a página de Salvador ou filtre o catálogo por Bahia. Perfis verificados com fotos, preços e WhatsApp para contato direto.",
       },
       {
         question: "Como encontrar acompanhantes em Salvador?",
         answer:
-          "Acesse o catálogo Mulheres para Salvador. Perfis com fotos, preços e WhatsApp para contato direto — sem intermediários.",
+          "Acesse o catálogo Mulheres de Luxo para Salvador. Perfis com fotos, preços e WhatsApp para contato direto — sem intermediários.",
       },
       {
         question: "Há acompanhantes na Barra, Salvador?",
@@ -429,9 +429,9 @@ export const CITY_HUBS: CityHub[] = [
           "Sim. Vários perfis em Salvador indicam atendimento com local próprio, além de hotel e motel. Use os filtros do catálogo para encontrar a opção ideal.",
       },
       {
-        question: "O Mulheres é seguro para encontrar acompanhantes em Salvador?",
+        question: "O Mulheres de Luxo é seguro para encontrar acompanhantes em Salvador?",
         answer:
-          "Sim. O Mulheres verifica identidade dos perfis, exibe fotos reais e permite contato direto via WhatsApp — sem intermediários. Combine valores e local antes do encontro.",
+          "Sim. O Mulheres de Luxo verifica identidade dos perfis, exibe fotos reais e permite contato direto via WhatsApp — sem intermediários. Combine valores e local antes do encontro.",
       },
     ],
     neighborhoods: [],
@@ -448,10 +448,10 @@ export const STATE_HUBS: StateHub[] = [
     heroLocation: "Minas Gerais",
     heroSub:
       "Da capital mineira ao interior — perfis verificados com discrição, sofisticação e contato direto via WhatsApp.",
-    intro: `Catálogo de acompanhantes em Minas Gerais — Belo Horizonte, Contagem, Betim e região. Perfis verificados, filtros por cidade e bairro. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres é a opção moderna.`,
+    intro: `Catálogo de acompanhantes em Minas Gerais — Belo Horizonte, Contagem, Betim e região. Perfis verificados, filtros por cidade e bairro. Para quem já usa ${ALTERNATIVES_TEXT}, o Mulheres de Luxo é a opção moderna.`,
     seoHeading: "Acompanhantes de luxo em Minas Gerais — MG",
     whySection:
-      "Minas Gerais concentra milhares de buscas mensais, com BH como principal hub. O Mulheres organiza capitais e cidades com perfis verificados e filtros precisos.",
+      "Minas Gerais concentra milhares de buscas mensais, com BH como principal hub. O Mulheres de Luxo organiza capitais e cidades com perfis verificados e filtros precisos.",
     tags: [
       "acompanhantes minas gerais",
       "acompanhantes mg",
@@ -463,10 +463,10 @@ export const STATE_HUBS: StateHub[] = [
       {
         question: "Onde encontrar acompanhantes em Minas Gerais?",
         answer:
-          "No Mulheres você encontra acompanhantes em Minas Gerais com foco em Belo Horizonte e região. Perfis verificados e contato via WhatsApp.",
+          "No Mulheres de Luxo você encontra acompanhantes em Minas Gerais com foco em Belo Horizonte e região. Perfis verificados e contato via WhatsApp.",
       },
       {
-        question: "Qual a principal cidade de MG no Mulheres?",
+        question: "Qual a principal cidade de MG no Mulheres de Luxo?",
         answer:
           "Belo Horizonte é o hub principal, com páginas por bairro (Savassi, Lourdes, Funcionários e mais). Outras cidades aparecem no catálogo conforme os anúncios.",
       },
@@ -485,7 +485,7 @@ export const STATE_HUBS: StateHub[] = [
       "Catálogo de acompanhantes no estado de São Paulo. Comece pela capital ou filtre no catálogo completo por cidade e bairro.",
     seoHeading: "Acompanhantes de luxo em São Paulo — SP",
     whySection:
-      "O estado de São Paulo lidera o volume de buscas no Brasil. O Mulheres oferece curadoria com perfis verificados e navegação por capital e filtros.",
+      "O estado de São Paulo lidera o volume de buscas no Brasil. O Mulheres de Luxo oferece curadoria com perfis verificados e navegação por capital e filtros.",
     tags: [
       "acompanhantes são paulo",
       "acompanhantes sp",
@@ -513,7 +513,7 @@ export const STATE_HUBS: StateHub[] = [
       "Acompanhantes no estado do Rio de Janeiro. Explore a capital ou filtre no catálogo por cidade e bairro.",
     seoHeading: "Acompanhantes de luxo no Rio de Janeiro — RJ",
     whySection:
-      "O Rio une turismo e vida urbana com alta demanda. O Mulheres organiza perfis verificados com filtros claros e WhatsApp direto.",
+      "O Rio une turismo e vida urbana com alta demanda. O Mulheres de Luxo organiza perfis verificados com filtros claros e WhatsApp direto.",
     tags: [
       "acompanhantes rio de janeiro",
       "acompanhantes rj",
@@ -524,7 +524,7 @@ export const STATE_HUBS: StateHub[] = [
       {
         question: "Onde achar acompanhantes no estado do Rio?",
         answer:
-          "No Mulheres, comece pela capital ou use o catálogo com filtro Rio de Janeiro. Contato direto via WhatsApp.",
+          "No Mulheres de Luxo, comece pela capital ou use o catálogo com filtro Rio de Janeiro. Contato direto via WhatsApp.",
       },
     ],
   },
@@ -541,12 +541,12 @@ export const STATE_HUBS: StateHub[] = [
       "Catálogo de acompanhantes no Paraná, com Curitiba como hub principal. Perfis verificados e contato via WhatsApp.",
     seoHeading: "Acompanhantes de luxo no Paraná — PR",
     whySection:
-      "O Paraná busca qualidade e discrição. O Mulheres reúne acompanhantes verificadas com filtros por cidade e serviços.",
+      "O Paraná busca qualidade e discrição. O Mulheres de Luxo reúne acompanhantes verificadas com filtros por cidade e serviços.",
     tags: ["acompanhantes paraná", "acompanhantes pr", "acompanhantes curitiba"],
     capitalCitySlug: "curitiba",
     faq: [
       {
-        question: "Tem acompanhantes no Paraná no Mulheres?",
+        question: "Tem acompanhantes no Paraná no Mulheres de Luxo?",
         answer:
           "Sim. Curitiba é o hub principal; use o catálogo para filtrar por Paraná e comparar perfis verificados.",
       },
@@ -565,7 +565,7 @@ export const STATE_HUBS: StateHub[] = [
       "Acompanhantes no Distrito Federal com foco em Brasília. Perfis verificados, filtros e WhatsApp direto.",
     seoHeading: "Acompanhantes de luxo no Distrito Federal — DF",
     whySection:
-      "O DF concentra demanda corporativa e encontros discretos. O Mulheres oferece perfis verificados e navegação clara por Brasília.",
+      "O DF concentra demanda corporativa e encontros discretos. O Mulheres de Luxo oferece perfis verificados e navegação clara por Brasília.",
     tags: [
       "acompanhantes distrito federal",
       "acompanhantes df",
@@ -593,14 +593,14 @@ export const STATE_HUBS: StateHub[] = [
       "Catálogo de acompanhantes na Bahia, com Salvador como hub. Perfis verificados e contato via WhatsApp.",
     seoHeading: "Acompanhantes de luxo na Bahia — BA",
     whySection:
-      "A Bahia une turismo e vida noturna. O Mulheres lista acompanhantes verificadas com filtros por cidade e serviços.",
+      "A Bahia une turismo e vida noturna. O Mulheres de Luxo lista acompanhantes verificadas com filtros por cidade e serviços.",
     tags: ["acompanhantes bahia", "acompanhantes ba", "acompanhantes salvador"],
     capitalCitySlug: "salvador",
     faq: [
       {
         question: "Onde buscar acompanhantes na Bahia?",
         answer:
-          "No Mulheres, comece por Salvador ou filtre o catálogo por Bahia. Contato direto via WhatsApp.",
+          "No Mulheres de Luxo, comece por Salvador ou filtre o catálogo por Bahia. Contato direto via WhatsApp.",
       },
     ],
   },

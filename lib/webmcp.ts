@@ -41,7 +41,7 @@ function buildTools(): WebMcpTool[] {
     {
       name: "searchListings",
       description:
-        "Busca anúncios de acompanhantes no Mulheres por cidade, bairro ou texto livre. Retorna perfis publicados com título, preço, localização e URL.",
+        "Busca anúncios de acompanhantes no Mulheres de Luxo por cidade, bairro ou texto livre. Retorna perfis publicados com título, preço, localização e URL.",
       annotations: { readOnlyHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",
@@ -86,7 +86,7 @@ function buildTools(): WebMcpTool[] {
     {
       name: "navigateTo",
       description:
-        "Navega o navegador para um caminho do Mulheres ou URL absoluta neste origin (catálogo, hubs de cidade, guias, auth, conta).",
+        "Navega o navegador para um caminho do Mulheres de Luxo ou URL absoluta neste origin (catálogo, hubs de cidade, guias, auth, conta).",
       annotations: { readOnlyHint: false, openWorldHint: false },
       inputSchema: {
         type: "object",
@@ -157,7 +157,7 @@ function buildTools(): WebMcpTool[] {
     {
       name: "getDiscovery",
       description:
-        "Retorna links de descoberta para agentes no Mulheres (OpenAPI, catálogo de APIs, Auth.md, MCP Server Card, Agent Skills, metadados OAuth, health).",
+        "Retorna links de descoberta para agentes no Mulheres de Luxo (OpenAPI, catálogo de APIs, Auth.md, MCP Server Card, Agent Skills, metadados OAuth, health).",
       annotations: { readOnlyHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",
@@ -190,7 +190,7 @@ function buildTools(): WebMcpTool[] {
     },
     {
       name: "getHealth",
-      description: "Verifica o status de saúde da API Mulheres.",
+      description: "Verifica o status de saúde da API Mulheres de Luxo.",
       annotations: { readOnlyHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",
@@ -224,7 +224,7 @@ function getModelContext(): WebMcpModelContext | null {
 }
 
 /**
- * Register Mulheres WebMCP tools for browser AI agents.
+ * Register Mulheres de Luxo WebMCP tools for browser AI agents.
  * Supports current `registerTool` and legacy `provideContext`.
  */
 export async function registerWebMcpTools(signal?: AbortSignal) {

@@ -28,7 +28,7 @@ export function HomeSeoSection() {
           </div>
 
           <p className="mt-4 font-light leading-relaxed text-gray-600">
-            O Mulheres reúne acompanhantes verificadas nas principais capitais —
+            O Mulheres de Luxo reúne acompanhantes verificadas nas principais capitais —
             Belo Horizonte, São Paulo, Rio de Janeiro, Curitiba, Brasília e
             Salvador — com filtros por bairro, preço e contato direto via
             WhatsApp. Se você costuma buscar em {alternatives}, conheça uma

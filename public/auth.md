@@ -1,6 +1,6 @@
 # auth.md
 
-Você é um agente. O **Mulheres** oferece **registro agentic**: descobrir → registrar → (reivindicar se necessário) → trocar por um access_token → chamar a API → tratar revogação. Siga as etapas em ordem; não pule à frente.
+Você é um agente. O **Mulheres de Luxo** oferece **registro agentic**: descobrir → registrar → (reivindicar se necessário) → trocar por um access_token → chamar a API → tratar revogação. Siga as etapas em ordem; não pule à frente.
 
 Hosts do serviço:
 
@@ -19,7 +19,7 @@ GET /.well-known/oauth-protected-resource
 ```json
 {
   "resource": "https://mulheresdeluxo.com.br/api",
-  "resource_name": "Mulheres API",
+  "resource_name": "Mulheres de Luxo API",
   "authorization_servers": ["https://mulheresdeluxo.com.br"],
   "scopes_supported": ["openid", "profile", "email", "offline_access"],
   "bearer_methods_supported": ["header"]

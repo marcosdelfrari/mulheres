@@ -207,7 +207,7 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
             <p className="mt-4 font-light leading-relaxed text-gray-600">
               {hub.intro}{" "}
               Se você já usa {GENERIC_PLATFORMS_PHRASE}, o{" "}
-              <strong>Mulheres</strong> é uma opção com filtros por localização e
+              <strong>Mulheres de Luxo</strong> é uma opção com filtros por localização e
               perfis verificados em {hub.city}.
             </p>
 
@@ -225,7 +225,7 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-light tracking-wide text-gray-900">
-              Por que escolher o Mulheres em {hub.city}?
+              Por que escolher o Mulheres de Luxo em {hub.city}?
             </h2>
             <p className="mt-4 font-light leading-relaxed text-gray-600">
               {hub.whySection}
@@ -465,7 +465,7 @@ export async function StateHubPage({ hub }: StateHubPageProps) {
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-light tracking-wide text-gray-900">
-              Por que escolher o Mulheres em {hub.region}?
+              Por que escolher o Mulheres de Luxo em {hub.region}?
             </h2>
             <p className="mt-4 font-light leading-relaxed text-gray-600">
               {hub.whySection}
@@ -659,7 +659,7 @@ export async function ComLocalHubPage({ hub }: ComLocalHubPageProps) {
   const faqs = [
     {
       question: `Tem acompanhantes com local em ${hub.city}?`,
-      answer: `Sim. O Mulheres lista acompanhantes com local próprio em ${hub.city}. Perfis verificados com fotos reais e contato direto via WhatsApp.`,
+      answer: `Sim. O Mulheres de Luxo lista acompanhantes com local próprio em ${hub.city}. Perfis verificados com fotos reais e contato direto via WhatsApp.`,
     },
     {
       question: `Onde encontrar mulheres com local em ${hub.shortName}?`,
@@ -807,7 +807,7 @@ export async function TypeTagHubPage({ hub, typeTag }: TypeTagHubPageProps) {
   const faqs = [
     {
       question: `Onde encontrar acompanhantes ${typeTag.toLowerCase()} em ${hub.city}?`,
-      answer: `No Mulheres você encontra acompanhantes ${typeTag.toLowerCase()} em ${hub.city} com perfis verificados, fotos reais e contato direto via WhatsApp.`,
+      answer: `No Mulheres de Luxo você encontra acompanhantes ${typeTag.toLowerCase()} em ${hub.city} com perfis verificados, fotos reais e contato direto via WhatsApp.`,
     },
     {
       question: `Tem acompanhantes ${typeTag.toLowerCase()} com local em ${hub.shortName}?`,
@@ -866,7 +866,7 @@ export async function TypeTagHubPage({ hub, typeTag }: TypeTagHubPageProps) {
             Acompanhantes {typeTag} em {hub.city}
           </h1>
           <p className="mt-3 text-base leading-relaxed text-gray-600 sm:mt-4 sm:text-lg">
-            Perfis com tag {typeTag} em {hub.city}. Verificados no Mulheres com
+            Perfis com tag {typeTag} em {hub.city}. Verificados no Mulheres de Luxo com
             contato direto via WhatsApp.
           </p>
         </header>

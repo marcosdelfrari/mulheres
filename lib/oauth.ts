@@ -175,7 +175,7 @@ export function buildProtectedResourceMetadata() {
     scopes_supported: ["openid", "profile", "email", "offline_access"],
     bearer_methods_supported: ["header"],
     resource_documentation: absoluteUrl("/guias/como-funciona"),
-    resource_name: "Mulheres API",
+    resource_name: "Mulheres de Luxo API",
   };
 }
 

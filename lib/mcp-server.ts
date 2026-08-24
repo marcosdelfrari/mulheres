@@ -27,7 +27,7 @@ type JsonRpcResponse = {
 const TOOLS = [
   {
     name: "health",
-    description: "Verifica o status de saúde do serviço Mulheres.",
+    description: "Verifica o status de saúde do serviço Mulheres de Luxo.",
     inputSchema: {
       type: "object",
       properties: {},
@@ -268,7 +268,7 @@ export async function handleMcpJsonRpc(
             title: SITE_NAME,
           },
           instructions:
-            "MCP do catálogo Mulheres. Use as tools search_listings, health e get_discovery. Para APIs HTTP protegidas, autentique com OAuth Bearer.",
+            "MCP do catálogo Mulheres de Luxo. Use as tools search_listings, health e get_discovery. Para APIs HTTP protegidas, autentique com OAuth Bearer.",
         }),
       );
       continue;
@@ -418,7 +418,7 @@ export async function handleMcpJsonRpc(
               role: "user",
               content: {
                 type: "text",
-                text: `Busque no Mulheres acompanhantes em ${city}${neighborhood ? `, bairro ${neighborhood}` : ""}. Use a tool search_listings e resuma perfis verificados com links.`,
+                text: `Busque no Mulheres de Luxo acompanhantes em ${city}${neighborhood ? `, bairro ${neighborhood}` : ""}. Use a tool search_listings e resuma perfis verificados com links.`,
               },
             },
           ],

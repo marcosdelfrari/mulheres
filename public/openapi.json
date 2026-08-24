@@ -1,11 +1,11 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Mulheres API",
-    "description": "APIs HTTP para autenticação, anúncios e verificação de perfil no Mulheres — catálogo de acompanhantes de luxo em Belo Horizonte e no Brasil.",
+    "title": "Mulheres de Luxo API",
+    "description": "APIs HTTP para autenticação, anúncios e verificação de perfil no Mulheres de Luxo — catálogo de acompanhantes de luxo em Belo Horizonte e no Brasil.",
     "version": "1.0.0",
     "contact": {
-      "name": "Mulheres",
+      "name": "Mulheres de Luxo",
       "url": "https://mulheresdeluxo.com.br/contato",
       "email": "contato@mulheresdeluxo.com.br"
     }

@@ -4,7 +4,7 @@ export const GENERIC_PLATFORMS_PHRASE =
 
 /** Uma linha para rodapé e páginas editoriais */
 export const TRADEMARK_DISCLAIMER =
-  "Marcas de terceiros citadas em buscas pertencem aos respectivos proprietários. O Mulheres não possui afiliação, parceria ou endosso com outras plataformas.";
+  "Marcas de terceiros citadas em buscas pertencem aos respectivos proprietários. O Mulheres de Luxo não possui afiliação, parceria ou endosso com outras plataformas.";
 
 /** Termos de busca (meta keywords) — não usar em copy visível comparativo */
 export const SEO_COMPETITOR_KEYWORDS = [

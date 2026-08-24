@@ -1,6 +1,6 @@
 ---
 name: mcp-catalog
-description: Conecte-se ao servidor MCP do Mulheres via Server Card e endpoint Streamable HTTP. Use quando um agente com MCP precisar listar tools, buscar anúncios, ler resources de descoberta ou executar o prompt find_companions.
+description: Conecte-se ao servidor MCP do Mulheres de Luxo via Server Card e endpoint Streamable HTTP. Use quando um agente com MCP precisar listar tools, buscar anúncios, ler resources de descoberta ou executar o prompt find_companions.
 ---
 
 # Catálogo MCP

@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       grant_types: ["authorization_code", "password", "client_credentials"],
       response_types: ["code"],
       token_endpoint_auth_method: "none",
-      client_name: body.client_name ?? "Mulheres Agent",
+      client_name: body.client_name ?? "Mulheres de Luxo Agent",
     },
     { status: 201 },
   );

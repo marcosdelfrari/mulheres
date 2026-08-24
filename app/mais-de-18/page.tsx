@@ -4,7 +4,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata = buildPageMetadata({
   title: "Conteúdo +18",
   description:
-    "Aviso de conteúdo adulto. O Mulheres é destinado exclusivamente a maiores de 18 anos.",
+    "Aviso de conteúdo adulto. O Mulheres de Luxo é destinado exclusivamente a maiores de 18 anos.",
   path: "/mais-de-18",
 });
 
@@ -15,7 +15,7 @@ export default function MaisDe18Page() {
         Conteúdo para maiores de 18 anos
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-gray-600">
-        O Mulheres contém material destinado exclusivamente a adultos. Ao
+        O Mulheres de Luxo contém material destinado exclusivamente a adultos. Ao
         continuar navegando, você confirma ter 18 anos ou mais e aceita nossos{" "}
         <Link
           href="/termos"

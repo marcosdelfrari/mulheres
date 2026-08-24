@@ -1,6 +1,6 @@
 ---
 name: agent-auth
-description: Registre e autentique agentes no Mulheres com Auth.md — descubra metadados PRM/AS, registre em /agent/identity, reivindique se preciso, troque por access_token e revogue. Use ao chamar APIs protegidas como agente.
+description: Registre e autentique agentes no Mulheres de Luxo com Auth.md — descubra metadados PRM/AS, registre em /agent/identity, reivindique se preciso, troque por access_token e revogue. Use ao chamar APIs protegidas como agente.
 ---
 
 # Auth de agentes (Auth.md)

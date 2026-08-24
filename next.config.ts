@@ -217,6 +217,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/contato",
+        destination: "/",
+        permanent: true,
+      },
+      {
         source: "/guias/mulheres-vs-fatal-model",
         destination: "/guias/alternativas-em-bh",
         permanent: true,

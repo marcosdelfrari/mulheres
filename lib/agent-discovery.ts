@@ -39,7 +39,7 @@ export function buildAgentCard() {
         id: "api-catalog",
         name: "Catálogo de APIs",
         description:
-          "Catálogo de APIs (RFC 9727) e superfície OpenAPI do Mulheres.",
+          "Catálogo de APIs (RFC 9727) e superfície OpenAPI do Mulheres de Luxo.",
         tags: ["api", "discovery"],
         examples: ["Listar APIs HTTP públicas"],
         inputModes: ["text"],

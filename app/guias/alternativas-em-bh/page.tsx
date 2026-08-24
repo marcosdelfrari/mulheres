@@ -10,7 +10,7 @@ import {
 import { GENERIC_PLATFORMS_PHRASE } from "@/lib/brand-copy";
 
 const PAGE_DESCRIPTION =
-  "Guia para encontrar acompanhantes de luxo em Belo Horizonte com perfis verificados, filtros por bairro e contato direto via WhatsApp no Mulheres.";
+  "Guia para encontrar acompanhantes de luxo em Belo Horizonte com perfis verificados, filtros por bairro e contato direto via WhatsApp no Mulheres de Luxo.";
 
 export const metadata = buildGuideMetadata({
   title: "Alternativas para encontrar acompanhantes em BH",
@@ -45,12 +45,12 @@ const FAQ = [
   {
     question: "Como encontrar acompanhantes em Belo Horizonte com segurança?",
     answer:
-      "Prefira plataformas com perfis verificados, fotos reais e contato direto. No Mulheres você filtra por bairro, compara preços e conversa via WhatsApp antes de combinar o encontro.",
+      "Prefira plataformas com perfis verificados, fotos reais e contato direto. No Mulheres de Luxo você filtra por bairro, compara preços e conversa via WhatsApp antes de combinar o encontro.",
   },
   {
-    question: "O Mulheres cobra taxa de intermediação?",
+    question: "O Mulheres de Luxo cobra taxa de intermediação?",
     answer:
-      "Não. O contato é direto entre você e a acompanhante. O Mulheres reúne modelos e anúncios verificados.",
+      "Não. O contato é direto entre você e a acompanhante. O Mulheres de Luxo reúne modelos e anúncios verificados.",
   },
   {
     question: "Quais bairros de BH estão entre as modelos?",
@@ -90,7 +90,7 @@ export default function AlternativasBhPage() {
             Como encontrar acompanhantes em Belo Horizonte
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
-            Se você já usa {GENERIC_PLATFORMS_PHRASE}, conheça o Mulheres: modelos
+            Se você já usa {GENERIC_PLATFORMS_PHRASE}, conheça o Mulheres de Luxo: modelos
             com perfis verificados, filtros por bairro e contato direto via
             WhatsApp em BH.
           </p>
@@ -98,7 +98,7 @@ export default function AlternativasBhPage() {
 
         <section className="mt-10 space-y-4">
           <h2 className="font-serif text-xl font-bold italic text-gray-900">
-            O que o Mulheres oferece
+            O que o Mulheres de Luxo oferece
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {FEATURES.map((feature) => (
@@ -121,7 +121,7 @@ export default function AlternativasBhPage() {
           </h2>
           <p className="mt-2">
             Belo Horizonte concentra milhares de buscas mensais por acompanhantes.
-            O Mulheres organiza perfis por bairro — comece por{" "}
+            O Mulheres de Luxo organiza perfis por bairro — comece por{" "}
             <Link
               href="/minas-gerais/belo-horizonte/savassi"
               className="text-purple-800 hover:text-luxury-accent hover:underline"

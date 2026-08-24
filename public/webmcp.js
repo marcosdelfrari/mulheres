@@ -49,7 +49,7 @@
     {
       name: "searchListings",
       description:
-        "Busca anúncios de acompanhantes no Mulheres por cidade, bairro ou texto livre.",
+        "Busca anúncios de acompanhantes no Mulheres de Luxo por cidade, bairro ou texto livre.",
       inputSchema: {
         type: "object",
         properties: {
@@ -69,7 +69,7 @@
     },
     {
       name: "navigateTo",
-      description: "Navega para um caminho ou URL same-origin do Mulheres.",
+      description: "Navega para um caminho ou URL same-origin do Mulheres de Luxo.",
       inputSchema: {
         type: "object",
         properties: { path: { type: "string" } },
@@ -112,7 +112,7 @@
     },
     {
       name: "getDiscovery",
-      description: "Retorna URLs de descoberta para agentes no Mulheres.",
+      description: "Retorna URLs de descoberta para agentes no Mulheres de Luxo.",
       inputSchema: { type: "object", properties: {} },
       execute: async function () {
         try {
@@ -134,7 +134,7 @@
     },
     {
       name: "getHealth",
-      description: "Verifica o status de saúde da API Mulheres.",
+      description: "Verifica o status de saúde da API Mulheres de Luxo.",
       inputSchema: { type: "object", properties: {} },
       execute: async function () {
         try {

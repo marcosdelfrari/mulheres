@@ -82,14 +82,14 @@ function buildCityFaq(city: string, shortName: string, uf: string) {
     faqs.push({
       question: "Onde encontrar mulheres de programa em Salvador?",
       answer:
-        "No Mulheres você encontra acompanhantes e mulheres de programa em Salvador com perfis verificados, fotos reais e contato direto via WhatsApp — sem intermediários.",
+        "No Mulheres de Luxo você encontra acompanhantes e mulheres de programa em Salvador com perfis verificados, fotos reais e contato direto via WhatsApp — sem intermediários.",
     });
   }
 
   faqs.push(
     {
       question: `Onde encontrar acompanhantes em ${city}?`,
-      answer: `No Mulheres você encontra acompanhantes em ${city} com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro, preço e serviços.`,
+      answer: `No Mulheres de Luxo você encontra acompanhantes em ${city} com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro, preço e serviços.`,
     },
     {
       question: `Tem acompanhantes com local em ${city}?`,
@@ -97,7 +97,7 @@ function buildCityFaq(city: string, shortName: string, uf: string) {
     },
     {
       question: `Quais bairros de ${city} têm acompanhantes no catálogo?`,
-      answer: `O Mulheres lista acompanhantes nos bairros com anúncios ativos em ${city}. Use as páginas por bairro ou os filtros do catálogo para refinar a busca.`,
+      answer: `O Mulheres de Luxo lista acompanhantes nos bairros com anúncios ativos em ${city}. Use as páginas por bairro ou os filtros do catálogo para refinar a busca.`,
     },
     {
       question: `Como entrar em contato com uma acompanhante em ${shortName}?`,
@@ -105,13 +105,13 @@ function buildCityFaq(city: string, shortName: string, uf: string) {
         "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Combine valores, horários e local antes do encontro.",
     },
     {
-      question: `O Mulheres é seguro para encontrar acompanhantes em ${shortName}?`,
+      question: `O Mulheres de Luxo é seguro para encontrar acompanhantes em ${shortName}?`,
       answer:
         "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro.",
     },
     {
       question: `Qual site é mais seguro para encontrar acompanhantes em ${city}?`,
-      answer: `O Mulheres verifica identidade dos perfis, exibe fotos reais e permite contato direto via WhatsApp — sem taxas ocultas. Veja ${absoluteUrl("/guias/site-seguro-acompanhantes")} ou explore perfis verificados em ${city}.`,
+      answer: `O Mulheres de Luxo verifica identidade dos perfis, exibe fotos reais e permite contato direto via WhatsApp — sem taxas ocultas. Veja ${absoluteUrl("/guias/site-seguro-acompanhantes")} ou explore perfis verificados em ${city}.`,
     },
   );
 
@@ -170,7 +170,7 @@ export function buildDynamicCityHub(stateHub: StateHub, city: string): CityHub {
     heroSub: `Perfis verificados em ${city} com contato direto via WhatsApp — sem intermediários.`,
     intro: `Encontre acompanhantes em ${city} com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por bairro, tipo, com local e serviços.`,
     seoHeading: `Acompanhantes de luxo em ${city} — ${stateHub.uf}`,
-    whySection: `${city} concentra buscas por acompanhantes verificadas. O Mulheres reúne perfis com filtros por bairro, tipo e local de atendimento — contato direto via WhatsApp.`,
+    whySection: `${city} concentra buscas por acompanhantes verificadas. O Mulheres de Luxo reúne perfis com filtros por bairro, tipo e local de atendimento — contato direto via WhatsApp.`,
     tags: buildCityTags(city, stateHub),
     faq: buildCityFaq(city, shortName, stateHub.uf),
     neighborhoods: [],
@@ -184,11 +184,11 @@ export function buildDynamicNeighborhoodHub(
   return {
     slug: slugify(name),
     name,
-    intro: `Encontre acompanhantes em ${name}, ${hub.city}. Perfis verificados no Mulheres com contato direto via WhatsApp.`,
+    intro: `Encontre acompanhantes em ${name}, ${hub.city}. Perfis verificados no Mulheres de Luxo com contato direto via WhatsApp.`,
     faq: [
       {
         question: `Onde encontrar acompanhantes em ${name}, ${hub.shortName}?`,
-        answer: `No Mulheres você encontra acompanhantes em ${name}, ${hub.city} com perfis verificados, fotos reais e contato direto via WhatsApp.`,
+        answer: `No Mulheres de Luxo você encontra acompanhantes em ${name}, ${hub.city} com perfis verificados, fotos reais e contato direto via WhatsApp.`,
       },
       {
         question: `Tem acompanhantes com local em ${name}, ${hub.city}?`,

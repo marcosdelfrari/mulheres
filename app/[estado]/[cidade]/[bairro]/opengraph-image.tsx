@@ -9,7 +9,7 @@ import {
   renderLocationOgImage,
 } from "@/lib/og-location-image";
 
-export const alt = "Mulheres — Acompanhantes por bairro";
+export const alt = "Mulheres de Luxo — Acompanhantes por bairro";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
@@ -36,7 +36,7 @@ export default async function OpenGraphImage({ params }: ImageProps) {
 
   if (!hub || !neighborhood) {
     return renderLocationOgImage({
-      headline: "Mulheres",
+      headline: "Mulheres de Luxo",
       subtitle: "Acompanhantes de luxo em todo o Brasil",
     });
   }

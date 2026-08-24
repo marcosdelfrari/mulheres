@@ -57,34 +57,14 @@ export function Header() {
             As modelos
           </Link>
           <Link
-            href="/minas-gerais/belo-horizonte"
+            href="/criar-conta?role=acompanhante"
             className={
               luxury
                 ? "hover:text-luxury-accent transition-colors"
                 : "hover:text-purple-800 transition-colors"
             }
           >
-            BH
-          </Link>
-          <Link
-            href="/sao-paulo/sao-paulo"
-            className={
-              luxury
-                ? "hover:text-luxury-accent transition-colors"
-                : "hover:text-purple-800 transition-colors"
-            }
-          >
-            SP
-          </Link>
-          <Link
-            href="/contato"
-            className={
-              luxury
-                ? "hover:text-luxury-accent transition-colors"
-                : "hover:text-purple-800 transition-colors"
-            }
-          >
-            Contato
+            Anunciar
           </Link>
         </nav>
 

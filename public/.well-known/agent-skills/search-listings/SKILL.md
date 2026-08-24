@@ -1,11 +1,11 @@
 ---
 name: search-listings
-description: Busca e navega anúncios de acompanhantes verificadas no Mulheres por cidade, bairro e filtros. Use quando um agente precisar encontrar perfis, comparar opções ou gerar deep-links para páginas públicas.
+description: Busca e navega anúncios de acompanhantes verificadas no Mulheres de Luxo por cidade, bairro e filtros. Use quando um agente precisar encontrar perfis, comparar opções ou gerar deep-links para páginas públicas.
 ---
 
 # Busca de anúncios
 
-Use esta skill quando o usuário pedir para encontrar acompanhantes, anúncios ou perfis no Mulheres.
+Use esta skill quando o usuário pedir para encontrar acompanhantes, anúncios ou perfis no Mulheres de Luxo.
 
 ## Interfaces preferidas
 
@@ -53,4 +53,4 @@ Veja `/openapi.json` e `/.well-known/api-catalog` para APIs HTTP. Leituras públ
 
 - `/llms.txt` — visão geral do site
 - `/auth.md` — registro de agente quando APIs autenticadas forem necessárias
-- `/.well-known/agent-skills/index.json` — outras skills do Mulheres
+- `/.well-known/agent-skills/index.json` — outras skills do Mulheres de Luxo

@@ -52,12 +52,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.72,
     },
     {
-      url: absoluteUrl("/contato"),
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.4,
-    },
-    {
       url: absoluteUrl("/privacidade"),
       lastModified: now,
       changeFrequency: "yearly",

@@ -157,7 +157,6 @@ export function Footer() {
               }`}
             >
               {[
-                ["/contato", "Contato"],
                 ["/privacidade", "Privacidade"],
                 ["/termos", "Termos de uso"],
                 ["/mais-de-18", "Conteúdo +18"],
