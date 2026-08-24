@@ -81,7 +81,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         parsed.status === "published" &&
         existing.status !== "published"
       ) {
-        await assertCanPublishListing(user.id, {
+        await assertCanPublishListing(user, {
           excludeId: existing.id,
           nextStatus: "published",
         });
@@ -94,7 +94,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 
       return Response.json({
         listing: toListingSummary(listing),
-        limits: await getListingLimits(user.id),
+        limits: await getListingLimits(user),
       });
     }
 
@@ -121,7 +121,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       parsed.status === "published" &&
       existing.status !== "published"
     ) {
-      await assertCanPublishListing(user.id, {
+      await assertCanPublishListing(user, {
         excludeId: existing.id,
         nextStatus: "published",
       });
@@ -185,7 +185,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         ...listing,
         user: { lastLoginAt: user.lastLoginAt ?? null },
       }),
-      limits: await getListingLimits(user.id),
+      limits: await getListingLimits(user),
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -219,7 +219,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
 
     return Response.json({
       ok: true,
-      limits: await getListingLimits(user.id),
+      limits: await getListingLimits(user),
     });
   } catch (error) {
     console.error(error);

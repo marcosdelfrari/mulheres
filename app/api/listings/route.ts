@@ -92,7 +92,7 @@ export async function GET() {
         include: { user: { select: { lastLoginAt: true } } },
         orderBy: [{ isLuxo: "desc" }, { createdAt: "desc" }],
       }),
-      getListingLimits(user.id),
+      getListingLimits(user),
     ]);
 
     return Response.json({
@@ -121,12 +121,12 @@ export async function POST(request: Request) {
       return jsonError("Confirme seu cadastro no perfil antes de anunciar.", 403);
     }
 
-    await assertCanCreateListing(user.id);
+    await assertCanCreateListing(user);
 
     const form = await request.formData();
     const parsed = readListingFields(form);
 
-    await assertCanPublishListing(user.id, { nextStatus: parsed.status });
+    await assertCanPublishListing(user, { nextStatus: parsed.status });
 
     const photoFiles = collectPhotoFiles(form);
 
@@ -171,7 +171,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const limits = await getListingLimits(user.id);
+    const limits = await getListingLimits(user);
 
     return Response.json(
       { listing: toListingSummary(listing), limits },

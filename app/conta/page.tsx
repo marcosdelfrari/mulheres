@@ -25,6 +25,7 @@ type ListingLimits = {
   canPublishMore: boolean;
   nextCreateAt: string | null;
   cooldownHours: number;
+  unlimited?: boolean;
 };
 
 const PREMIUM_WHATSAPP_URL =
@@ -593,7 +594,11 @@ export default function ContaPage() {
         <div className="rounded-3xl border border-gray-200 bg-white px-5 py-5">
           <p className="text-base text-gray-600">Ativos</p>
           <p className="mt-1 text-4xl font-bold text-gray-900">
-            {loadingListings ? "…" : `${activeCount}/${limits?.maxActive ?? 2}`}
+            {loadingListings
+              ? "…"
+              : limits?.unlimited
+                ? String(activeCount)
+                : `${activeCount}/${limits?.maxActive ?? 2}`}
           </p>
         </div>
         <div className="rounded-3xl border border-gray-200 bg-white px-5 py-5">
@@ -605,19 +610,28 @@ export default function ContaPage() {
       </div>
 
       <p className="text-base leading-relaxed text-gray-600">
-        Máximo de {limits?.maxActive ?? 2} anúncios ativos. Você pode criar 1
-        novo a cada {limits?.cooldownHours ?? 8} horas. Pause, reative ou exclua
-        quando quiser.
-        {limits && !limits.canCreate && limits.nextCreateAt ? (
+        {limits?.unlimited ? (
           <>
-            {" "}
-            Próxima criação:{" "}
-            <span className="font-semibold text-gray-900">
-              {formatNextCreate(limits.nextCreateAt)}
-            </span>
-            .
+            Conta admin: você pode criar e publicar anúncios sem limite de
+            quantidade nem intervalo.
           </>
-        ) : null}
+        ) : (
+          <>
+            Máximo de {limits?.maxActive ?? 2} anúncios ativos. Você pode criar 1
+            novo a cada {limits?.cooldownHours ?? 8} horas. Pause, reative ou exclua
+            quando quiser.
+            {limits && !limits.canCreate && limits.nextCreateAt ? (
+              <>
+                {" "}
+                Próxima criação:{" "}
+                <span className="font-semibold text-gray-900">
+                  {formatNextCreate(limits.nextCreateAt)}
+                </span>
+                .
+              </>
+            ) : null}
+          </>
+        )}
       </p>
 
       <section className="rounded-3xl border border-gray-200 bg-gray-50 p-5">

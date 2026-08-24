@@ -1,3 +1,4 @@
+import { isAdminEmail } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 
 /** Máximo de anúncios publicados (ativos) por usuária. */
@@ -6,6 +7,11 @@ export const MAX_ACTIVE_LISTINGS = 2;
 /** Intervalo mínimo entre criações de novos anúncios. */
 export const CREATE_COOLDOWN_MS = 8 * 60 * 60 * 1000;
 
+type LimitUser = {
+  id: string;
+  email: string;
+};
+
 export type ListingLimits = {
   maxActive: number;
   activeCount: number;
@@ -13,6 +19,7 @@ export type ListingLimits = {
   canPublishMore: boolean;
   nextCreateAt: string | null;
   cooldownHours: number;
+  unlimited: boolean;
 };
 
 function formatRemaining(ms: number) {
@@ -57,11 +64,23 @@ export async function getCreateCooldown(userId: string) {
   return { allowed: false as const, nextCreateAt: next, waitMs };
 }
 
-export async function getListingLimits(userId: string): Promise<ListingLimits> {
+export async function getListingLimits(user: LimitUser): Promise<ListingLimits> {
   const [activeCount, cooldown] = await Promise.all([
-    countActiveListings(userId),
-    getCreateCooldown(userId),
+    countActiveListings(user.id),
+    getCreateCooldown(user.id),
   ]);
+
+  if (isAdminEmail(user.email)) {
+    return {
+      maxActive: Number.MAX_SAFE_INTEGER,
+      activeCount,
+      canCreate: true,
+      canPublishMore: true,
+      nextCreateAt: null,
+      cooldownHours: 0,
+      unlimited: true,
+    };
+  }
 
   return {
     maxActive: MAX_ACTIVE_LISTINGS,
@@ -70,11 +89,14 @@ export async function getListingLimits(userId: string): Promise<ListingLimits> {
     canPublishMore: activeCount < MAX_ACTIVE_LISTINGS,
     nextCreateAt: cooldown.nextCreateAt?.toISOString() ?? null,
     cooldownHours: CREATE_COOLDOWN_MS / (60 * 60 * 1000),
+    unlimited: false,
   };
 }
 
-export async function assertCanCreateListing(userId: string) {
-  const cooldown = await getCreateCooldown(userId);
+export async function assertCanCreateListing(user: LimitUser) {
+  if (isAdminEmail(user.email)) return;
+
+  const cooldown = await getCreateCooldown(user.id);
   if (!cooldown.allowed) {
     throw new Error(
       `Você pode criar 1 anúncio a cada 8 horas. Aguarde ${formatRemaining(cooldown.waitMs)}.`,
@@ -83,13 +105,15 @@ export async function assertCanCreateListing(userId: string) {
 }
 
 export async function assertCanPublishListing(
-  userId: string,
+  user: LimitUser,
   options?: { excludeId?: string; nextStatus?: string },
 ) {
+  if (isAdminEmail(user.email)) return;
+
   const nextStatus = options?.nextStatus ?? "published";
   if (nextStatus !== "published") return;
 
-  const active = await countActiveListings(userId, options?.excludeId);
+  const active = await countActiveListings(user.id, options?.excludeId);
   if (active >= MAX_ACTIVE_LISTINGS) {
     throw new Error(
       `Você pode ter no máximo ${MAX_ACTIVE_LISTINGS} anúncios ativos. Pause ou exclua um para reativar/publicar outro.`,
