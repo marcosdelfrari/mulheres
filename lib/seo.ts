@@ -3,7 +3,13 @@ import type { Companion } from "./types";
 import { companionPhotoAlt, companionProfilePath } from "./companion-utils";
 import { SEO_COMPETITOR_KEYWORDS } from "./brand-copy";
 import type { CityHub, NeighborhoodHub, StateHub } from "./location-hubs";
-import { cityHubPath, neighborhoodHubPath, stateHubPath } from "./location-hubs";
+import {
+  cityHubPath,
+  findCityHubBySearch,
+  findNeighborhoodHubByNames,
+  neighborhoodHubPath,
+  stateHubPath,
+} from "./location-hubs";
 
 export const SITE_NAME = "Mulheres";
 
@@ -77,6 +83,16 @@ export const BR_FAQ = [
       "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Combine valores, horários e local antes do encontro.",
   },
   {
+    question: "O Mulheres é seguro?",
+    answer:
+      "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro. Conteúdo destinado a maiores de 18 anos.",
+  },
+  {
+    question: "Tem acompanhantes com local?",
+    answer:
+      "Sim. Vários perfis indicam atendimento com local próprio, além de hotel, motel e deslocamento. Use os filtros do catálogo por cidade e bairro para encontrar a opção ideal.",
+  },
+  {
     question: "O que diferencia o Mulheres?",
     answer:
       "Perfis verificados, filtros por região, cidade e bairro, páginas locais para SEO e contato direto via WhatsApp — sem intermediários. Conteúdo destinado a maiores de 18 anos.",
@@ -127,10 +143,10 @@ function trimMetaDescription(text: string, max = 160): string {
   return `${normalized.slice(0, max - 1).trimEnd()}…`;
 }
 
-function ogImageMeta(title: string) {
+function ogImageMeta(title: string, imagePath = DEFAULT_OG_IMAGE) {
   return [
     {
-      url: absoluteUrl(DEFAULT_OG_IMAGE),
+      url: absoluteUrl(imagePath),
       width: 1200,
       height: 630,
       alt: title,
@@ -138,18 +154,25 @@ function ogImageMeta(title: string) {
   ];
 }
 
+function routeOgImagePath(pagePath: string): string {
+  return `${pagePath}/opengraph-image`;
+}
+
 export function buildPageMetadata(options: {
   title: string;
   description: string;
   path: string;
   type?: "website" | "profile" | "article";
+  ogImagePath?: string;
   overrides?: Partial<Metadata>;
 }): Metadata {
-  const { title, description, path, type = "website", overrides } = options;
+  const { title, description, path, type = "website", ogImagePath, overrides } =
+    options;
   const url = absoluteUrl(path);
   const fullTitle = title.includes(SITE_NAME)
     ? title
     : `${title} | ${SITE_NAME}`;
+  const imagePath = ogImagePath ?? DEFAULT_OG_IMAGE;
 
   return {
     title,
@@ -161,13 +184,13 @@ export function buildPageMetadata(options: {
       siteName: SITE_NAME,
       title: fullTitle,
       description,
-      images: ogImageMeta(fullTitle),
+      images: ogImageMeta(fullTitle, imagePath),
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+      images: [absoluteUrl(imagePath)],
     },
     alternates: { canonical: url },
     ...overrides,
@@ -293,8 +316,27 @@ export function buildCatalogMetadata(params: {
   const { region, search, city, neighborhood } = params;
 
   if (neighborhood && city) {
+    const hubMatch = findNeighborhoodHubByNames(city, neighborhood);
+    if (hubMatch) {
+      const { hub, neighborhood: n } = hubMatch;
+      const shortCity = hub.shortName;
+      const path = neighborhoodHubPath(hub, n);
+      const title = `Acompanhantes em ${n.name}, ${shortCity} — Verificadas`;
+      const description = trimMetaDescription(
+        `Acompanhantes em ${n.name}, ${shortCity} com local, perfis verificados e WhatsApp direto. Sem intermediários.`,
+      );
+      return buildPageMetadata({
+        title,
+        description,
+        path,
+        ogImagePath: routeOgImagePath(path),
+      });
+    }
+
     const title = `Acompanhantes em ${neighborhood}, ${city}`;
-    const description = `Encontre acompanhantes verificadas em ${neighborhood}, ${city}. Perfis com fotos reais, preços transparentes e contato direto via WhatsApp.`;
+    const description = trimMetaDescription(
+      `Encontre acompanhantes verificadas em ${neighborhood}, ${city}. Perfis com fotos reais, com local e contato direto via WhatsApp.`,
+    );
     const url = `/acompanhantes?city=${encodeURIComponent(city)}&neighborhood=${encodeURIComponent(neighborhood)}${region ? `&region=${encodeURIComponent(region)}` : ""}`;
     return buildPageMetadata({ title, description, path: url });
   }
@@ -342,6 +384,17 @@ export function buildCatalogMetadata(params: {
   }
 
   if (search) {
+    const cityHub = findCityHubBySearch(search);
+    if (cityHub) {
+      const path = cityHubPath(cityHub);
+      return buildPageMetadata({
+        title: cityHub.title,
+        description: trimMetaDescription(cityHub.intro),
+        path,
+        ogImagePath: routeOgImagePath(path),
+      });
+    }
+
     return buildPageMetadata({
       title: `Acompanhantes em ${search}`,
       description: `Encontre acompanhantes em ${search}. Perfis verificados, fotos reais e contato via WhatsApp.`,
@@ -358,30 +411,36 @@ export function buildCatalogMetadata(params: {
 }
 
 export function buildBhCatalogMetadata(): Metadata {
+  const path = "/minas-gerais/belo-horizonte";
   return buildPageMetadata({
     title: "Acompanhantes em Belo Horizonte, MG",
     description:
       "Acompanhantes de luxo em Belo Horizonte com perfis verificados. Savassi, Lourdes, Funcionários, Pampulha e mais. Contato direto via WhatsApp.",
-    path: "/minas-gerais/belo-horizonte",
+    path,
+    ogImagePath: routeOgImagePath(path),
   });
 }
 
 export function buildCityHubMetadata(hub: CityHub): Metadata {
+  const path = cityHubPath(hub);
   const keywords = [...hub.tags];
   return buildPageMetadata({
     title: hub.title,
-    description: hub.intro.slice(0, 160),
-    path: cityHubPath(hub),
+    description: trimMetaDescription(hub.intro),
+    path,
+    ogImagePath: routeOgImagePath(path),
     overrides: { keywords },
   });
 }
 
 export function buildStateHubMetadata(hub: StateHub): Metadata {
+  const path = stateHubPath(hub);
   const keywords = [...hub.tags];
   return buildPageMetadata({
     title: hub.title,
-    description: hub.intro.slice(0, 160),
-    path: stateHubPath(hub),
+    description: trimMetaDescription(hub.intro),
+    path,
+    ogImagePath: routeOgImagePath(path),
     overrides: { keywords },
   });
 }
@@ -390,16 +449,24 @@ export function buildNeighborhoodMetadata(
   hub: CityHub,
   neighborhood: NeighborhoodHub,
 ): Metadata {
-  const title = `Acompanhantes em ${neighborhood.name}, ${hub.city}`;
+  const shortCity = hub.shortName;
+  const path = neighborhoodHubPath(hub, neighborhood);
+  const title = `Acompanhantes em ${neighborhood.name}, ${shortCity} — Verificadas`;
+  const description = trimMetaDescription(
+    `Acompanhantes em ${neighborhood.name}, ${shortCity} com local, perfis verificados e WhatsApp direto. Sem intermediários.`,
+  );
   return buildPageMetadata({
     title,
-    description: neighborhood.intro.slice(0, 160),
-    path: neighborhoodHubPath(hub, neighborhood),
+    description,
+    path,
+    ogImagePath: routeOgImagePath(path),
     overrides: {
       keywords: [
         `acompanhantes ${neighborhood.name.toLowerCase()}`,
+        `acompanhantes ${neighborhood.name.toLowerCase()} ${shortCity.toLowerCase()}`,
         `acompanhantes ${hub.city.toLowerCase()}`,
-        ...hub.tags.slice(0, 4),
+        `acompanhante ${neighborhood.name.toLowerCase()} bh`,
+        ...hub.tags.slice(0, 3),
       ],
     },
   });

@@ -7,7 +7,7 @@ import {
   getTopCompanions,
 } from "@/lib/listings";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function HomePage() {
   const [tops, sponsored] = await Promise.all([

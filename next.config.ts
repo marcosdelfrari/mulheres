@@ -1,5 +1,22 @@
 import type { NextConfig } from "next";
 
+const BH_NEIGHBORHOOD_REDIRECTS = [
+  { neighborhood: "Savassi", slug: "savassi" },
+  { neighborhood: "Lourdes", slug: "lourdes" },
+  { neighborhood: "Funcionários", slug: "funcionarios" },
+  { neighborhood: "Centro", slug: "centro" },
+  { neighborhood: "Pampulha", slug: "pampulha" },
+  { neighborhood: "Buritis", slug: "buritis" },
+].map(({ neighborhood, slug }) => ({
+  source: "/acompanhantes",
+  has: [
+    { type: "query" as const, key: "city", value: "Belo Horizonte" },
+    { type: "query" as const, key: "neighborhood", value: neighborhood },
+  ],
+  destination: `/minas-gerais/belo-horizonte/${slug}`,
+  permanent: true,
+}));
+
 const AGENT_LINK_HEADER = [
   '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
   '</.well-known/oauth-protected-resource>; rel="oauth-protected-resource"; type="application/json"',
@@ -130,6 +147,25 @@ const nextConfig: NextConfig = {
         destination: "/minas-gerais/belo-horizonte",
         permanent: true,
       },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "Salvador" }],
+        destination: "/bahia/salvador",
+        permanent: true,
+      },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "salvador" }],
+        destination: "/bahia/salvador",
+        permanent: true,
+      },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "city", value: "Salvador" }],
+        destination: "/bahia/salvador",
+        permanent: true,
+      },
+      ...BH_NEIGHBORHOOD_REDIRECTS,
       {
         source: "/catalogo",
         destination: "/acompanhantes",

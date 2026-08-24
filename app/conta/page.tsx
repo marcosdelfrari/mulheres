@@ -895,13 +895,14 @@ export default function ContaPage() {
               Idade
             </label>
             <input
-              type="number"
-              min={18}
-              max={80}
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
               value={form.age}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, age: e.target.value }))
-              }
+              onChange={(e) => {
+                const digits = e.target.value.replace(/\D/g, "").slice(0, 2);
+                setForm((prev) => ({ ...prev, age: digits }));
+              }}
               className={pillInput}
               placeholder="Idade"
               required

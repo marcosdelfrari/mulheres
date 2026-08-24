@@ -12,6 +12,7 @@ import {
   getPublishedNeighborhoodHubs,
   neighborhoodHubPath,
   stateHubPath,
+  tagToHubPath,
 } from "@/lib/location-hubs";
 import {
   absoluteUrl,
@@ -132,15 +133,27 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
               </div>
             )}
 
-            {/* Tags SEO legíveis */}
+            {/* Tags SEO com links internos */}
             <ul className="mt-4 flex flex-wrap gap-2" aria-label={`Tags ${hub.city}`}>
-              {hub.tags.map((tag) => (
-                <li key={tag}>
-                  <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-xs text-gray-500 ring-1 ring-gray-200">
-                    {tag}
-                  </span>
-                </li>
-              ))}
+              {hub.tags.map((tag) => {
+                const href = tagToHubPath(tag, hub);
+                return (
+                  <li key={tag}>
+                    {href ? (
+                      <Link
+                        href={href}
+                        className="rounded-full bg-white/80 px-2.5 py-0.5 text-xs text-gray-500 ring-1 ring-gray-200 hover:text-luxury-accent hover:ring-purple-300"
+                      >
+                        {tag}
+                      </Link>
+                    ) : (
+                      <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-xs text-gray-500 ring-1 ring-gray-200">
+                        {tag}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
 
             <p className="mt-4 font-light leading-relaxed text-gray-600">
@@ -320,13 +333,25 @@ export async function StateHubPage({ hub }: StateHubPageProps) {
             </h2>
 
             <ul className="mt-4 flex flex-wrap gap-2" aria-label={`Tags ${hub.region}`}>
-              {hub.tags.map((tag) => (
-                <li key={tag}>
-                  <span className="rounded-full bg-white px-2.5 py-0.5 text-xs text-gray-500 ring-1 ring-gray-200">
-                    {tag}
-                  </span>
-                </li>
-              ))}
+              {hub.tags.map((tag) => {
+                const href = tagToHubPath(tag, hub);
+                return (
+                  <li key={tag}>
+                    {href ? (
+                      <Link
+                        href={href}
+                        className="rounded-full bg-white px-2.5 py-0.5 text-xs text-gray-500 ring-1 ring-gray-200 hover:text-luxury-accent hover:ring-purple-300"
+                      >
+                        {tag}
+                      </Link>
+                    ) : (
+                      <span className="rounded-full bg-white px-2.5 py-0.5 text-xs text-gray-500 ring-1 ring-gray-200">
+                        {tag}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
 
             <p className="mt-4 font-light leading-relaxed text-gray-600">
@@ -460,7 +485,7 @@ export async function NeighborhoodHubPage({
 
         <header className="mt-5 max-w-3xl sm:mt-6">
           <h1 className="font-serif text-[1.65rem] font-bold italic leading-snug text-gray-900 sm:text-4xl">
-            Acompanhantes em {neighborhood.name}, {hub.city}
+            Acompanhantes em {neighborhood.name}, {hub.shortName}
           </h1>
           <p className="mt-3 text-base leading-relaxed text-gray-600 sm:mt-4 sm:text-lg">
             {neighborhood.intro}

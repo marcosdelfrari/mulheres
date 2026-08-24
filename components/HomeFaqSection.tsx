@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { BR_FAQ, buildFaqJsonLd } from "@/lib/seo";
 
 export function HomeFaqSection() {
-  const faqs = BR_FAQ.slice(0, 4);
+  const faqs = BR_FAQ;
 
   return (
     <section className="border-t border-gray-100 bg-white" aria-labelledby="home-faq">

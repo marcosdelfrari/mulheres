@@ -62,6 +62,11 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
           "No Mulheres você encontra acompanhantes no Savassi com perfis verificados, fotos reais e contato direto via WhatsApp. Filtre por preço, serviços e disponibilidade.",
       },
       {
+        question: "Tem acompanhantes com local no Savassi?",
+        answer:
+          "Sim. Vários perfis no Savassi indicam atendimento com local próprio, além de hotel, motel e deslocamento. Confira cada anúncio antes de combinar.",
+      },
+      {
         question: "Acompanhantes do Savassi atendem em hotel?",
         answer:
           "Sim. Várias acompanhantes no Savassi atendem em hotel, motel e deslocamento. Cada perfil indica os locais de atendimento disponíveis.",
@@ -75,9 +80,14 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       "Lourdes é um bairro tradicional e sofisticado de BH, ideal para encontros discretos e eventos. Confira acompanhantes verificadas no Mulheres com atendimento no bairro e região.",
     faq: [
       {
-        question: "Tem acompanhantes no Lourdes, Belo Horizonte?",
+        question: "Tem acompanhantes no Lourdes, BH?",
         answer:
           "Sim. O Mulheres lista acompanhantes no Lourdes com perfis verificados, preços transparentes e contato direto via WhatsApp.",
+      },
+      {
+        question: "Acompanhantes com local no Lourdes, Belo Horizonte?",
+        answer:
+          "Sim. Vários perfis no Lourdes indicam atendimento com local próprio, hotel ou deslocamento. Use os filtros do catálogo para refinar a busca.",
       },
     ],
   },
@@ -88,9 +98,14 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       "Funcionários reúne perfis discretos e elegantes para jantares, encontros reservados e eventos corporativos em Belo Horizonte.",
     faq: [
       {
-        question: "Como encontrar acompanhantes no Funcionários?",
+        question: "Como encontrar acompanhantes no Funcionários, BH?",
         answer:
           "Acesse o catálogo do Mulheres filtrado por Funcionários. Perfis verificados com fotos, serviços e WhatsApp para contato imediato.",
+      },
+      {
+        question: "Tem acompanhantes com local no Funcionários?",
+        answer:
+          "Sim. Diversos perfis no Funcionários indicam local próprio, hotel ou deslocamento. Cada anúncio detalha as opções de atendimento.",
       },
     ],
   },
@@ -105,6 +120,11 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
         answer:
           "No Mulheres você navega por acompanhantes no Centro de Belo Horizonte, compara preços e entra em contato direto via WhatsApp, sem intermediários.",
       },
+      {
+        question: "Tem acompanhantes com local no Centro de BH?",
+        answer:
+          "Sim. Vários perfis no Centro indicam atendimento com local próprio, hotel ou deslocamento. Confira cada anúncio antes de combinar.",
+      },
     ],
   },
   {
@@ -114,9 +134,14 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       "A região da Pampulha oferece acompanhantes com flexibilidade de horários e atendimento em diversos locais de Belo Horizonte.",
     faq: [
       {
-        question: "Há acompanhantes na Pampulha?",
+        question: "Há acompanhantes na Pampulha, BH?",
         answer:
           "Sim. O Mulheres lista acompanhantes na Pampulha e entorno com perfis verificados e contato direto via WhatsApp.",
+      },
+      {
+        question: "Acompanhantes com local na Pampulha?",
+        answer:
+          "Sim. Diversos perfis na Pampulha indicam local próprio, hotel ou deslocamento. Use os filtros do catálogo para refinar.",
       },
     ],
   },
@@ -127,9 +152,14 @@ export const BH_NEIGHBORHOOD_HUBS: NeighborhoodHub[] = [
       "Buritis é uma região residencial de BH com demanda crescente. Encontre acompanhantes verificadas com filtros por preço e serviços.",
     faq: [
       {
-        question: "Onde achar acompanhantes no Buritis?",
+        question: "Onde achar acompanhantes no Buritis, BH?",
         answer:
           "No catálogo Mulheres, filtre por Buritis em Belo Horizonte. Perfis com fotos reais e contato via WhatsApp.",
+      },
+      {
+        question: "Tem acompanhantes com local no Buritis?",
+        answer:
+          "Sim. Vários perfis no Buritis indicam atendimento com local próprio, hotel ou deslocamento. Confira cada anúncio.",
       },
     ],
   },
@@ -190,6 +220,16 @@ export const CITY_HUBS: CityHub[] = [
         question: "O que diferencia o Mulheres em Belo Horizonte?",
         answer:
           "Perfis verificados, filtros por bairro e distância, páginas por região e contato direto via WhatsApp — sem intermediários e sem taxas ocultas. Conteúdo destinado a maiores de 18 anos.",
+      },
+      {
+        question: "O Mulheres é seguro para encontrar acompanhantes em BH?",
+        answer:
+          "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro.",
+      },
+      {
+        question: "Tem acompanhantes com local em Belo Horizonte?",
+        answer:
+          "Sim. Vários perfis em BH indicam atendimento com local próprio, além de hotel, motel e deslocamento. Use os filtros por bairro no catálogo.",
       },
     ],
     neighborhoods: BH_NEIGHBORHOOD_HUBS,
@@ -350,13 +390,13 @@ export const CITY_HUBS: CityHub[] = [
     city: "Salvador",
     region: "Bahia",
     shortName: "Salvador",
-    title: "Acompanhantes em Salvador, BA",
+    title: "Acompanhantes em Salvador, BA — Perfis verificados",
     eyebrow: "Exclusividade na Bahia",
     heroLocation: "Salvador",
     heroSub:
       "Perfis com charme baiano na Barra e região metropolitana. Discrição, sofisticação e atendimento de alto nível.",
     intro:
-      "Acompanhantes em Salvador com charme baiano. Barra e região metropolitana com perfis verificados e contato direto via WhatsApp.",
+      "Acompanhantes em Salvador com local, perfis verificados e WhatsApp direto. Barra, Ondina e região metropolitana — sem intermediários.",
     seoHeading: "Acompanhantes de luxo em Salvador — BA",
     whySection:
       "Salvador une turismo e vida noturna com alta busca por acompanhantes. O Mulheres lista perfis verificados com filtros claros e WhatsApp direto.",
@@ -368,14 +408,29 @@ export const CITY_HUBS: CityHub[] = [
     ],
     faq: [
       {
+        question: "Onde encontrar acompanhantes em Salvador, BA?",
+        answer:
+          "No Mulheres, acesse a página de Salvador ou filtre o catálogo por Bahia. Perfis verificados com fotos, preços e WhatsApp para contato direto.",
+      },
+      {
         question: "Como encontrar acompanhantes em Salvador?",
         answer:
-          "Acesse o catálogo Mulheres para Salvador. Perfis com fotos, preços e WhatsApp para contato direto.",
+          "Acesse o catálogo Mulheres para Salvador. Perfis com fotos, preços e WhatsApp para contato direto — sem intermediários.",
       },
       {
         question: "Há acompanhantes na Barra, Salvador?",
         answer:
           "Sim. Use os filtros do catálogo por cidade e bairro para encontrar perfis na Barra e outras regiões de Salvador.",
+      },
+      {
+        question: "Tem acompanhantes com local em Salvador?",
+        answer:
+          "Sim. Vários perfis em Salvador indicam atendimento com local próprio, além de hotel e motel. Use os filtros do catálogo para encontrar a opção ideal.",
+      },
+      {
+        question: "O Mulheres é seguro para encontrar acompanhantes em Salvador?",
+        answer:
+          "Sim. O Mulheres verifica identidade dos perfis, exibe fotos reais e permite contato direto via WhatsApp — sem intermediários. Combine valores e local antes do encontro.",
       },
     ],
     neighborhoods: [],
@@ -549,6 +604,67 @@ export const STATE_HUBS: StateHub[] = [
     ],
   },
 ];
+
+export function findNeighborhoodHubByNames(
+  city: string,
+  neighborhood: string,
+): { hub: CityHub; neighborhood: NeighborhoodHub } | undefined {
+  for (const hub of CITY_HUBS) {
+    if (hub.city.toLowerCase() !== city.toLowerCase()) continue;
+    const match = hub.neighborhoods.find(
+      (n) => n.name.toLowerCase() === neighborhood.toLowerCase(),
+    );
+    if (match) return { hub, neighborhood: match };
+  }
+  return undefined;
+}
+
+export function findCityHubBySearch(search: string): CityHub | undefined {
+  const normalized = search.toLowerCase().trim();
+  return CITY_HUBS.find(
+    (h) =>
+      h.city.toLowerCase() === normalized ||
+      h.shortName.toLowerCase() === normalized ||
+      h.citySlug === slugify(normalized),
+  );
+}
+
+export function tagToHubPath(
+  tag: string,
+  hub: CityHub | StateHub,
+): string | undefined {
+  const normalized = tag.toLowerCase();
+
+  if ("neighborhoods" in hub) {
+    for (const neighborhood of hub.neighborhoods) {
+      const name = neighborhood.name.toLowerCase();
+      if (
+        normalized.includes(name) ||
+        normalized.includes(neighborhood.slug.replace(/-/g, " "))
+      ) {
+        return neighborhoodHubPath(hub, neighborhood);
+      }
+    }
+    if (
+      normalized.includes(hub.city.toLowerCase()) ||
+      normalized.includes(hub.shortName.toLowerCase())
+    ) {
+      return cityHubPath(hub);
+    }
+    return undefined;
+  }
+
+  const capital = getCityHub(hub.stateSlug, hub.capitalCitySlug);
+  if (
+    capital &&
+    (normalized.includes(capital.city.toLowerCase()) ||
+      normalized.includes(hub.uf.toLowerCase()) ||
+      normalized.includes(hub.region.toLowerCase()))
+  ) {
+    return cityHubPath(capital);
+  }
+  return stateHubPath(hub);
+}
 
 export function getCityHub(
   stateSlug: string,

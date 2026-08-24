@@ -1,13 +1,15 @@
 import { notFound } from "next/navigation";
 import { NeighborhoodHubPage } from "@/components/LocationHubPages";
+import { getCompanionsByCity } from "@/lib/listings";
 import {
   CITY_HUBS,
   getCityHub,
+  getNeighborhoodCompanions,
   getNeighborhoodHub,
 } from "@/lib/location-hubs";
 import { buildNeighborhoodMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ estado: string; cidade: string; bairro: string }>;
@@ -30,7 +32,23 @@ export async function generateMetadata({ params }: PageProps) {
     ? getNeighborhoodHub(estado, cidade, bairro)
     : undefined;
   if (!hub || !neighborhood) return { title: "Página não encontrada" };
-  return buildNeighborhoodMetadata(hub, neighborhood);
+
+  const cityCompanions = await getCompanionsByCity(hub.city);
+  const companions = getNeighborhoodCompanions(
+    cityCompanions,
+    hub.city,
+    neighborhood.name,
+  );
+  const metadata = buildNeighborhoodMetadata(hub, neighborhood);
+
+  if (companions.length === 0) {
+    return {
+      ...metadata,
+      robots: { index: false, follow: true },
+    };
+  }
+
+  return metadata;
 }
 
 export default async function DynamicNeighborhoodPage({ params }: PageProps) {

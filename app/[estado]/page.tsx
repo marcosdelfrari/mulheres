@@ -3,7 +3,7 @@ import { StateHubPage } from "@/components/LocationHubPages";
 import { getStateHub, STATE_HUBS } from "@/lib/location-hubs";
 import { buildStateHubMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ estado: string }>;
