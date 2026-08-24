@@ -39,7 +39,6 @@ export const FILTER_SERVICES_FOR = [
   "Homens",
   "Mulheres",
   "Casais",
-  "Pessoas com deficiência",
 ];
 
 export const FILTER_LOCATIONS = [

@@ -8,6 +8,7 @@ import {
   getCompanionBySlugOrId,
   getPublishedCompanions,
 } from "@/lib/listings";
+import { whatsappIntl } from "@/lib/phone";
 import { CompanionContactBar } from "@/components/CompanionContactBar";
 import { CompanionProfileBreadcrumb } from "@/components/CompanionProfileBreadcrumb";
 import { CompanionProfileHero } from "@/components/CompanionProfileHero";
@@ -53,7 +54,7 @@ export default async function CompanionProfilePage({ params }: PageProps) {
     notFound();
   }
 
-  const whatsappUrl = `https://wa.me/${companion.whatsapp}?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${whatsappIntl(companion.whatsapp)}?text=${encodeURIComponent(
     `Olá ${companion.name}, vi seu perfil no Mulheres.`,
   )}`;
 

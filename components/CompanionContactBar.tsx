@@ -1,3 +1,5 @@
+import { formatBrazilPhone, normalizeBrazilPhone } from "@/lib/phone";
+
 interface CompanionContactBarProps {
   phone: string;
   whatsappUrl: string;
@@ -39,7 +41,8 @@ export function CompanionContactBar({
   phone,
   whatsappUrl,
 }: CompanionContactBarProps) {
-  const tel = phone.replace(/\D/g, "");
+  const tel = normalizeBrazilPhone(phone);
+  const display = formatBrazilPhone(phone);
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
@@ -49,7 +52,7 @@ export function CompanionContactBar({
           className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-purple-700 px-3 py-3.5 text-sm font-bold text-white transition-colors hover:bg-purple-600 active:scale-[0.98]"
         >
           <PhoneIcon />
-          <span className="truncate">{phone}</span>
+          <span className="truncate">{display}</span>
         </a>
 
         <a

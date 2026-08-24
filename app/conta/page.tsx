@@ -15,6 +15,7 @@ import {
 import { cityShortSlug, slugify } from "@/lib/slug";
 import { REGIONS } from "@/lib/regions";
 import { uploadListingPhotos } from "@/lib/upload-listing-photos";
+import { formatBrazilPhone, normalizeBrazilPhone } from "@/lib/phone";
 
 function listingPublicPath(listing: ListingSummary) {
   return `/acompanhante/${slugify(listing.title)}-${slugify(listing.neighborhood)}-${cityShortSlug(listing.city)}-${listing.id}`;
@@ -125,7 +126,7 @@ function formFromListing(listing: ListingSummary): ListingFormState {
     region: listing.region || "Minas Gerais",
     city: listing.city,
     neighborhood: listing.neighborhood,
-    whatsapp: listing.whatsapp || listing.phone || "",
+    whatsapp: formatBrazilPhone(listing.whatsapp || listing.phone || ""),
     services: listing.services ?? [],
     servicesFor: listing.servicesFor?.length ? listing.servicesFor : ["Homens"],
     serviceLocations: listing.serviceLocations?.length
@@ -510,7 +511,7 @@ export default function ContaPage() {
         region: form.region,
         city: form.city,
         neighborhood: form.neighborhood,
-        whatsapp: form.whatsapp,
+        whatsapp: normalizeBrazilPhone(form.whatsapp),
         services: form.services,
         servicesFor: form.servicesFor,
         serviceLocations: form.serviceLocations,
@@ -957,7 +958,7 @@ export default function ContaPage() {
                   setForm((prev) => ({ ...prev, whatsapp: e.target.value }))
                 }
                 className={pillInput}
-                placeholder="DDD + número"
+                placeholder="(86) 99520-9564"
                 required
               />
             </div>

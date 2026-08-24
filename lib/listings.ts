@@ -1,6 +1,7 @@
 import { isOnlineFromLastLogin } from "@/lib/online";
 import { coordsForCity } from "@/lib/city-coords";
 import { buildCompanionSlug } from "@/lib/companion-utils";
+import { digitsOnly, normalizeBrazilPhone } from "@/lib/phone";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 import type { Companion, Region } from "@/lib/types";
 import { REGIONS } from "@/lib/regions";
@@ -51,10 +52,6 @@ function asRegion(value: string): Region {
     : "Minas Gerais";
 }
 
-function digitsOnly(value: string | null | undefined) {
-  return (value ?? "").replace(/\D/g, "");
-}
-
 function isLuxoActive(listing: Pick<Listing, "isLuxo" | "luxoUntil">) {
   if (!listing.isLuxo) return false;
   if (!listing.luxoUntil) return true;
@@ -69,8 +66,9 @@ export function listingToCompanion(listing: ListingWithUser): Companion {
         ? [listing.photoUrl]
         : [];
   const coverPhoto = listing.photoUrl ?? photos[0] ?? "";
-  const contact =
-    listing.whatsapp || listing.phone || listing.user?.phone || "";
+  const contact = normalizeBrazilPhone(
+    listing.whatsapp || listing.phone || listing.user?.phone || "",
+  );
   const phone = contact;
   const whatsappRaw = contact;
   const coords = coordsForCity(listing.city);

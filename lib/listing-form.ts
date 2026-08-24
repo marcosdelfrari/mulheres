@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeBrazilPhone } from "@/lib/phone";
 
 export const listingWriteSchema = z.object({
   title: z.string().trim().min(2, "Informe o nome do anúncio."),
@@ -32,10 +33,11 @@ export function resolveListingContact(
   parsed: Pick<ListingWriteInput, "phone" | "whatsapp">,
   userPhone: string | null | undefined,
 ) {
-  const contact =
+  const raw =
     parsed.whatsapp?.trim() ||
     parsed.phone?.trim() ||
     userPhone?.trim() ||
-    null;
+    "";
+  const contact = normalizeBrazilPhone(raw) || null;
   return { phone: contact, whatsapp: contact };
 }
