@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
-import { CityHubPage } from "@/components/LocationHubPages";
+import { ComLocalHubPage } from "@/components/LocationHubPages";
 import {
-  allCityHubKeys,
   buildPublishedLocationIndex,
   resolveCityHubFromData,
 } from "@/lib/dynamic-location-hubs";
 import { getPublishedCompanions } from "@/lib/listings";
-import { buildCityHubMetadata } from "@/lib/seo";
+import { buildComLocalCityMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
 
@@ -17,7 +16,12 @@ interface PageProps {
 export async function generateStaticParams() {
   const companions = await getPublishedCompanions().catch(() => []);
   const index = buildPublishedLocationIndex(companions);
-  return allCityHubKeys(index);
+  return index.cities
+    .filter((city) => city.withLocalCount > 0)
+    .map((city) => ({
+      estado: city.stateSlug,
+      cidade: city.citySlug,
+    }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -25,13 +29,13 @@ export async function generateMetadata({ params }: PageProps) {
   const companions = await getPublishedCompanions().catch(() => []);
   const hub = resolveCityHubFromData(estado, cidade, companions);
   if (!hub) return { title: "Página não encontrada" };
-  return buildCityHubMetadata(hub);
+  return buildComLocalCityMetadata(hub);
 }
 
-export default async function DynamicCityPage({ params }: PageProps) {
+export default async function ComLocalCityPage({ params }: PageProps) {
   const { estado, cidade } = await params;
   const companions = await getPublishedCompanions().catch(() => []);
   const hub = resolveCityHubFromData(estado, cidade, companions);
   if (!hub) notFound();
-  return <CityHubPage hub={hub} />;
+  return <ComLocalHubPage hub={hub} />;
 }

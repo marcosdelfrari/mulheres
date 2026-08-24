@@ -94,6 +94,8 @@ model PasswordResetToken {
 
 model Listing {
   id               String        @id @default(cuid())
+  /** Código numérico público (6 dígitos) usado no slug do anúncio. */
+  publicCode       String        @unique
   userId           String
   user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   title            String
@@ -109,6 +111,8 @@ model Listing {
   services         String[]      @default([])
   servicesFor      String[]      @default([])
   serviceLocations String[]      @default([])
+  /** Tags de tipo/corpo (ex.: Gordinha, Cavala). Opcional. */
+  typeTags         String[]      @default([])
   status           ListingStatus @default(draft)
   isLuxo           Boolean       @default(false)
   luxoUntil        DateTime?

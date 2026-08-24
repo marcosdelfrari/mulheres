@@ -47,6 +47,17 @@ export const FILTER_LOCATIONS = [
   "Eventos e festas",
 ];
 
+export const FILTER_TYPE_TAGS = [
+  "Gordinha",
+  "Alternativa",
+  "Emo",
+  "Egirl",
+  "Peitão",
+  "Cavala",
+  "Rabuda",
+  "Bundão",
+];
+
 export const FILTER_GENDERS = ["Mulher", "Travesti", "Trans"];
 
 export const CITIES_BY_REGION: Record<Region, string[]> = {

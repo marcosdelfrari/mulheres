@@ -5,21 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { AccountVerification } from "@/components/AccountVerification";
+import { listingPublicPath } from "@/lib/companion-utils";
 import type { ListingSummary } from "@/lib/auth-types";
 import {
   FILTER_LOCATIONS,
   FILTER_SERVICES,
   FILTER_SERVICES_FOR,
+  FILTER_TYPE_TAGS,
   citiesForRegion,
 } from "@/lib/catalog-locations";
-import { cityShortSlug, slugify } from "@/lib/slug";
 import { REGIONS } from "@/lib/regions";
 import { uploadListingPhotos } from "@/lib/upload-listing-photos";
 import { formatBrazilPhone, normalizeBrazilPhone } from "@/lib/phone";
-
-function listingPublicPath(listing: ListingSummary) {
-  return `/acompanhante/${slugify(listing.title)}-${slugify(listing.neighborhood)}-${cityShortSlug(listing.city)}-${listing.id}`;
-}
 
 type ListingLimits = {
   maxActive: number;
@@ -73,6 +70,7 @@ type ListingFormState = {
   services: string[];
   servicesFor: string[];
   serviceLocations: string[];
+  typeTags: string[];
   photos: FormPhoto[];
   avatarKey: string;
 };
@@ -112,6 +110,7 @@ function emptyForm(): ListingFormState {
     services: [],
     servicesFor: [],
     serviceLocations: [],
+    typeTags: [],
     photos: [],
     avatarKey: "",
   };
@@ -132,6 +131,7 @@ function formFromListing(listing: ListingSummary): ListingFormState {
     serviceLocations: listing.serviceLocations?.length
       ? listing.serviceLocations
       : ["Em casa"],
+    typeTags: listing.typeTags ?? [],
     photos: (listing.photos?.length
       ? listing.photos
       : listing.photoUrl
@@ -262,6 +262,82 @@ function ServicesChipGroup({
           }}
           className={pillInput}
           placeholder="Incluir outro serviço"
+          maxLength={40}
+        />
+        <button
+          type="button"
+          onClick={addCustom}
+          disabled={!custom.trim()}
+          className={`${pillBtn} shrink-0 border border-gray-300 bg-white text-gray-900 hover:bg-gray-50`}
+        >
+          Incluir
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TypeTagsChipGroup({
+  selected,
+  onChange,
+}: {
+  selected: string[];
+  onChange: (next: string[]) => void;
+}) {
+  const [custom, setCustom] = useState("");
+  const extras = selected.filter((item) => !FILTER_TYPE_TAGS.includes(item));
+  const options = [...FILTER_TYPE_TAGS, ...extras];
+
+  const addCustom = () => {
+    const value = custom.trim().replace(/\s+/g, " ");
+    if (!value) return;
+    if (value.length > 40) return;
+    const exists = selected.some(
+      (item) => item.toLowerCase() === value.toLowerCase(),
+    );
+    if (!exists) onChange([...selected, value]);
+    setCustom("");
+  };
+
+  return (
+    <div>
+      <p className="mb-2 text-lg font-semibold text-gray-900">
+        Tipo (opcional)
+      </p>
+      <p className="mb-3 text-sm text-gray-500">
+        Nenhuma seleção = sem tag de tipo no perfil.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {options.map((option) => {
+          const active = selected.includes(option);
+          return (
+            <button
+              key={option}
+              type="button"
+              onClick={() => onChange(toggleValue(selected, option))}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                active
+                  ? "bg-[#0c0414] text-white"
+                  : "border border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+              }`}
+            >
+              {option}
+            </button>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex gap-2">
+        <input
+          value={custom}
+          onChange={(e) => setCustom(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              addCustom();
+            }
+          }}
+          className={pillInput}
+          placeholder="Incluir outra tag"
           maxLength={40}
         />
         <button
@@ -515,6 +591,7 @@ export default function ContaPage() {
         services: form.services,
         servicesFor: form.servicesFor,
         serviceLocations: form.serviceLocations,
+        typeTags: form.typeTags,
         status: mode === "edit" && existing ? existing.status : "published",
         photos,
         photoUrl,
@@ -986,6 +1063,11 @@ export default function ContaPage() {
           <ServicesChipGroup
             selected={form.services}
             onChange={(services) => setForm((prev) => ({ ...prev, services }))}
+          />
+
+          <TypeTagsChipGroup
+            selected={form.typeTags}
+            onChange={(typeTags) => setForm((prev) => ({ ...prev, typeTags }))}
           />
 
           <div>

@@ -60,6 +60,7 @@ export function toListingSummary(
 
   return {
     id: listing.id,
+    publicCode: listing.publicCode,
     title: listing.title,
     description: listing.description,
     pricePerHour: listing.pricePerHour,
@@ -73,6 +74,7 @@ export function toListingSummary(
     services: listing.services ?? [],
     servicesFor: listing.servicesFor ?? [],
     serviceLocations: listing.serviceLocations ?? [],
+    typeTags: listing.typeTags ?? [],
     status: listing.status,
     isLuxo: listing.isLuxo,
     luxoUntil: listing.luxoUntil?.toISOString() ?? null,

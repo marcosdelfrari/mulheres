@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { Companion } from "./types";
 import { companionPhotoAlt, companionProfilePath } from "./companion-utils";
 import { SEO_COMPETITOR_KEYWORDS } from "./brand-copy";
+import { slugify } from "./slug";
 import type { CityHub, NeighborhoodHub, StateHub } from "./location-hubs";
 import {
   cityHubPath,
@@ -464,9 +465,55 @@ export function buildNeighborhoodMetadata(
       keywords: [
         `acompanhantes ${neighborhood.name.toLowerCase()}`,
         `acompanhantes ${neighborhood.name.toLowerCase()} ${shortCity.toLowerCase()}`,
+        `acompanhante ${neighborhood.name.toLowerCase()} ${shortCity.toLowerCase()}`,
         `acompanhantes ${hub.city.toLowerCase()}`,
         `acompanhante ${neighborhood.name.toLowerCase()} bh`,
         ...hub.tags.slice(0, 3),
+      ],
+    },
+  });
+}
+
+export function buildComLocalCityMetadata(hub: CityHub): Metadata {
+  const path = `/${hub.stateSlug}/${hub.citySlug}/com-local`;
+  const title = `Acompanhantes com local em ${hub.city}, ${hub.region}`;
+  const description = trimMetaDescription(
+    `Encontre acompanhantes com local em ${hub.city}. Perfis verificados, fotos reais e contato direto via WhatsApp — sem intermediários.`,
+  );
+  return buildPageMetadata({
+    title,
+    description,
+    path,
+    ogImagePath: routeOgImagePath(`/${hub.stateSlug}/${hub.citySlug}`),
+    overrides: {
+      keywords: [
+        `acompanhantes com local ${hub.city.toLowerCase()}`,
+        `mulheres com local ${hub.city.toLowerCase()}`,
+        `acompanhante com local ${hub.shortName.toLowerCase()}`,
+        `acompanhantes ${hub.city.toLowerCase()}`,
+        ...hub.tags.slice(0, 4),
+      ],
+    },
+  });
+}
+
+export function buildTypeTagCityMetadata(hub: CityHub, typeTag: string): Metadata {
+  const path = `/${hub.stateSlug}/${hub.citySlug}/tipo/${slugify(typeTag)}`;
+  const title = `Acompanhantes ${typeTag} em ${hub.city}, ${hub.region}`;
+  const description = trimMetaDescription(
+    `Encontre acompanhantes ${typeTag.toLowerCase()} em ${hub.city}. Perfis verificados, fotos reais e contato direto via WhatsApp.`,
+  );
+  return buildPageMetadata({
+    title,
+    description,
+    path,
+    ogImagePath: routeOgImagePath(`/${hub.stateSlug}/${hub.citySlug}`),
+    overrides: {
+      keywords: [
+        `acompanhante ${typeTag.toLowerCase()} ${hub.city.toLowerCase()}`,
+        `acompanhantes ${typeTag.toLowerCase()} ${hub.shortName.toLowerCase()}`,
+        `acompanhantes ${typeTag.toLowerCase()}`,
+        `acompanhantes ${hub.city.toLowerCase()}`,
       ],
     },
   });

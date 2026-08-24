@@ -117,6 +117,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         services: parsed.services,
         servicesFor: parsed.servicesFor,
         serviceLocations: parsed.serviceLocations,
+        typeTags: parsed.typeTags,
         status: parsed.status,
         photoUrl,
         photos,

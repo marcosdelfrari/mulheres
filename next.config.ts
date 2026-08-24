@@ -165,7 +165,31 @@ const nextConfig: NextConfig = {
         destination: "/bahia/salvador",
         permanent: true,
       },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "rh" }],
+        destination: "/rio-de-janeiro/rio-de-janeiro",
+        permanent: true,
+      },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "RJ" }],
+        destination: "/rio-de-janeiro/rio-de-janeiro",
+        permanent: true,
+      },
       ...BH_NEIGHBORHOOD_REDIRECTS,
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "acompanhantes rh" }],
+        destination: "/rio-de-janeiro/rio-de-janeiro",
+        permanent: true,
+      },
+      {
+        source: "/acompanhantes",
+        has: [{ type: "query", key: "search", value: "mulheres com local" }],
+        destination: "/minas-gerais/belo-horizonte/com-local",
+        permanent: true,
+      },
       {
         source: "/catalogo",
         destination: "/acompanhantes",

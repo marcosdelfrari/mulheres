@@ -1,5 +1,11 @@
 import { CITY_HUBS, getCityHub } from "@/lib/location-hubs";
 import {
+  allCityHubKeys,
+  buildPublishedLocationIndex,
+  resolveCityHubFromData,
+} from "@/lib/dynamic-location-hubs";
+import { getPublishedCompanions } from "@/lib/listings";
+import {
   OG_CONTENT_TYPE,
   OG_SIZE,
   renderLocationOgImage,
@@ -13,16 +19,18 @@ interface ImageProps {
   params: Promise<{ estado: string; cidade: string }>;
 }
 
-export function generateStaticParams() {
-  return CITY_HUBS.map((hub) => ({
-    estado: hub.stateSlug,
-    cidade: hub.citySlug,
-  }));
+export async function generateStaticParams() {
+  const companions = await getPublishedCompanions().catch(() => []);
+  const index = buildPublishedLocationIndex(companions);
+  return allCityHubKeys(index);
 }
 
 export default async function OpenGraphImage({ params }: ImageProps) {
   const { estado, cidade } = await params;
-  const hub = getCityHub(estado, cidade);
+  const staticHub = getCityHub(estado, cidade);
+  const companions = await getPublishedCompanions().catch(() => []);
+  const hub =
+    staticHub ?? resolveCityHubFromData(estado, cidade, companions);
 
   if (!hub) {
     return renderLocationOgImage({

@@ -144,6 +144,12 @@ export default function AlternativasBhPage() {
             </Link>
             .
           </p>
+          <Link
+            href="/guias/site-seguro-acompanhantes"
+            className="mt-4 inline-block text-sm font-semibold text-purple-800 hover:underline"
+          >
+            Qual site é mais seguro para encontrar acompanhantes? →
+          </Link>
         </section>
 
         <section className="mt-14" aria-labelledby="faq-alternativas">

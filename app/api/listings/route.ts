@@ -11,6 +11,7 @@ import {
   getListingLimits,
 } from "@/lib/listing-limits";
 import { listingWriteSchema, resolveListingContact } from "@/lib/listing-form";
+import { generateUniqueListingPublicCode } from "@/lib/listing-public-code";
 import { resolveOwnedListingPhotos } from "@/lib/listing-photos";
 import { prisma } from "@/lib/prisma";
 
@@ -67,10 +68,12 @@ export async function POST(request: Request) {
       { avatar: parsed.photoUrl },
     );
     const contact = resolveListingContact(parsed, user.phone);
+    const publicCode = await generateUniqueListingPublicCode();
 
     const listing = await prisma.listing.create({
       data: {
         userId: user.id,
+        publicCode,
         title: parsed.title,
         description: parsed.description,
         pricePerHour: parsed.pricePerHour,
@@ -84,6 +87,7 @@ export async function POST(request: Request) {
         services: parsed.services,
         servicesFor: parsed.servicesFor,
         serviceLocations: parsed.serviceLocations,
+        typeTags: parsed.typeTags,
         online: isOnlineFromLastLogin(user.lastLoginAt),
         status: parsed.status,
         photoUrl,

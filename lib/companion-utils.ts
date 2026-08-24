@@ -1,12 +1,52 @@
 import type { Companion } from "@/lib/types";
 import { cityShortSlug, slugify } from "./slug";
 
+type ListingSlugParts = {
+  name: string;
+  neighborhood: string;
+  city: string;
+  publicCode: string;
+};
+
+export function buildListingPublicSlug(parts: ListingSlugParts): string {
+  return `${slugify(parts.name)}-${slugify(parts.neighborhood)}-${cityShortSlug(parts.city)}-${parts.publicCode}`;
+}
+
 export function buildCompanionSlug(companion: Companion): string {
-  return `${slugify(companion.name)}-${slugify(companion.neighborhood)}-${cityShortSlug(companion.city)}-${companion.id}`;
+  return buildListingPublicSlug({
+    name: companion.name,
+    neighborhood: companion.neighborhood,
+    city: companion.city,
+    publicCode: companion.publicCode,
+  });
+}
+
+export function listingPublicPath(
+  listing: Pick<ListingSlugParts, "neighborhood" | "city" | "publicCode"> & {
+    title?: string;
+    name?: string;
+  },
+): string {
+  const name = listing.title ?? listing.name;
+  if (!name) {
+    throw new Error("listingPublicPath requires title or name.");
+  }
+
+  return `/acompanhante/${buildListingPublicSlug({
+    name,
+    neighborhood: listing.neighborhood,
+    city: listing.city,
+    publicCode: listing.publicCode,
+  })}`;
 }
 
 export function companionProfilePath(companion: Companion): string {
-  return `/acompanhante/${buildCompanionSlug(companion)}`;
+  return listingPublicPath({
+    name: companion.name,
+    neighborhood: companion.neighborhood,
+    city: companion.city,
+    publicCode: companion.publicCode,
+  });
 }
 
 type PhotoAltCompanion = Pick<

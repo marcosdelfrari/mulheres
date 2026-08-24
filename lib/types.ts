@@ -45,6 +45,8 @@ export interface Companion {
   services: string[];
   servicesFor: string[];
   serviceLocations: string[];
+  /** Tags de tipo/corpo (opcional). */
+  typeTags: string[];
   payments: string[];
   bio: string;
   phone: string;
@@ -58,6 +60,8 @@ export interface Companion {
   /** URLs com nudez detectada (subconjunto de `photos`). */
   nsfwPhotos: string[];
   adId: string;
+  /** Código numérico de até 6 dígitos no slug público do anúncio. */
+  publicCode: string;
   publishedAt: string;
   verifiedAt?: string;
   sponsored: boolean;
@@ -81,6 +85,7 @@ export interface CatalogFilters {
   selectedServices: string[];
   selectedServicesFor: string[];
   selectedLocations: string[];
+  selectedTypeTags: string[];
   selectedGenders: string[];
 }
 
@@ -96,5 +101,6 @@ export const DEFAULT_CATALOG_FILTERS: CatalogFilters = {
   selectedServices: [],
   selectedServicesFor: [],
   selectedLocations: [],
+  selectedTypeTags: [],
   selectedGenders: [],
 };

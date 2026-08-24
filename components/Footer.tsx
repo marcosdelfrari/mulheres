@@ -122,6 +122,7 @@ export function Footer() {
             >
               {[
                 ["/guias/como-funciona", "Como funciona"],
+                ["/guias/site-seguro-acompanhantes", "Site seguro"],
                 ["/guias/alternativas-em-bh", "Alternativas em BH"],
                 ["/acompanhantes", "Todas as modelos"],
                 ["/minas-gerais/belo-horizonte", "Acompanhantes em BH"],

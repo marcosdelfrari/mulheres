@@ -1,6 +1,6 @@
 import { absoluteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
+import { buildListingPublicSlug } from "@/lib/companion-utils";
 import { prisma } from "@/lib/prisma";
-import { cityShortSlug, slugify } from "@/lib/slug";
 import {
   MCP_PROTOCOL_VERSION,
   MCP_SERVER_NAME,
@@ -181,6 +181,7 @@ async function callTool(name: string, args: Record<string, unknown>) {
         isLuxo: true,
         photoUrl: true,
         photos: true,
+        publicCode: true,
       },
     });
 
@@ -191,7 +192,12 @@ async function callTool(name: string, args: Record<string, unknown>) {
           : item.photoUrl
             ? [item.photoUrl]
             : [];
-      const slug = `${slugify(item.title)}-${slugify(item.neighborhood)}-${cityShortSlug(item.city)}-${item.id}`;
+      const slug = buildListingPublicSlug({
+        name: item.title,
+        neighborhood: item.neighborhood,
+        city: item.city,
+        publicCode: item.publicCode,
+      });
 
       return {
         id: item.id,

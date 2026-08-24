@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
 import { buildCompanionSlug } from "@/lib/companion-utils";
 import {
-  CITY_HUBS,
+  buildPublishedLocationIndex,
+  comLocalPath,
+  typeTagHubPath,
+} from "@/lib/dynamic-location-hubs";
+import {
   cityHubPath,
   getNeighborhoodCompanions,
   neighborhoodHubPath,
@@ -14,6 +18,7 @@ import { absoluteUrl } from "@/lib/seo";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const companions = await getPublishedCompanions().catch(() => []);
+  const index = buildPublishedLocationIndex(companions);
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -39,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.65,
+    },
+    {
+      url: absoluteUrl("/guias/site-seguro-acompanhantes"),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.72,
     },
     {
       url: absoluteUrl("/contato"),
@@ -73,30 +84,46 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.88,
   }));
 
-  const cityPages: MetadataRoute.Sitemap = CITY_HUBS.map((hub) => ({
-    url: absoluteUrl(cityHubPath(hub)),
+  const cityPages: MetadataRoute.Sitemap = index.cities.map((city) => ({
+    url: absoluteUrl(cityHubPath(city.hub)),
     lastModified: now,
     changeFrequency: "daily" as const,
-    priority: hub.city === "Belo Horizonte" ? 0.95 : 0.8,
+    priority: city.city === "Belo Horizonte" ? 0.95 : 0.8,
   }));
 
-  const neighborhoodPages: MetadataRoute.Sitemap = CITY_HUBS.flatMap((hub) => {
-    const cityCompanions = companions.filter(
-      (c) => c.city.toLowerCase() === hub.city.toLowerCase(),
-    );
-    return hub.neighborhoods
-      .filter(
-        (n) =>
-          getNeighborhoodCompanions(cityCompanions, hub.city, n.name).length >=
-          1,
-      )
-      .map((n) => ({
-        url: absoluteUrl(neighborhoodHubPath(hub, n)),
-        lastModified: now,
-        changeFrequency: "daily" as const,
-        priority: 0.85,
-      }));
-  });
+  const neighborhoodPages: MetadataRoute.Sitemap = index.cities.flatMap(
+    (city) =>
+      city.neighborhoods
+        .filter(
+          (n) =>
+            getNeighborhoodCompanions(city.companions, city.city, n.name)
+              .length >= 1,
+        )
+        .map((n) => ({
+          url: absoluteUrl(neighborhoodHubPath(city.hub, n)),
+          lastModified: now,
+          changeFrequency: "daily" as const,
+          priority: 0.85,
+        })),
+  );
+
+  const comLocalPages: MetadataRoute.Sitemap = index.cities
+    .filter((city) => city.withLocalCount > 0)
+    .map((city) => ({
+      url: absoluteUrl(comLocalPath(city.hub)),
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 0.82,
+    }));
+
+  const typeTagPages: MetadataRoute.Sitemap = index.cities.flatMap((city) =>
+    city.typeTags.map((tag) => ({
+      url: absoluteUrl(typeTagHubPath(city.hub, tag)),
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 0.78,
+    })),
+  );
 
   const profilePages: MetadataRoute.Sitemap = companions.map((c) => ({
     url: absoluteUrl(`/acompanhante/${buildCompanionSlug(c)}`),
@@ -114,6 +141,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...statePages,
     ...cityPages,
     ...neighborhoodPages,
+    ...comLocalPages,
+    ...typeTagPages,
     ...profilePages,
   ];
 }

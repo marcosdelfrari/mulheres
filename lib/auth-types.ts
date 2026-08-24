@@ -15,6 +15,7 @@ export type AuthUser = {
 
 export type ListingSummary = {
   id: string;
+  publicCode: string;
   title: string;
   description: string;
   pricePerHour: number;
@@ -28,6 +29,7 @@ export type ListingSummary = {
   services: string[];
   servicesFor: string[];
   serviceLocations: string[];
+  typeTags: string[];
   status: string;
   isLuxo: boolean;
   luxoUntil: string | null;

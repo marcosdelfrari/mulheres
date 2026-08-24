@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { cityShortSlug, slugify } from "@/lib/slug";
+import { listingPublicPath } from "@/lib/companion-utils";
 import type { ListingSummary } from "@/lib/auth-types";
 import type { VerificationStatus } from "@/lib/types";
 
@@ -49,6 +49,7 @@ type AdminReport = {
     status: string;
     city: string;
     neighborhood: string;
+    publicCode: string;
     photoUrl: string | null;
     userName: string;
     userEmail: string;
@@ -98,10 +99,6 @@ function isLuxoActive(listing: ListingSummary) {
     listing.isLuxo &&
     (!listing.luxoUntil || new Date(listing.luxoUntil) > new Date())
   );
-}
-
-function listingPublicPath(listing: ListingSummary) {
-  return `/acompanhante/${slugify(listing.title)}-${slugify(listing.neighborhood)}-${cityShortSlug(listing.city)}-${listing.id}`;
 }
 
 async function readError(res: Response) {
@@ -702,11 +699,11 @@ export default function AdminPage() {
               const listingPath =
                 report.listing != null
                   ? listingPublicPath({
-                      id: report.listing.id,
                       title: report.listing.title,
                       neighborhood: report.listing.neighborhood,
                       city: report.listing.city,
-                    } as ListingSummary)
+                      publicCode: report.listing.publicCode,
+                    })
                   : null;
               return (
                 <article

@@ -294,6 +294,7 @@ export const CITY_HUBS: CityHub[] = [
     tags: [
       "acompanhantes rio de janeiro",
       "acompanhantes rj",
+      "acompanhantes rh",
       "acompanhantes copacabana",
       "acompanhantes barra da tijuca",
       "acompanhantes zona sul",
@@ -636,6 +637,10 @@ export function tagToHubPath(
   const normalized = tag.toLowerCase();
 
   if ("neighborhoods" in hub) {
+    if (normalized.includes("com local")) {
+      return `/${hub.stateSlug}/${hub.citySlug}/com-local`;
+    }
+
     for (const neighborhood of hub.neighborhoods) {
       const name = neighborhood.name.toLowerCase();
       if (

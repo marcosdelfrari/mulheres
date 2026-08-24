@@ -58,6 +58,7 @@ export function CompanionProfileContent({
           services={companion.services}
           servicesFor={companion.servicesFor}
           serviceLocations={companion.serviceLocations}
+          typeTags={companion.typeTags}
           payments={companion.payments}
         />
       </section>

@@ -1,6 +1,7 @@
 import { isOnlineFromLastLogin } from "@/lib/online";
 import { coordsForCity } from "@/lib/city-coords";
 import { buildCompanionSlug } from "@/lib/companion-utils";
+import { extractPublicCodeFromSlug } from "@/lib/listing-public-code";
 import { digitsOnly, normalizeBrazilPhone } from "@/lib/phone";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 import type { Companion, Region } from "@/lib/types";
@@ -91,6 +92,7 @@ export function listingToCompanion(listing: ListingWithUser): Companion {
     services: listing.services ?? [],
     servicesFor: listing.servicesFor ?? [],
     serviceLocations: listing.serviceLocations ?? [],
+    typeTags: listing.typeTags ?? [],
     payments: ["Pix"],
     bio: listing.description,
     phone,
@@ -102,7 +104,8 @@ export function listingToCompanion(listing: ListingWithUser): Companion {
     coverPhoto,
     photos,
     nsfwPhotos: listing.nsfwPhotos ?? [],
-    adId: listing.id.slice(-8),
+    adId: listing.publicCode,
+    publicCode: listing.publicCode,
     publishedAt: listing.createdAt.toISOString(),
     verifiedAt: listing.user?.verifiedAt?.toISOString(),
     sponsored: isLuxoActive(listing),
@@ -201,6 +204,18 @@ export async function getTopCompanions(limit = 6): Promise<Companion[]> {
   return listings.map(listingToCompanion);
 }
 
+export async function getPublishedCompanionByPublicCode(
+  publicCode: string,
+): Promise<Companion | undefined> {
+  if (!hasDatabaseUrl()) return undefined;
+
+  const listing = await prisma.listing.findFirst({
+    where: { publicCode, ...publishedWhere },
+    include: { user: { select: listingUserSelect } },
+  });
+  return listing ? listingToCompanion(listing) : undefined;
+}
+
 export async function getCompanionBySlugOrId(
   slugOrId: string,
 ): Promise<Companion | undefined> {
@@ -208,6 +223,12 @@ export async function getCompanionBySlugOrId(
 
   const byId = await getPublishedCompanionById(slugOrId);
   if (byId) return byId;
+
+  const publicCode = extractPublicCodeFromSlug(slugOrId);
+  if (publicCode) {
+    const byCode = await getPublishedCompanionByPublicCode(publicCode);
+    if (byCode) return byCode;
+  }
 
   const companions = await getPublishedCompanions();
   const bySlug = companions.find((c) => buildCompanionSlug(c) === slugOrId);

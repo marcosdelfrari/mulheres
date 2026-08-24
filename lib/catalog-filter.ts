@@ -31,6 +31,7 @@ export function filterCompanions(
       return false;
     if (!matchesAnySelected(filters.selectedLocations, c.serviceLocations))
       return false;
+    if (!matchesAnySelected(filters.selectedTypeTags, c.typeTags)) return false;
     if (
       filters.selectedGenders.length > 0 &&
       !filters.selectedGenders.includes(c.gender ?? "Mulher")

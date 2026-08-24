@@ -18,6 +18,7 @@ export const listingWriteSchema = z.object({
   services: z.array(z.string()).default([]),
   servicesFor: z.array(z.string()).default([]),
   serviceLocations: z.array(z.string()).default([]),
+  typeTags: z.array(z.string()).default([]),
   status: z.enum(["draft", "published", "paused"]).default("published"),
   photos: z
     .array(z.string().trim().min(1))

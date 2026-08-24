@@ -8,6 +8,7 @@ import {
   FILTER_LOCATIONS,
   FILTER_SERVICES,
   FILTER_SERVICES_FOR,
+  FILTER_TYPE_TAGS,
   getCitiesByRegion,
   getNeighborhoodsByCity,
 } from "@/lib/catalog-locations";
@@ -305,6 +306,17 @@ export function CatalogFiltersBar({
                 <h3 className="text-lg font-bold text-gray-900">Filtros</h3>
               </div>
 
+              <FilterAccordion
+                icon={
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                }
+                title="Tipo"
+                options={FILTER_TYPE_TAGS}
+                selected={draft.selectedTypeTags}
+                onChange={(v) => updateDraft({ selectedTypeTags: v })}
+              />
               <FilterAccordion
                 icon={
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
