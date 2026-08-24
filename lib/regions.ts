@@ -7,4 +7,7 @@ export const REGIONS: Region[] = [
   "Paraná",
   "Bahia",
   "Distrito Federal",
+  "Espírito Santo",
+  "Goiás",
+  "Tocantins",
 ];

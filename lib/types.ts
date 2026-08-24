@@ -12,7 +12,10 @@ export type Region =
   | "Minas Gerais"
   | "Paraná"
   | "Bahia"
-  | "Distrito Federal";
+  | "Distrito Federal"
+  | "Espírito Santo"
+  | "Goiás"
+  | "Tocantins";
 
 export interface User {
   id: string;

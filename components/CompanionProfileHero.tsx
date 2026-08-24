@@ -14,6 +14,9 @@ const REGION_UF: Record<Region, string> = {
   Paraná: "PR",
   Bahia: "BA",
   "Distrito Federal": "DF",
+  "Espírito Santo": "ES",
+  Goiás: "GO",
+  Tocantins: "TO",
 };
 
 function formatServicesFor(servicesFor: string[]): string {

@@ -98,14 +98,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }));
   });
 
-  const profilePages: MetadataRoute.Sitemap = companions
-    .filter((c) => c.verified)
-    .map((c) => ({
-      url: absoluteUrl(`/acompanhante/${buildCompanionSlug(c)}`),
-      lastModified: new Date(c.publishedAt),
-      changeFrequency: "weekly" as const,
-      priority: c.city === "Belo Horizonte" ? 0.7 : 0.55,
-    }));
+  const profilePages: MetadataRoute.Sitemap = companions.map((c) => ({
+    url: absoluteUrl(`/acompanhante/${buildCompanionSlug(c)}`),
+    lastModified: new Date(c.publishedAt),
+    changeFrequency: "weekly" as const,
+    priority: c.verified
+      ? c.city === "Belo Horizonte"
+        ? 0.7
+        : 0.55
+      : 0.45,
+  }));
 
   return [
     ...staticPages,

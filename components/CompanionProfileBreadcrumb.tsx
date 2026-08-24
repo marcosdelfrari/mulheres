@@ -1,60 +1,11 @@
 import Link from "next/link";
 import type { Companion } from "@/lib/types";
-import { CITY_HUBS, cityHubPath, neighborhoodHubPath } from "@/lib/location-hubs";
-
-interface BreadcrumbItem {
-  label: string;
-  href: string;
-}
-
-function buildBreadcrumb(companion: Companion): BreadcrumbItem[] {
-  const cityHub = CITY_HUBS.find(
-    (h) => h.region === companion.region && h.city === companion.city,
-  );
-
-  const neighborhood = cityHub?.neighborhoods.find(
-    (n) => n.name.toLowerCase() === companion.neighborhood.toLowerCase(),
-  );
-
-  const items: BreadcrumbItem[] = [
-    { label: "Início", href: "/" },
-    { label: "As modelos", href: "/acompanhantes" },
-  ];
-
-  const citySameAsRegion =
-    companion.city.trim().toLowerCase() === companion.region.trim().toLowerCase();
-
-  if (!citySameAsRegion) {
-    items.push({
-      label: companion.region,
-      href: `/acompanhantes?region=${encodeURIComponent(companion.region)}`,
-    });
-  }
-
-  items.push({
-    label: companion.city,
-    href: cityHub
-      ? cityHubPath(cityHub)
-      : `/acompanhantes?region=${encodeURIComponent(companion.region)}&search=${encodeURIComponent(companion.city)}`,
-  });
-
-  if (companion.neighborhood) {
-    const hoodHref =
-      cityHub && neighborhood
-        ? neighborhoodHubPath(cityHub, neighborhood)
-        : `/acompanhantes?region=${encodeURIComponent(companion.region)}&city=${encodeURIComponent(companion.city)}&neighborhood=${encodeURIComponent(companion.neighborhood)}`;
-
-    items.push({
-      label: companion.neighborhood,
-      href: hoodHref,
-    });
-  }
-
-  return items;
-}
+import { buildCompanionBreadcrumb } from "@/lib/companion-breadcrumb";
 
 /** No mobile: Início / … / penúltimo / último — evita truncar no meio. */
-function compactForMobile(items: BreadcrumbItem[]): BreadcrumbItem[] {
+function compactForMobile(
+  items: ReturnType<typeof buildCompanionBreadcrumb>,
+) {
   if (items.length <= 3) return items;
   return [
     items[0]!,
@@ -79,7 +30,7 @@ interface CompanionProfileBreadcrumbProps {
 export function CompanionProfileBreadcrumb({
   companion,
 }: CompanionProfileBreadcrumbProps) {
-  const items = buildBreadcrumb(companion);
+  const items = buildCompanionBreadcrumb(companion);
   const mobileItems = compactForMobile(items);
   const verifiedDate = companion.verifiedAt
     ? formatShortDate(companion.verifiedAt)

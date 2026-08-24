@@ -4,6 +4,7 @@ import {
   buildCompanionSlug,
   companionProfilePath,
 } from "@/lib/companion-utils";
+import { buildCompanionBreadcrumb } from "@/lib/companion-breadcrumb";
 import {
   getCompanionBySlugOrId,
   getPublishedCompanions,
@@ -20,7 +21,6 @@ import {
   buildCompanionJsonLd,
   buildCompanionMetadata,
 } from "@/lib/seo";
-import { CITY_HUBS, cityHubPath } from "@/lib/location-hubs";
 
 export const dynamic = "force-dynamic";
 
@@ -58,33 +58,17 @@ export default async function CompanionProfilePage({ params }: PageProps) {
     `Olá ${companion.name}, vi seu perfil no Mulheres.`,
   )}`;
 
-  const cityHub = CITY_HUBS.find(
-    (h) => h.region === companion.region && h.city === companion.city,
-  );
-
-  const breadcrumbItems = cityHub
-    ? [
-        { name: "Início", url: absoluteUrl("/") },
-        {
-          name: companion.region,
-          url: absoluteUrl(
-            `/acompanhantes?region=${encodeURIComponent(companion.region)}`,
-          ),
-        },
-        { name: companion.city, url: absoluteUrl(cityHubPath(cityHub)) },
-        {
-          name: companion.name,
-          url: absoluteUrl(companionProfilePath(companion)),
-        },
-      ]
-    : [
-        { name: "Início", url: absoluteUrl("/") },
-        { name: "As modelos", url: absoluteUrl("/acompanhantes") },
-        {
-          name: companion.name,
-          url: absoluteUrl(companionProfilePath(companion)),
-        },
-      ];
+  const breadcrumbTrail = buildCompanionBreadcrumb(companion);
+  const breadcrumbItems = [
+    ...breadcrumbTrail.map((item) => ({
+      name: item.label,
+      url: absoluteUrl(item.href),
+    })),
+    {
+      name: companion.name,
+      url: absoluteUrl(companionProfilePath(companion)),
+    },
+  ];
 
   return (
     <>

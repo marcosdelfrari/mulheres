@@ -121,6 +121,12 @@ export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+function trimMetaDescription(text: string, max = 160): string {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (normalized.length <= max) return normalized;
+  return `${normalized.slice(0, max - 1).trimEnd()}…`;
+}
+
 function ogImageMeta(title: string) {
   return [
     {
@@ -231,7 +237,16 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
 
 export function buildCompanionMetadata(companion: Companion): Metadata {
   const title = `${companion.name}, ${companion.age} — Acompanhante em ${companion.city}`;
-  const description = `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de R$ ${companion.pricePerHour}/hora. ${companion.bio.slice(0, 120)}`;
+  const description = trimMetaDescription(
+    `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de R$ ${companion.pricePerHour}/hora. ${companion.bio}`,
+  );
+  const keywords = [
+    `acompanhante ${companion.name.toLowerCase()}`,
+    `acompanhante ${companion.city.toLowerCase()}`,
+    `acompanhante ${companion.neighborhood.toLowerCase()}`,
+    `acompanhantes ${companion.city.toLowerCase()}`,
+    `acompanhantes ${companion.region.toLowerCase()}`,
+  ];
   const photo = companion.coverPhoto || companion.photos[0];
   const imageAlt = companionPhotoAlt(companion);
   const metadata = buildPageMetadata({
@@ -239,6 +254,19 @@ export function buildCompanionMetadata(companion: Companion): Metadata {
     description,
     path: companionProfilePath(companion),
     type: "profile",
+    overrides: {
+      keywords,
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
+      },
+    },
   });
 
   if (!photo) return metadata;
@@ -483,6 +511,7 @@ export function buildCollectionPageJsonLd(options: {
 }
 
 export function buildCompanionJsonLd(companion: Companion) {
+  const profileUrl = absoluteUrl(companionProfilePath(companion));
   const photos =
     companion.photos.length > 0
       ? companion.photos
@@ -493,18 +522,33 @@ export function buildCompanionJsonLd(companion: Companion) {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": profileUrl,
     name: companion.name,
     description: companion.bio,
-    url: absoluteUrl(companionProfilePath(companion)),
+    url: profileUrl,
     jobTitle: "Acompanhante",
     gender: companion.gender || "Mulher",
     ...(photos.length > 0 ? { image: photos } : {}),
     address: {
       "@type": "PostalAddress",
+      ...(companion.neighborhood
+        ? { streetAddress: companion.neighborhood }
+        : {}),
       addressLocality: companion.city,
       addressRegion: companion.region,
       addressCountry: "BR",
     },
+    ...(companion.pricePerHour > 0
+      ? {
+          makesOffer: {
+            "@type": "Offer",
+            price: companion.pricePerHour,
+            priceCurrency: "BRL",
+            unitText: "HOUR",
+            availability: "https://schema.org/InStock",
+          },
+        }
+      : {}),
   };
 }
 
