@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { companionProfilePath, isNsfwPhoto } from "@/lib/companion-utils";
+import {
+  companionPhotoAlt,
+  companionProfilePath,
+  isNsfwPhoto,
+} from "@/lib/companion-utils";
 import type { Companion } from "@/lib/types";
 import { formatDistance } from "@/lib/geo";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
@@ -22,7 +26,7 @@ export function SponsoredCompanionCard({
   locationMode,
   priority = false,
 }: SponsoredCompanionCardProps) {
-  const photo = companion.photos[0];
+  const photo = companion.photos[0] || companion.coverPhoto;
 
   return (
     <Link
@@ -38,7 +42,7 @@ export function SponsoredCompanionCard({
           {photo ? (
             <Image
               src={photo}
-              alt={`${companion.name}, acompanhante em ${companion.neighborhood}, ${companion.city}`}
+              alt={companionPhotoAlt(companion)}
               fill
               className="object-cover object-center transition-transform group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, 192px"

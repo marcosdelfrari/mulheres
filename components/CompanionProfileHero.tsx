@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { isNsfwPhoto } from "@/lib/companion-utils";
+import { companionPhotoAlt, isNsfwPhoto } from "@/lib/companion-utils";
 import type { Companion, Region } from "@/lib/types";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 import { CompanionDistance } from "./CompanionDistance";
@@ -29,7 +29,7 @@ interface CompanionProfileHeroProps {
 }
 
 export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
-  const profilePhoto = companion.photos[0];
+  const profilePhoto = companion.coverPhoto || companion.photos[0];
   const uf = REGION_UF[companion.region];
   const hasLocal = companion.serviceLocations.includes("Em casa");
 
@@ -44,7 +44,7 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
           {profilePhoto ? (
             <Image
               src={profilePhoto}
-              alt={companion.name}
+              alt={companionPhotoAlt(companion, { role: "avatar" })}
               fill
               className="object-cover"
               sizes="88px"

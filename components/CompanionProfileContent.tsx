@@ -37,7 +37,7 @@ export function CompanionProfileContent({
           <CompanionGallery
             photos={companion.photos}
             nsfwPhotos={companion.nsfwPhotos}
-            name={companion.name}
+            companion={companion}
             variant="embedded"
           />
         </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { Companion } from "./types";
-import { companionProfilePath } from "./companion-utils";
+import { companionPhotoAlt, companionProfilePath } from "./companion-utils";
 import { SEO_COMPETITOR_KEYWORDS } from "./brand-copy";
 import type { CityHub, NeighborhoodHub, StateHub } from "./location-hubs";
 import { cityHubPath, neighborhoodHubPath, stateHubPath } from "./location-hubs";
@@ -232,13 +232,28 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
 export function buildCompanionMetadata(companion: Companion): Metadata {
   const title = `${companion.name}, ${companion.age} — Acompanhante em ${companion.city}`;
   const description = `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de R$ ${companion.pricePerHour}/hora. ${companion.bio.slice(0, 120)}`;
-
-  return buildPageMetadata({
+  const photo = companion.photos[0] || companion.coverPhoto;
+  const imageAlt = companionPhotoAlt(companion);
+  const metadata = buildPageMetadata({
     title,
     description,
     path: companionProfilePath(companion),
     type: "profile",
   });
+
+  if (!photo) return metadata;
+
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      images: [{ url: photo, alt: imageAlt }],
+    },
+    twitter: {
+      ...metadata.twitter,
+      images: [photo],
+    },
+  };
 }
 
 export function buildCatalogMetadata(params: {
@@ -468,12 +483,22 @@ export function buildCollectionPageJsonLd(options: {
 }
 
 export function buildCompanionJsonLd(companion: Companion) {
+  const photos =
+    companion.photos.length > 0
+      ? companion.photos
+      : companion.coverPhoto
+        ? [companion.coverPhoto]
+        : [];
+
   return {
     "@context": "https://schema.org",
     "@type": "Person",
     name: companion.name,
     description: companion.bio,
     url: absoluteUrl(companionProfilePath(companion)),
+    jobTitle: "Acompanhante",
+    gender: companion.gender || "Mulher",
+    ...(photos.length > 0 ? { image: photos } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: companion.city,

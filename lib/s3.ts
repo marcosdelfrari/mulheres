@@ -1,8 +1,18 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomBytes } from "crypto";
 
 const region = process.env.AWS_REGION ?? "us-east-2";
 const bucket = process.env.AWS_S3_BUCKET ?? "";
+
+export const MAX_PHOTO_BYTES = 2_500_000;
+export const MAX_LISTING_PHOTOS = 5;
+export const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+] as const;
 
 export type UploadedImage = {
   url: string;
@@ -43,10 +53,94 @@ function extensionFor(mime: string) {
   return "jpg";
 }
 
+export function publicUrlForKey(key: string) {
+  return `https://${bucket}.s3.${region}.amazonaws.com/${key}`;
+}
+
+export function isOwnedListingPhotoUrl(url: string, userId: string) {
+  if (!bucket || !userId) return false;
+  try {
+    const parsed = new URL(url);
+    const expectedHost = `${bucket}.s3.${region}.amazonaws.com`;
+    if (parsed.hostname !== expectedHost) return false;
+    const key = decodeURIComponent(parsed.pathname.replace(/^\//, ""));
+    return key.startsWith(`listings/${userId}/`);
+  } catch {
+    return false;
+  }
+}
+
+export function pickListingAvatar(
+  photos: string[],
+  avatar?: string | null,
+) {
+  const unique = [...new Set(photos)];
+  const photoUrl =
+    avatar && unique.includes(avatar) ? avatar : (unique[0] ?? null);
+  return { photos: unique, photoUrl };
+}
+
+export async function createListingPhotoPresign(
+  userId: string,
+  contentType: string,
+) {
+  if (
+    !ALLOWED_IMAGE_TYPES.includes(
+      contentType as (typeof ALLOWED_IMAGE_TYPES)[number],
+    )
+  ) {
+    throw new Error("Envie uma imagem (JPG, PNG ou WEBP).");
+  }
+
+  const key = `listings/${userId}/${Date.now()}-${randomBytes(6).toString("hex")}.${extensionFor(contentType)}`;
+  const uploadUrl = await getSignedUrl(
+    getClient(),
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ContentType: contentType,
+    }),
+    { expiresIn: 60 },
+  );
+
+  return {
+    uploadUrl,
+    publicUrl: publicUrlForKey(key),
+    contentType,
+  };
+}
+
+export async function classifyRemoteImageNsfw(url: string) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return false;
+    const buffer = Buffer.from(await res.arrayBuffer());
+    return classifyImageNsfw(buffer);
+  } catch (error) {
+    console.error("[s3] NSFW classify from URL failed:", error);
+    return false;
+  }
+}
+
+export async function classifyNewListingPhotos(
+  photos: string[],
+  alreadyNsfw: string[] = [],
+) {
+  const known = new Set(alreadyNsfw);
+  const nsfwPhotos: string[] = photos.filter((url) => known.has(url));
+  for (const url of photos) {
+    if (known.has(url)) continue;
+    if (await classifyRemoteImageNsfw(url)) {
+      nsfwPhotos.push(url);
+    }
+  }
+  return nsfwPhotos;
+}
+
 export async function uploadImageToS3(
   file: File,
   folder: string,
-  maxBytes = 2_500_000,
+  maxBytes = MAX_PHOTO_BYTES,
   options: { classifyNsfw?: boolean } = {},
 ): Promise<UploadedImage> {
   if (!file.type.startsWith("image/")) {

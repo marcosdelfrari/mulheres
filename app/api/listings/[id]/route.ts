@@ -8,43 +8,9 @@ import {
   assertCanPublishListing,
   getListingLimits,
 } from "@/lib/listing-limits";
+import { listingWriteSchema } from "@/lib/listing-form";
+import { resolveOwnedListingPhotos } from "@/lib/listing-photos";
 import { prisma } from "@/lib/prisma";
-import { uploadImagesToS3 } from "@/lib/s3";
-
-function parseJsonArray(value: FormDataEntryValue | null): string[] {
-  if (typeof value !== "string" || !value.trim()) return [];
-  try {
-    const parsed = JSON.parse(value) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is string => typeof item === "string");
-  } catch {
-    return value
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }
-}
-
-const updateSchema = z.object({
-  title: z.string().trim().min(2, "Informe o nome do anúncio."),
-  description: z
-    .string()
-    .trim()
-    .min(40, "Descrição com pelo menos 40 caracteres."),
-  pricePerHour: z.coerce.number().int().min(50, "Valor mínimo R$ 50."),
-  age: z.coerce.number().int().min(18, "Idade mínima 18.").max(80),
-  gender: z.string().trim().min(1).default("Mulher"),
-  region: z.string().trim().min(2).default("Minas Gerais"),
-  city: z.string().trim().min(2).default("Belo Horizonte"),
-  neighborhood: z.string().trim().min(2, "Informe o bairro."),
-  phone: z.string().trim().optional(),
-  whatsapp: z.string().trim().optional(),
-  services: z.array(z.string()).default([]),
-  servicesFor: z.array(z.string()).default([]),
-  serviceLocations: z.array(z.string()).default([]),
-  status: z.enum(["draft", "published", "paused"]).default("published"),
-  keepPhotos: z.array(z.string()).default([]),
-});
 
 const statusOnlySchema = z.object({
   status: z.enum(["draft", "published", "paused"]),
@@ -53,6 +19,12 @@ const statusOnlySchema = z.object({
 type RouteContext = {
   params: Promise<{ id: string }>;
 };
+
+function isStatusOnlyBody(body: unknown): body is { status: string } {
+  if (!body || typeof body !== "object") return false;
+  const record = body as Record<string, unknown>;
+  return "status" in record && !("title" in record) && !("photos" in record);
+}
 
 export async function PATCH(request: Request, context: RouteContext) {
   try {
@@ -70,11 +42,9 @@ export async function PATCH(request: Request, context: RouteContext) {
       return jsonError("Anúncio não encontrado.", 404);
     }
 
-    const contentType = request.headers.get("content-type") ?? "";
+    const body = (await request.json()) as unknown;
 
-    // Status-only toggle (pausar / reativar) via JSON.
-    if (contentType.includes("application/json")) {
-      const body = (await request.json()) as { status?: string };
+    if (isStatusOnlyBody(body)) {
       const parsed = statusOnlySchema.parse(body);
 
       if (
@@ -98,23 +68,16 @@ export async function PATCH(request: Request, context: RouteContext) {
       });
     }
 
-    const form = await request.formData();
-    const parsed = updateSchema.parse({
-      title: form.get("title"),
-      description: form.get("description"),
-      pricePerHour: form.get("pricePerHour"),
-      age: form.get("age") || existing.age,
-      gender: form.get("gender") || existing.gender,
-      region: form.get("region") || existing.region,
-      city: form.get("city") || existing.city,
-      neighborhood: form.get("neighborhood") || existing.neighborhood,
-      phone: form.get("phone") || undefined,
-      whatsapp: form.get("whatsapp") || undefined,
-      services: parseJsonArray(form.get("services")),
-      servicesFor: parseJsonArray(form.get("servicesFor")),
-      serviceLocations: parseJsonArray(form.get("serviceLocations")),
-      status: form.get("status") || existing.status,
-      keepPhotos: parseJsonArray(form.get("keepPhotos")),
+    const record =
+      body && typeof body === "object" ? (body as Record<string, unknown>) : {};
+    const parsed = listingWriteSchema.parse({
+      ...record,
+      age: record.age || existing.age,
+      gender: record.gender || existing.gender,
+      region: record.region || existing.region,
+      city: record.city || existing.city,
+      neighborhood: record.neighborhood || existing.neighborhood,
+      status: record.status || existing.status,
     });
 
     if (
@@ -127,34 +90,14 @@ export async function PATCH(request: Request, context: RouteContext) {
       });
     }
 
-    const newPhotoFiles = form
-      .getAll("photos")
-      .filter((item): item is File => item instanceof File && item.size > 0);
-
-    const kept = parsed.keepPhotos.filter((url) =>
-      existing.photos.includes(url),
-    );
-
-    if (kept.length + newPhotoFiles.length === 0) {
-      return jsonError("O anúncio precisa de pelo menos 1 foto.");
-    }
-
-    if (kept.length + newPhotoFiles.length > 5) {
-      return jsonError("No máximo 5 fotos por anúncio.");
-    }
-
-    const uploaded = newPhotoFiles.length
-      ? await uploadImagesToS3(newPhotoFiles, `listings/${user.id}`)
-      : [];
-
-    const uploadedUrls = uploaded.map((item) => item.url);
-    const photos = [...kept, ...uploadedUrls].slice(0, 5);
-    const keptNsfw = kept.filter((url) => existing.nsfwPhotos.includes(url));
-    const uploadedNsfw = uploaded
-      .filter((item) => item.isNsfw)
-      .map((item) => item.url);
-    const nsfwPhotos = [...keptNsfw, ...uploadedNsfw].filter((url) =>
-      photos.includes(url),
+    const { photos, photoUrl, nsfwPhotos } = await resolveOwnedListingPhotos(
+      parsed.photos,
+      user.id,
+      {
+        allowedExisting: existing.photos,
+        avatar: parsed.photoUrl,
+        alreadyNsfw: existing.nsfwPhotos,
+      },
     );
 
     const listing = await prisma.listing.update({
@@ -174,7 +117,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         servicesFor: parsed.servicesFor,
         serviceLocations: parsed.serviceLocations,
         status: parsed.status,
-        photoUrl: photos[0] ?? null,
+        photoUrl,
         photos,
         nsfwPhotos,
       },

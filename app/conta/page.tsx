@@ -13,6 +13,7 @@ import {
 } from "@/lib/catalog-locations";
 import { cityShortSlug, slugify } from "@/lib/slug";
 import { REGIONS } from "@/lib/regions";
+import { uploadListingPhotos } from "@/lib/upload-listing-photos";
 
 function listingPublicPath(listing: ListingSummary) {
   return `/acompanhante/${slugify(listing.title)}-${slugify(listing.neighborhood)}-${cityShortSlug(listing.city)}-${listing.id}`;
@@ -54,6 +55,10 @@ function formatNextCreate(iso: string | null) {
   });
 }
 
+type FormPhoto =
+  | { id: string; kind: "existing"; url: string }
+  | { id: string; kind: "new"; file: File };
+
 type ListingFormState = {
   title: string;
   description: string;
@@ -67,8 +72,8 @@ type ListingFormState = {
   services: string[];
   servicesFor: string[];
   serviceLocations: string[];
-  existingPhotos: string[];
-  newPhotos: File[];
+  photos: FormPhoto[];
+  avatarKey: string;
 };
 
 const pillInput =
@@ -107,8 +112,8 @@ function emptyForm(phone = ""): ListingFormState {
     services: [],
     servicesFor: ["Homens"],
     serviceLocations: ["Em casa"],
-    existingPhotos: [],
-    newPhotos: [],
+    photos: [],
+    avatarKey: "",
   };
 }
 
@@ -128,12 +133,17 @@ function formFromListing(listing: ListingSummary): ListingFormState {
     serviceLocations: listing.serviceLocations?.length
       ? listing.serviceLocations
       : ["Em casa"],
-    existingPhotos: listing.photos?.length
+    photos: (listing.photos?.length
       ? listing.photos
       : listing.photoUrl
         ? [listing.photoUrl]
-        : [],
-    newPhotos: [],
+        : []
+    ).map((url) => ({ id: url, kind: "existing" as const, url })),
+    avatarKey:
+      listing.photoUrl &&
+      (listing.photos?.includes(listing.photoUrl) || !listing.photos?.length)
+        ? listing.photoUrl
+        : (listing.photos?.[0] ?? listing.photoUrl ?? ""),
   };
 }
 
@@ -141,6 +151,21 @@ function toggleValue(list: string[], value: string) {
   return list.includes(value)
     ? list.filter((item) => item !== value)
     : [...list, value];
+}
+
+function nextAvatarKey(photos: FormPhoto[], current: string) {
+  if (photos.some((photo) => photo.id === current)) return current;
+  return photos[0]?.id ?? "";
+}
+
+function movePhoto(photos: FormPhoto[], index: number, delta: number) {
+  const next = index + delta;
+  if (next < 0 || next >= photos.length) return photos;
+  const copy = [...photos];
+  const [item] = copy.splice(index, 1);
+  if (!item) return photos;
+  copy.splice(next, 0, item);
+  return copy;
 }
 
 function ChipGroup({
@@ -282,13 +307,20 @@ export default function ContaPage() {
     [limits, listings],
   );
 
-  const newPhotoPreviews = useMemo(
-    () => form.newPhotos.map((file) => URL.createObjectURL(file)),
-    [form.newPhotos],
-  );
+  const newPhotoPreviews = useMemo(() => {
+    const urls = new Map<string, string>();
+    for (const photo of form.photos) {
+      if (photo.kind === "new") {
+        urls.set(photo.id, URL.createObjectURL(photo.file));
+      }
+    }
+    return urls;
+  }, [form.photos]);
 
   useEffect(() => {
-    return () => newPhotoPreviews.forEach((url) => URL.revokeObjectURL(url));
+    return () => {
+      newPhotoPreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
   }, [newPhotoPreviews]);
 
   const loadListings = useCallback(async () => {
@@ -421,7 +453,7 @@ export default function ContaPage() {
     setForm(emptyForm(user.phone ?? ""));
   };
 
-  const totalPhotos = form.existingPhotos.length + form.newPhotos.length;
+  const totalPhotos = form.photos.length;
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -440,28 +472,48 @@ export default function ContaPage() {
 
     setSaving(true);
     try {
-      const body = new FormData();
-      body.set("title", form.title);
-      body.set("description", form.description);
-      body.set("pricePerHour", form.pricePerHour);
-      body.set("age", form.age);
-      body.set("gender", form.gender);
-      body.set("region", form.region);
-      body.set("city", form.city);
-      body.set("neighborhood", form.neighborhood);
-      body.set("whatsapp", form.whatsapp);
-      body.set("services", JSON.stringify(form.services));
-      body.set("servicesFor", JSON.stringify(form.servicesFor));
-      body.set("serviceLocations", JSON.stringify(form.serviceLocations));
+      const newPhotos = form.photos.filter(
+        (photo): photo is Extract<FormPhoto, { kind: "new" }> =>
+          photo.kind === "new",
+      );
+      const uploadedUrls = await uploadListingPhotos(
+        newPhotos.map((photo) => photo.file),
+      );
+      const uploadedById = new Map(
+        newPhotos.map((photo, index) => [photo.id, uploadedUrls[index]!]),
+      );
+      const photos = form.photos.map((photo) =>
+        photo.kind === "existing"
+          ? photo.url
+          : uploadedById.get(photo.id)!,
+      );
+      const photoUrl = uploadedById.get(form.avatarKey) ??
+        (form.photos.some(
+          (photo) => photo.kind === "existing" && photo.id === form.avatarKey,
+        )
+          ? form.avatarKey
+          : (photos[0] ?? null));
+
       const existing = editingId
         ? listings.find((item) => item.id === editingId)
         : null;
-      body.set(
-        "status",
-        mode === "edit" && existing ? existing.status : "published",
-      );
-      body.set("keepPhotos", JSON.stringify(form.existingPhotos));
-      form.newPhotos.forEach((photo) => body.append("photos", photo));
+      const body = {
+        title: form.title,
+        description: form.description,
+        pricePerHour: Number(form.pricePerHour),
+        age: Number(form.age),
+        gender: form.gender,
+        region: form.region,
+        city: form.city,
+        neighborhood: form.neighborhood,
+        whatsapp: form.whatsapp,
+        services: form.services,
+        servicesFor: form.servicesFor,
+        serviceLocations: form.serviceLocations,
+        status: mode === "edit" && existing ? existing.status : "published",
+        photos,
+        photoUrl,
+      };
 
       const url =
         mode === "edit" && editingId
@@ -472,7 +524,8 @@ export default function ContaPage() {
       const res = await fetch(url, {
         method,
         credentials: "include",
-        body,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
@@ -487,8 +540,12 @@ export default function ContaPage() {
       );
       closeForm();
       await loadListings();
-    } catch {
-      setError("Falha de conexão ao salvar anúncio.");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Falha de conexão ao salvar anúncio.",
+      );
     } finally {
       setSaving(false);
     }
@@ -691,7 +748,8 @@ export default function ContaPage() {
               Fotos do perfil ({totalPhotos}/5)
             </label>
             <p className="text-base text-gray-600">
-              A 1ª foto é o avatar circular do perfil. Envie 3 a 5 fotos.
+              A ordem vale na galeria e na capa da listagem. O avatar é a foto
+              redonda do perfil. Envie 3 a 5 fotos.
             </p>
             <label
               className={`${pillBtn} w-full cursor-pointer border border-dashed border-gray-400 bg-gray-50 text-gray-800 hover:bg-gray-100`}
@@ -706,75 +764,108 @@ export default function ContaPage() {
                   const files = e.target.files
                     ? Array.from(e.target.files)
                     : [];
-                  setForm((prev) => ({
-                    ...prev,
-                    newPhotos: [
-                      ...prev.newPhotos,
-                      ...files,
-                    ].slice(0, Math.max(0, 5 - prev.existingPhotos.length)),
-                  }));
+                  setForm((prev) => {
+                    const added: FormPhoto[] = files.map((file) => ({
+                      id: crypto.randomUUID(),
+                      kind: "new",
+                      file,
+                    }));
+                    const photos = [...prev.photos, ...added].slice(0, 5);
+                    return {
+                      ...prev,
+                      photos,
+                      avatarKey: nextAvatarKey(photos, prev.avatarKey),
+                    };
+                  });
                   e.target.value = "";
                 }}
               />
             </label>
-            {(form.existingPhotos.length > 0 || newPhotoPreviews.length > 0) && (
+            {form.photos.length > 0 && (
               <div className="grid grid-cols-3 gap-2">
-                {form.existingPhotos.map((src, index) => (
-                  <div key={src} className="relative overflow-hidden rounded-2xl">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={src}
-                      alt={`Foto ${index + 1}`}
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                    {index === 0 && (
-                      <span className="absolute left-2 top-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-gray-900">
-                        Avatar
-                      </span>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setForm((prev) => ({
-                          ...prev,
-                          existingPhotos: prev.existingPhotos.filter(
-                            (p) => p !== src,
-                          ),
-                        }))
-                      }
-                      className="absolute right-2 top-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-gray-900"
+                {form.photos.map((photo, index) => {
+                  const src =
+                    photo.kind === "existing"
+                      ? photo.url
+                      : newPhotoPreviews.get(photo.id);
+                  if (!src) return null;
+                  const isAvatar = form.avatarKey === photo.id;
+                  return (
+                    <div
+                      key={photo.id}
+                      className={`relative overflow-hidden rounded-2xl ${
+                        isAvatar ? "ring-2 ring-gray-900 ring-offset-2" : ""
+                      }`}
                     >
-                      Remover
-                    </button>
-                  </div>
-                ))}
-                {newPhotoPreviews.map((src, index) => (
-                  <div key={src} className="relative overflow-hidden rounded-2xl">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={src}
-                      alt={`Nova foto ${index + 1}`}
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                    {form.existingPhotos.length === 0 && index === 0 && (
-                      <span className="absolute left-2 top-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-gray-900">
-                        Avatar
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={src}
+                        alt={`Foto ${index + 1}`}
+                        className="aspect-[3/4] w-full object-cover"
+                      />
+                      <span className="absolute bottom-2 left-2 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-bold text-white">
+                        {index + 1}
                       </span>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setForm((prev) => ({
-                          ...prev,
-                          newPhotos: prev.newPhotos.filter((_, i) => i !== index),
-                        }))
-                      }
-                      className="absolute right-2 top-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-gray-900"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setForm((prev) => ({ ...prev, avatarKey: photo.id }))
+                        }
+                        className="absolute left-2 top-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-gray-900"
+                      >
+                        {isAvatar ? "Avatar" : "Usar avatar"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setForm((prev) => {
+                            const photos = prev.photos.filter(
+                              (item) => item.id !== photo.id,
+                            );
+                            return {
+                              ...prev,
+                              photos,
+                              avatarKey: nextAvatarKey(photos, prev.avatarKey),
+                            };
+                          })
+                        }
+                        className="absolute right-2 top-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-gray-900"
+                      >
+                        Remover
+                      </button>
+                      <div className="absolute bottom-2 right-2 flex gap-1">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              photos: movePhoto(prev.photos, index, -1),
+                            }))
+                          }
+                          className="rounded-full bg-white px-2 py-1 text-xs font-bold text-gray-900 disabled:opacity-40"
+                          aria-label="Mover para a esquerda"
+                        >
+                          ←
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === form.photos.length - 1}
+                          onClick={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              photos: movePhoto(prev.photos, index, 1),
+                            }))
+                          }
+                          className="rounded-full bg-white px-2 py-1 text-xs font-bold text-gray-900 disabled:opacity-40"
+                          aria-label="Mover para a direita"
+                        >
+                          →
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

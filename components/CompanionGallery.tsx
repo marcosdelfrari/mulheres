@@ -3,20 +3,21 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useAgeGate } from "@/lib/age-gate-context";
-import { isNsfwPhoto } from "@/lib/companion-utils";
+import { companionPhotoAlt, isNsfwPhoto } from "@/lib/companion-utils";
+import type { Companion } from "@/lib/types";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 
 interface CompanionGalleryProps {
   photos: string[];
   nsfwPhotos?: string[];
-  name: string;
+  companion: Companion;
   variant?: "default" | "embedded";
 }
 
 export function CompanionGallery({
   photos,
   nsfwPhotos,
-  name,
+  companion,
   variant = "default",
 }: CompanionGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -28,6 +29,11 @@ export function CompanionGallery({
   const isEmbedded = variant === "embedded";
   const activePhoto = photos[activeIndex]!;
   const activeIsNsfw = isNsfwPhoto(nsfwPhotos, activePhoto);
+  const photoAlt = (index: number) =>
+    companionPhotoAlt(companion, {
+      index: index + 1,
+      total: photos.length,
+    });
 
   const openFullscreen = () => {
     if (activeIsNsfw && !verified) {
@@ -75,7 +81,7 @@ export function CompanionGallery({
           aria-label={
             activeIsNsfw && !verified
               ? "Verificar idade para ver a foto"
-              : `Ampliar foto de ${name}`
+              : `Ampliar ${photoAlt(activeIndex)}`
           }
         >
           <AgeRestrictedMedia
@@ -85,7 +91,7 @@ export function CompanionGallery({
           >
             <Image
               src={activePhoto}
-              alt={`${name} — foto ${activeIndex + 1}`}
+              alt={photoAlt(activeIndex)}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 720px"
@@ -107,7 +113,7 @@ export function CompanionGallery({
                   ? "border-luxury-accent"
                   : "border-transparent opacity-70 hover:opacity-100"
               }`}
-              aria-label={`Ver foto ${index + 1} de ${name}`}
+              aria-label={`Ver ${photoAlt(index)}`}
             >
               <AgeRestrictedMedia
                 className="absolute inset-0"
@@ -116,7 +122,7 @@ export function CompanionGallery({
               >
                 <Image
                   src={photo}
-                  alt={`${name} — miniatura ${index + 1}`}
+                  alt={photoAlt(index)}
                   fill
                   className="object-cover"
                   sizes="64px"
@@ -149,7 +155,7 @@ export function CompanionGallery({
           >
             <Image
               src={activePhoto}
-              alt={`${name} — foto ${activeIndex + 1}`}
+              alt={photoAlt(activeIndex)}
               fill
               className="object-contain"
               sizes="100vw"
@@ -173,7 +179,7 @@ export function CompanionGallery({
                   className={`h-2 w-2 rounded-full ${
                     index === activeIndex ? "bg-white" : "bg-white/40"
                   }`}
-                  aria-label={`Foto ${index + 1}`}
+                  aria-label={photoAlt(index)}
                 />
               ))}
             </div>
