@@ -5,10 +5,7 @@ import {
   companionProfilePath,
 } from "@/lib/companion-utils";
 import { buildCompanionBreadcrumb } from "@/lib/companion-breadcrumb";
-import {
-  getCompanionBySlugOrId,
-  getPublishedCompanions,
-} from "@/lib/listings";
+import { getCompanionBySlugOrId, getPublishedCompanions } from "@/lib/listings";
 import { whatsappIntl } from "@/lib/phone";
 import { CompanionContactBar } from "@/components/CompanionContactBar";
 import { CompanionProfileBreadcrumb } from "@/components/CompanionProfileBreadcrumb";
@@ -55,7 +52,7 @@ export default async function CompanionProfilePage({ params }: PageProps) {
   }
 
   const whatsappUrl = `https://wa.me/${whatsappIntl(companion.whatsapp)}?text=${encodeURIComponent(
-    `Olá ${companion.name}, vi seu perfil no Mulheres.`,
+    `Olá ${companion.name}, vi seu perfil no *Mulheres de Luxo* e gostaria de agendar.`,
   )}`;
 
   const breadcrumbTrail = buildCompanionBreadcrumb(companion);
