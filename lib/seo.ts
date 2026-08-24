@@ -48,7 +48,9 @@ export const SITE_DESCRIPTION =
 export const SITE_DESCRIPTION_SHORT =
   "Catálogo de acompanhantes verificadas no Brasil. Filtros por cidade, bairro e contato via WhatsApp.";
 
+/** OG da home: rota dinâmica centraliza `public/thumb.png` (bom no crop quadrado do WhatsApp). */
 export const DEFAULT_OG_IMAGE = "/opengraph-image";
+export const BRAND_LOGO_PATH = "/thumb.png";
 
 export const BH_NEIGHBORHOODS = [
   "Savassi",
@@ -235,6 +237,10 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
     keywords,
     authors: [{ name: SITE_NAME }],
     creator: SITE_NAME,
+    icons: {
+      icon: [{ url: BRAND_LOGO_PATH, type: "image/png" }],
+      apple: [{ url: BRAND_LOGO_PATH }],
+    },
     openGraph: {
       type: "website",
       locale: "pt_BR",
@@ -580,7 +586,7 @@ export function buildOrganizationJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     description: SITE_DESCRIPTION,
-    logo: absoluteUrl("/og-default.png"),
+    logo: absoluteUrl(BRAND_LOGO_PATH),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
@@ -720,7 +726,7 @@ export function buildArticleJsonLd(options: {
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/og-default.png"),
+        url: absoluteUrl(BRAND_LOGO_PATH),
       },
     },
   };
