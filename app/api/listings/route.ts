@@ -77,6 +77,7 @@ export async function POST(request: Request) {
         title: parsed.title,
         description: parsed.description,
         pricePerHour: parsed.pricePerHour,
+        priceDisplayUnit: parsed.priceDisplayUnit,
         age: parsed.age,
         gender: parsed.gender,
         region: parsed.region,

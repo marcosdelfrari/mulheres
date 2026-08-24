@@ -16,6 +16,7 @@ import {
 } from "@/lib/catalog-locations";
 import { REGIONS } from "@/lib/regions";
 import { uploadListingPhotos } from "@/lib/upload-listing-photos";
+import { formatListingPrice, type PriceDisplayUnit } from "@/lib/price-display";
 import { formatBrazilPhone, normalizeBrazilPhone } from "@/lib/phone";
 
 type ListingLimits = {
@@ -62,6 +63,7 @@ type ListingFormState = {
   title: string;
   description: string;
   pricePerHour: string;
+  priceDisplayUnit: PriceDisplayUnit;
   age: string;
   region: string;
   city: string;
@@ -102,6 +104,7 @@ function emptyForm(): ListingFormState {
     title: "",
     description: "",
     pricePerHour: "",
+    priceDisplayUnit: "hour",
     age: "",
     region: "",
     city: "",
@@ -121,6 +124,7 @@ function formFromListing(listing: ListingSummary): ListingFormState {
     title: listing.title,
     description: listing.description,
     pricePerHour: String(listing.pricePerHour),
+    priceDisplayUnit: listing.priceDisplayUnit ?? "hour",
     age: String(listing.age ?? 25),
     region: listing.region || "Minas Gerais",
     city: listing.city,
@@ -582,6 +586,7 @@ export default function ContaPage() {
         title: form.title,
         description: form.description,
         pricePerHour: Number(form.pricePerHour),
+        priceDisplayUnit: form.priceDisplayUnit,
         age: Number(form.age),
         gender: "Mulher",
         region: form.region,
@@ -1009,7 +1014,7 @@ export default function ContaPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-2 block text-lg font-semibold text-gray-900">
-                Valor / hora (R$)
+                Valor (R$)
               </label>
               <input
                 type="number"
@@ -1022,9 +1027,53 @@ export default function ContaPage() {
                   }))
                 }
                 className={pillInput}
-                placeholder="Valor por hora"
+                placeholder={
+                  form.priceDisplayUnit === "half_hour"
+                    ? "Valor por meia hora"
+                    : "Valor por hora"
+                }
                 required
               />
+              <fieldset className="mt-3">
+                <legend className="mb-2 text-sm font-medium text-gray-700">
+                  Exibir valor por
+                </legend>
+                <div className="flex flex-wrap gap-2">
+                  {(
+                    [
+                      { value: "hour", label: "1 hora" },
+                      { value: "half_hour", label: "Meia hora" },
+                    ] as const
+                  ).map((option) => {
+                    const selected = form.priceDisplayUnit === option.value;
+                    return (
+                      <label
+                        key={option.value}
+                        className={`inline-flex cursor-pointer items-center rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                          selected
+                            ? "border-gray-900 bg-gray-900 text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="priceDisplayUnit"
+                          value={option.value}
+                          checked={selected}
+                          onChange={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              priceDisplayUnit: option.value,
+                            }))
+                          }
+                          className="sr-only"
+                        />
+                        {option.label}
+                      </label>
+                    );
+                  })}
+                </div>
+              </fieldset>
             </div>
             <div>
               <label className="mb-2 block text-lg font-semibold text-gray-900">
@@ -1216,7 +1265,10 @@ export default function ContaPage() {
                         {listing.city ? `, ${listing.city}` : ""}
                       </p>
                       <p className="text-base font-bold text-gray-900">
-                        R$ {listing.pricePerHour}/h
+                        {formatListingPrice(
+                          listing.pricePerHour,
+                          listing.priceDisplayUnit ?? "hour",
+                        )}
                       </p>
                       <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">
                         {listing.description}

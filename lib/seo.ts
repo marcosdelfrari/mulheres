@@ -3,6 +3,7 @@ import type { Companion } from "./types";
 import { companionPhotoAlt, companionProfilePath } from "./companion-utils";
 import { catalogHeadingFromSearch } from "./catalog-search-resolve";
 import { SEO_COMPETITOR_KEYWORDS } from "./brand-copy";
+import { formatListingPrice } from "./price-display";
 import { slugify } from "./slug";
 import type { CityHub, NeighborhoodHub, StateHub } from "./location-hubs";
 import {
@@ -263,7 +264,7 @@ export function buildDefaultMetadata(overrides?: Partial<Metadata>): Metadata {
 export function buildCompanionMetadata(companion: Companion): Metadata {
   const title = `${companion.name}, ${companion.age} — Acompanhante em ${companion.city}`;
   const description = trimMetaDescription(
-    `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de R$ ${companion.pricePerHour}/hora. ${companion.bio}`,
+    `${companion.name}, ${companion.age} anos, acompanhante em ${companion.neighborhood}, ${companion.city} — ${companion.region}. A partir de ${formatListingPrice(companion.pricePerHour, companion.priceDisplayUnit)}. ${companion.bio}`,
   );
   const keywords = [
     `acompanhante ${companion.name.toLowerCase()}`,
@@ -669,7 +670,8 @@ export function buildCompanionJsonLd(companion: Companion) {
             "@type": "Offer",
             price: companion.pricePerHour,
             priceCurrency: "BRL",
-            unitText: "HOUR",
+            unitText:
+              companion.priceDisplayUnit === "half_hour" ? "HALF_HOUR" : "HOUR",
             availability: "https://schema.org/InStock",
           },
         }

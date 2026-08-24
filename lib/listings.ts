@@ -1,4 +1,5 @@
 import { isOnlineFromLastLogin } from "@/lib/online";
+import { normalizePriceDisplayUnit } from "@/lib/price-display";
 import { coordsForCity } from "@/lib/city-coords";
 import { buildCompanionSlug } from "@/lib/companion-utils";
 import { extractPublicCodeFromSlug } from "@/lib/listing-public-code";
@@ -89,6 +90,7 @@ export function listingToCompanion(listing: ListingWithUser): Companion {
     rating: 0,
     reviewCount: 0,
     pricePerHour: listing.pricePerHour,
+    priceDisplayUnit: normalizePriceDisplayUnit(listing.priceDisplayUnit),
     services: listing.services ?? [],
     servicesFor: listing.servicesFor ?? [],
     serviceLocations: listing.serviceLocations ?? [],

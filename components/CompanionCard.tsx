@@ -8,6 +8,7 @@ import {
   companionProfilePath,
   isNsfwPhoto,
 } from "@/lib/companion-utils";
+import { formatListingPrice } from "@/lib/price-display";
 import type { Companion } from "@/lib/types";
 import { formatDistance } from "@/lib/geo";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
@@ -166,7 +167,10 @@ export function CompanionCard({
               )}
             </span>
             <span className="text-sm font-medium text-purple-800 sm:font-light">
-              R$ {companion.pricePerHour}/h
+              {formatListingPrice(
+                companion.pricePerHour,
+                companion.priceDisplayUnit,
+              )}
             </span>
           </div>
         </div>

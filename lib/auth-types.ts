@@ -19,6 +19,7 @@ export type ListingSummary = {
   title: string;
   description: string;
   pricePerHour: number;
+  priceDisplayUnit: "hour" | "half_hour";
   age: number;
   gender: string;
   region: string;

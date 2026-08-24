@@ -78,6 +78,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       city: record.city || existing.city,
       neighborhood: record.neighborhood || existing.neighborhood,
       status: record.status || existing.status,
+      priceDisplayUnit: record.priceDisplayUnit || existing.priceDisplayUnit,
     });
 
     if (
@@ -107,6 +108,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         title: parsed.title,
         description: parsed.description,
         pricePerHour: parsed.pricePerHour,
+        priceDisplayUnit: parsed.priceDisplayUnit,
         age: parsed.age,
         gender: parsed.gender,
         region: parsed.region,

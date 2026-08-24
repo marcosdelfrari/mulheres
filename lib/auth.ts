@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { AuthUser, ListingSummary } from "@/lib/auth-types";
 import type { Listing, User } from "@/lib/generated/prisma/client";
+import { normalizePriceDisplayUnit } from "@/lib/price-display";
 import { isOnlineFromLastLogin } from "@/lib/online";
 
 export type { AuthUser, ListingSummary } from "@/lib/auth-types";
@@ -64,6 +65,7 @@ export function toListingSummary(
     title: listing.title,
     description: listing.description,
     pricePerHour: listing.pricePerHour,
+    priceDisplayUnit: normalizePriceDisplayUnit(listing.priceDisplayUnit),
     age: listing.age,
     gender: listing.gender,
     region: listing.region,

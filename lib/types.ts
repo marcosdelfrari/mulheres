@@ -1,3 +1,5 @@
+import type { PriceDisplayUnit } from "@/lib/price-display";
+
 export type UserRole = "cliente" | "acompanhante";
 
 export type VerificationStatus =
@@ -42,6 +44,8 @@ export interface Companion {
   rating: number;
   reviewCount: number;
   pricePerHour: number;
+  /** Unidade de exibição do valor: hour (padrão) ou half_hour. */
+  priceDisplayUnit: PriceDisplayUnit;
   services: string[];
   servicesFor: string[];
   serviceLocations: string[];

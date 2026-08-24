@@ -5,9 +5,16 @@ import type { Companion } from "@/lib/types";
 interface CatalogGridProps {
   items: { companion: Companion; distanceKm?: number }[];
   locationMode?: "city" | "neighborhood";
+  sponsoredSubtitle?: string;
+  regularSectionTitle?: string;
 }
 
-export function CatalogGrid({ items, locationMode }: CatalogGridProps) {
+export function CatalogGrid({
+  items,
+  locationMode,
+  sponsoredSubtitle = "Perfis em destaque para esta busca.",
+  regularSectionTitle = "Todas as acompanhantes",
+}: CatalogGridProps) {
   const sponsored = items.filter(({ companion }) => companion.sponsored);
   const regular = items.filter(({ companion }) => !companion.sponsored);
 
@@ -28,7 +35,7 @@ export function CatalogGrid({ items, locationMode }: CatalogGridProps) {
         <SponsoredSection
           companions={sponsored.map((s) => s.companion)}
           locationMode={locationMode}
-          subtitle="Perfis em destaque para esta busca."
+          subtitle={sponsoredSubtitle}
         />
       )}
 
@@ -36,10 +43,10 @@ export function CatalogGrid({ items, locationMode }: CatalogGridProps) {
         <div>
           {sponsored.length > 0 && (
             <h2 className="mb-4 text-lg font-light tracking-wide text-gray-900">
-              Todas as acompanhantes
+              {regularSectionTitle}
             </h2>
           )}
-          <div className="grid gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             {regular.map(({ companion, distanceKm }) => (
               <CompanionCard
                 key={companion.id}

@@ -8,6 +8,9 @@ export const listingWriteSchema = z.object({
     .trim()
     .min(40, "Descrição com pelo menos 40 caracteres."),
   pricePerHour: z.coerce.number().int().min(50, "Valor mínimo R$ 50."),
+  priceDisplayUnit: z
+    .enum(["hour", "half_hour"])
+    .default("hour"),
   age: z.coerce.number().int().min(18, "Idade mínima 18.").max(80),
   gender: z.string().trim().min(1).default("Mulher"),
   region: z.string().trim().min(2, "Informe o estado."),

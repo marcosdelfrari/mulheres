@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { companionPhotoAlt, isNsfwPhoto } from "@/lib/companion-utils";
+import { formatListingPrice } from "@/lib/price-display";
 import type { Companion, Region } from "@/lib/types";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 import { CompanionDistance } from "./CompanionDistance";
@@ -99,8 +100,10 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
             Valores
           </p>
           <p className="mt-1 text-sm font-bold leading-snug text-gray-900">
-            R$ {companion.pricePerHour}
-            <span className="font-normal text-gray-500"> /h</span>
+            {formatListingPrice(
+              companion.pricePerHour,
+              companion.priceDisplayUnit,
+            )}
           </p>
           <p className="mt-0.5 line-clamp-2 text-xs text-gray-500">
             {formatServicesFor(companion.servicesFor)}

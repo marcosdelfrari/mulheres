@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CatalogGrid } from "@/components/CatalogGrid";
 import { CompanionCard } from "@/components/CompanionCard";
 import { JsonLd } from "@/components/JsonLd";
 import { LocationHero } from "@/components/LocationHero";
@@ -115,15 +116,11 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
               em breve — estamos expandindo as modelos em {hub.city}.
             </p>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {cityCompanions.map((c) => (
-                <CompanionCard
-                  key={c.id}
-                  companion={c}
-                  locationMode="neighborhood"
-                />
-              ))}
-            </div>
+            <CatalogGrid
+              items={cityCompanions.map((c) => ({ companion: c }))}
+              locationMode="neighborhood"
+              sponsoredSubtitle={`Perfis em destaque em ${hub.shortName}.`}
+            />
           )}
         </section>
       </div>
@@ -407,11 +404,11 @@ export async function StateHubPage({ hub }: StateHubPageProps) {
               )}
             </p>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {regionCompanions.slice(0, 12).map((c) => (
-                <CompanionCard key={c.id} companion={c} locationMode="city" />
-              ))}
-            </div>
+            <CatalogGrid
+              items={regionCompanions.map((c) => ({ companion: c }))}
+              locationMode="city"
+              sponsoredSubtitle={`Perfis em destaque em ${hub.region}.`}
+            />
           )}
         </section>
       </div>

@@ -2,6 +2,7 @@ import type { CatalogFilters, Companion, Region } from "./types";
 import { DEFAULT_CATALOG_FILTERS } from "./types";
 import { catalogHeadingFromSearch } from "./catalog-search-resolve";
 import { getDistanceKm } from "./geo";
+import { effectiveHourlyPrice } from "./price-display";
 import type { Coordinates } from "./types";
 
 function matchesAnySelected(selected: string[], values: string[]): boolean {
@@ -20,7 +21,11 @@ export function filterCompanions(
     if (filters.neighborhood !== "all" && c.neighborhood !== filters.neighborhood)
       return false;
     if (filters.verifiedOnly && !c.verified) return false;
-    if (filters.maxPrice && c.pricePerHour > filters.maxPrice) return false;
+    if (
+      filters.maxPrice &&
+      effectiveHourlyPrice(c.pricePerHour, c.priceDisplayUnit) > filters.maxPrice
+    )
+      return false;
     if (filters.search) {
       const q = filters.search.toLowerCase();
       const haystack =
@@ -58,9 +63,27 @@ export function filterCompanions(
         if (!userLocation) return 0;
         return (a.distanceKm ?? 999) - (b.distanceKm ?? 999);
       case "price-asc":
-        return a.companion.pricePerHour - b.companion.pricePerHour;
+        return (
+          effectiveHourlyPrice(
+            a.companion.pricePerHour,
+            a.companion.priceDisplayUnit,
+          ) -
+          effectiveHourlyPrice(
+            b.companion.pricePerHour,
+            b.companion.priceDisplayUnit,
+          )
+        );
       case "price-desc":
-        return b.companion.pricePerHour - a.companion.pricePerHour;
+        return (
+          effectiveHourlyPrice(
+            b.companion.pricePerHour,
+            b.companion.priceDisplayUnit,
+          ) -
+          effectiveHourlyPrice(
+            a.companion.pricePerHour,
+            a.companion.priceDisplayUnit,
+          )
+        );
       case "rating":
         return b.companion.rating - a.companion.rating;
       default:

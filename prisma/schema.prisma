@@ -101,6 +101,8 @@ model Listing {
   title            String
   description      String
   pricePerHour     Int
+  /** Unidade de exibição do valor informado: hour (padrão) ou half_hour. */
+  priceDisplayUnit String        @default("hour")
   age              Int           @default(25)
   gender           String        @default("Mulher")
   region           String        @default("Minas Gerais")
