@@ -71,7 +71,7 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
             <OnlineBadge online={companion.online} />
           </div>
           <p className="mt-0.5 text-xs text-gray-500 sm:text-sm">
-            {companion.gender ?? "Mulher"} · {companion.age} anos
+            {companion.age} anos
           </p>
         </div>
       </div>

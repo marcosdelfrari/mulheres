@@ -49,3 +49,61 @@ export const FILTER_LOCATIONS = [
 ];
 
 export const FILTER_GENDERS = ["Mulher", "Travesti", "Trans"];
+
+export const CITIES_BY_REGION: Record<Region, string[]> = {
+  "São Paulo": [
+    "São Paulo",
+    "Campinas",
+    "Guarulhos",
+    "Santos",
+    "São José dos Campos",
+    "Ribeirão Preto",
+    "Sorocaba",
+    "Osasco",
+    "Santo André",
+    "São Bernardo do Campo",
+  ],
+  "Rio de Janeiro": [
+    "Rio de Janeiro",
+    "Niterói",
+    "Duque de Caxias",
+    "Nova Iguaçu",
+    "Petrópolis",
+    "Cabo Frio",
+    "Campos dos Goytacazes",
+  ],
+  "Minas Gerais": [
+    "Belo Horizonte",
+    "Contagem",
+    "Betim",
+    "Uberlândia",
+    "Juiz de Fora",
+    "Montes Claros",
+    "Uberaba",
+    "Governador Valadares",
+  ],
+  Paraná: [
+    "Curitiba",
+    "Londrina",
+    "Maringá",
+    "Ponta Grossa",
+    "Cascavel",
+    "Foz do Iguaçu",
+  ],
+  Bahia: [
+    "Salvador",
+    "Feira de Santana",
+    "Vitória da Conquista",
+    "Porto Seguro",
+    "Lauro de Freitas",
+    "Camaçari",
+  ],
+  "Distrito Federal": ["Brasília"],
+};
+
+export function citiesForRegion(region: string): string[] {
+  if (region in CITIES_BY_REGION) {
+    return CITIES_BY_REGION[region as Region];
+  }
+  return [];
+}

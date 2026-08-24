@@ -10,6 +10,7 @@ import {
   FILTER_LOCATIONS,
   FILTER_SERVICES,
   FILTER_SERVICES_FOR,
+  citiesForRegion,
 } from "@/lib/catalog-locations";
 import { cityShortSlug, slugify } from "@/lib/slug";
 import { REGIONS } from "@/lib/regions";
@@ -64,7 +65,6 @@ type ListingFormState = {
   description: string;
   pricePerHour: string;
   age: string;
-  gender: string;
   region: string;
   city: string;
   neighborhood: string;
@@ -98,20 +98,19 @@ function isLuxoActive(listing: ListingSummary) {
   );
 }
 
-function emptyForm(phone = ""): ListingFormState {
+function emptyForm(): ListingFormState {
   return {
     title: "",
     description: "",
-    pricePerHour: "300",
-    age: "25",
-    gender: "Mulher",
-    region: "Minas Gerais",
-    city: "Belo Horizonte",
+    pricePerHour: "",
+    age: "",
+    region: "",
+    city: "",
     neighborhood: "",
-    whatsapp: phone,
+    whatsapp: "",
     services: [],
-    servicesFor: ["Homens"],
-    serviceLocations: ["Em casa"],
+    servicesFor: [],
+    serviceLocations: [],
     photos: [],
     avatarKey: "",
   };
@@ -123,7 +122,6 @@ function formFromListing(listing: ListingSummary): ListingFormState {
     description: listing.description,
     pricePerHour: String(listing.pricePerHour),
     age: String(listing.age ?? 25),
-    gender: listing.gender || "Mulher",
     region: listing.region || "Minas Gerais",
     city: listing.city,
     neighborhood: listing.neighborhood,
@@ -317,6 +315,12 @@ export default function ContaPage() {
     return urls;
   }, [form.photos]);
 
+  const cities = useMemo(() => {
+    const list = [...citiesForRegion(form.region)];
+    if (form.city && !list.includes(form.city)) list.unshift(form.city);
+    return list;
+  }, [form.region, form.city]);
+
   useEffect(() => {
     return () => {
       newPhotoPreviews.forEach((url) => URL.revokeObjectURL(url));
@@ -381,7 +385,7 @@ export default function ContaPage() {
     }
     setMode("create");
     setEditingId(null);
-    setForm(emptyForm(user.phone ?? ""));
+    setForm(emptyForm());
     setError("");
     setMessage("");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -450,7 +454,7 @@ export default function ContaPage() {
   const closeForm = () => {
     setMode("closed");
     setEditingId(null);
-    setForm(emptyForm(user.phone ?? ""));
+    setForm(emptyForm());
   };
 
   const totalPhotos = form.photos.length;
@@ -502,7 +506,7 @@ export default function ContaPage() {
         description: form.description,
         pricePerHour: Number(form.pricePerHour),
         age: Number(form.age),
-        gender: form.gender,
+        gender: "Mulher",
         region: form.region,
         city: form.city,
         neighborhood: form.neighborhood,
@@ -880,44 +884,27 @@ export default function ContaPage() {
                 setForm((prev) => ({ ...prev, title: e.target.value }))
               }
               className={pillInput}
-              placeholder="Ex.: Larissa"
+              placeholder="Nome no anúncio"
               required
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="mb-2 block text-lg font-semibold text-gray-900">
-                Idade
-              </label>
-              <input
-                type="number"
-                min={18}
-                max={80}
-                value={form.age}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, age: e.target.value }))
-                }
-                className={pillInput}
-                required
-              />
-            </div>
-            <div>
-              <label className="mb-2 block text-lg font-semibold text-gray-900">
-                Gênero
-              </label>
-              <select
-                value={form.gender}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, gender: e.target.value }))
-                }
-                className={pillSelect}
-              >
-                <option>Mulher</option>
-                <option>Travesti</option>
-                <option>Trans</option>
-              </select>
-            </div>
+          <div>
+            <label className="mb-2 block text-lg font-semibold text-gray-900">
+              Idade
+            </label>
+            <input
+              type="number"
+              min={18}
+              max={80}
+              value={form.age}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, age: e.target.value }))
+              }
+              className={pillInput}
+              placeholder="Idade"
+              required
+            />
           </div>
 
           <div>
@@ -931,7 +918,7 @@ export default function ContaPage() {
               }
               rows={5}
               className={pillTextarea}
-              placeholder="Ex.: Atendimento carinhoso e discreto. Massagem, companhia e momentos especiais."
+              placeholder="Descreva o atendimento, horários e o que oferece."
               required
               minLength={40}
             />
@@ -956,6 +943,7 @@ export default function ContaPage() {
                   }))
                 }
                 className={pillInput}
+                placeholder="Valor por hora"
                 required
               />
             </div>
@@ -969,7 +957,7 @@ export default function ContaPage() {
                   setForm((prev) => ({ ...prev, whatsapp: e.target.value }))
                 }
                 className={pillInput}
-                placeholder="31999999999"
+                placeholder="DDD + número"
                 required
               />
             </div>
@@ -1005,10 +993,18 @@ export default function ContaPage() {
             <select
               value={form.region}
               onChange={(e) =>
-                setForm((prev) => ({ ...prev, region: e.target.value }))
+                setForm((prev) => ({
+                  ...prev,
+                  region: e.target.value,
+                  city: "",
+                }))
               }
               className={pillSelect}
+              required
             >
+              <option value="" disabled>
+                Selecione o estado
+              </option>
               {REGIONS.map((region) => (
                 <option key={region} value={region}>
                   {region}
@@ -1022,14 +1018,24 @@ export default function ContaPage() {
               <label className="mb-2 block text-lg font-semibold text-gray-900">
                 Cidade
               </label>
-              <input
+              <select
                 value={form.city}
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, city: e.target.value }))
                 }
-                className={pillInput}
+                className={pillSelect}
                 required
-              />
+                disabled={!form.region}
+              >
+                <option value="" disabled>
+                  {form.region ? "Selecione a cidade" : "Escolha o estado"}
+                </option>
+                {cities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="mb-2 block text-lg font-semibold text-gray-900">
@@ -1044,7 +1050,7 @@ export default function ContaPage() {
                   }))
                 }
                 className={pillInput}
-                placeholder="Ex.: Pinheiros"
+                placeholder="Bairro"
                 required
               />
             </div>

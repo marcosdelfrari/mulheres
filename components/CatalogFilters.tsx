@@ -5,7 +5,6 @@ import { REGIONS } from "@/lib/regions";
 import type { CatalogFilters, Companion, Region } from "@/lib/types";
 import { DEFAULT_CATALOG_FILTERS } from "@/lib/types";
 import {
-  FILTER_GENDERS,
   FILTER_LOCATIONS,
   FILTER_SERVICES,
   FILTER_SERVICES_FOR,
@@ -306,17 +305,6 @@ export function CatalogFiltersBar({
                 <h3 className="text-lg font-bold text-gray-900">Filtros</h3>
               </div>
 
-              <FilterAccordion
-                icon={
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                }
-                title="Gênero"
-                options={FILTER_GENDERS}
-                selected={draft.selectedGenders}
-                onChange={(v) => updateDraft({ selectedGenders: v })}
-              />
               <FilterAccordion
                 icon={
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
