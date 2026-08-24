@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { preload } from "react-dom";
 import {
   buildCompanionSlug,
   companionProfilePath,
 } from "@/lib/companion-utils";
 import { buildCompanionBreadcrumb } from "@/lib/companion-breadcrumb";
+import { getCompanionGalleryLcpPreload } from "@/lib/companion-lcp-image";
 import { getCompanionBySlugOrId, getPublishedCompanions } from "@/lib/listings";
 import { whatsappIntl } from "@/lib/phone";
 import { CompanionContactBar } from "@/components/CompanionContactBar";
@@ -49,6 +51,16 @@ export default async function CompanionProfilePage({ params }: PageProps) {
 
   if (!companion) {
     notFound();
+  }
+
+  const lcpPreload = getCompanionGalleryLcpPreload(companion);
+  if (lcpPreload) {
+    preload(lcpPreload.href, {
+      as: "image",
+      fetchPriority: "high",
+      imageSrcSet: lcpPreload.srcSet,
+      imageSizes: lcpPreload.sizes,
+    });
   }
 
   const whatsappUrl = `https://wa.me/${whatsappIntl(companion.whatsapp)}?text=${encodeURIComponent(

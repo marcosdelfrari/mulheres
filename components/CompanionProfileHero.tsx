@@ -52,7 +52,6 @@ export function CompanionProfileHero({ companion }: CompanionProfileHeroProps) {
               fill
               className="object-cover"
               sizes="88px"
-              priority
             />
           ) : (
             <div

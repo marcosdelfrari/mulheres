@@ -4,6 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { useAgeGate } from "@/lib/age-gate-context";
 import { companionPhotoAlt, isNsfwPhoto } from "@/lib/companion-utils";
+import {
+  COMPANION_GALLERY_LCP_HEIGHT,
+  COMPANION_GALLERY_LCP_SIZES,
+  COMPANION_GALLERY_LCP_WIDTH,
+  getCompanionGalleryCoverIndex,
+} from "@/lib/companion-lcp-image";
 import type { Companion } from "@/lib/types";
 import { AgeRestrictedMedia } from "./AgeRestrictedMedia";
 
@@ -20,10 +26,7 @@ export function CompanionGallery({
   companion,
   variant = "default",
 }: CompanionGalleryProps) {
-  const initialIndex = (() => {
-    const i = photos.indexOf(companion.coverPhoto);
-    return i >= 0 ? i : 0;
-  })();
+  const initialIndex = getCompanionGalleryCoverIndex(companion);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [fullscreen, setFullscreen] = useState(false);
   const { verified, requestVerification } = useAgeGate();
@@ -31,6 +34,14 @@ export function CompanionGallery({
   if (photos.length === 0) return null;
 
   const isEmbedded = variant === "embedded";
+  const mainWidth = isEmbedded ? COMPANION_GALLERY_LCP_WIDTH : 300;
+  const mainHeight = isEmbedded
+    ? COMPANION_GALLERY_LCP_HEIGHT
+    : Math.round((300 * 4) / 3);
+  const mainSizes = isEmbedded
+    ? COMPANION_GALLERY_LCP_SIZES
+    : `(max-width: 640px) min(calc(100vw - 2rem), 260px), ${mainWidth}px`;
+  const isLcpPhoto = activeIndex === initialIndex;
   const activePhoto = photos[activeIndex]!;
   const activeIsNsfw = isNsfwPhoto(nsfwPhotos, activePhoto);
   const photoAlt = (index: number) =>
@@ -79,8 +90,10 @@ export function CompanionGallery({
         <button
           type="button"
           onClick={openFullscreen}
-          className={`relative mx-auto block aspect-[3/4] w-full max-w-[260px] overflow-hidden bg-gray-100 sm:max-w-[300px] ${
-            isEmbedded ? "rounded-2xl" : ""
+          className={`relative mx-auto block aspect-[3/4] w-full overflow-hidden bg-gray-100 ${
+            isEmbedded
+              ? "max-w-[480px] rounded-2xl"
+              : "max-w-[260px] sm:max-w-[300px]"
           }`}
           aria-label={
             activeIsNsfw && !verified
@@ -96,10 +109,13 @@ export function CompanionGallery({
             <Image
               src={activePhoto}
               alt={photoAlt(activeIndex)}
-              fill
-              className="object-cover"
-              sizes="300px"
-              priority
+              width={mainWidth}
+              height={mainHeight}
+              className="size-full object-cover"
+              sizes={mainSizes}
+              quality={80}
+              priority={isLcpPhoto}
+              fetchPriority={isLcpPhoto ? "high" : "auto"}
             />
           </AgeRestrictedMedia>
         </button>
@@ -127,9 +143,11 @@ export function CompanionGallery({
                 <Image
                   src={photo}
                   alt={photoAlt(index)}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
+                  width={64}
+                  height={80}
+                  className="size-full object-cover"
+                  sizes="80px"
+                  quality={75}
                 />
               </AgeRestrictedMedia>
             </button>
@@ -160,9 +178,11 @@ export function CompanionGallery({
             <Image
               src={activePhoto}
               alt={photoAlt(activeIndex)}
-              fill
-              className="object-contain"
-              sizes="100vw"
+              width={768}
+              height={1024}
+              className="size-full object-contain"
+              sizes="(max-width: 768px) 100vw, 512px"
+              quality={85}
             />
           </div>
 
