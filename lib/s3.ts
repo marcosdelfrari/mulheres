@@ -43,6 +43,9 @@ function getClient() {
   return new S3Client({
     region,
     credentials: { accessKeyId, secretAccessKey },
+    // Presign de PUT quebra se o SDK v3 incluir CRC32 vazio na URL.
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    responseChecksumValidation: "WHEN_REQUIRED",
   });
 }
 
@@ -100,7 +103,10 @@ export async function createListingPhotoPresign(
       Key: key,
       ContentType: contentType,
     }),
-    { expiresIn: 60 },
+    {
+      expiresIn: 60,
+      unhoistableHeaders: new Set(["content-type"]),
+    },
   );
 
   return {
