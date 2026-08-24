@@ -20,6 +20,68 @@ interface CompanionGalleryProps {
   variant?: "default" | "embedded";
 }
 
+function GalleryPhotoStack({
+  photos,
+  activeIndex,
+  initialIndex,
+  photoAlt,
+  width,
+  height,
+  sizes,
+  fit,
+}: {
+  photos: string[];
+  activeIndex: number;
+  initialIndex: number;
+  photoAlt: (index: number) => string;
+  width: number;
+  height: number;
+  sizes: string;
+  fit: "cover" | "contain";
+}) {
+  const fitClass = fit === "contain" ? "object-contain" : "object-cover";
+
+  return (
+    <>
+      {photos.map((photo, index) => {
+        const isActive = index === activeIndex;
+        const isLcp = index === initialIndex;
+        return (
+          <div
+            key={`${photo}-${index}`}
+            className={`absolute inset-0 ${
+              isActive ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0"
+            }`}
+            aria-hidden={!isActive}
+          >
+            <Image
+              src={photo}
+              alt=""
+              width={64}
+              height={80}
+              className={`size-full ${fitClass}`}
+              sizes="80px"
+              quality={75}
+            />
+            <Image
+              src={photo}
+              alt={isActive ? photoAlt(index) : ""}
+              width={width}
+              height={height}
+              className={`absolute inset-0 size-full ${fitClass}`}
+              sizes={sizes}
+              quality={80}
+              priority={isLcp}
+              fetchPriority={isLcp ? "high" : "low"}
+              {...(isLcp ? {} : { loading: "eager" as const })}
+            />
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
 export function CompanionGallery({
   photos,
   nsfwPhotos,
@@ -41,7 +103,6 @@ export function CompanionGallery({
   const mainSizes = isEmbedded
     ? COMPANION_GALLERY_LCP_SIZES
     : `(max-width: 640px) min(calc(100vw - 2rem), 260px), ${mainWidth}px`;
-  const isLcpPhoto = activeIndex === initialIndex;
   const activePhoto = photos[activeIndex]!;
   const activeIsNsfw = isNsfwPhoto(nsfwPhotos, activePhoto);
   const photoAlt = (index: number) =>
@@ -66,6 +127,19 @@ export function CompanionGallery({
     }
     setActiveIndex(index);
   };
+
+  const stack = (
+    <GalleryPhotoStack
+      photos={photos}
+      activeIndex={activeIndex}
+      initialIndex={initialIndex}
+      photoAlt={photoAlt}
+      width={mainWidth}
+      height={mainHeight}
+      sizes={mainSizes}
+      fit="cover"
+    />
+  );
 
   return (
     <>
@@ -106,17 +180,7 @@ export function CompanionGallery({
             interactive={false}
             restricted={activeIsNsfw}
           >
-            <Image
-              src={activePhoto}
-              alt={photoAlt(activeIndex)}
-              width={mainWidth}
-              height={mainHeight}
-              className="size-full object-cover"
-              sizes={mainSizes}
-              quality={80}
-              priority={isLcpPhoto}
-              fetchPriority={isLcpPhoto ? "high" : "auto"}
-            />
+            {stack}
           </AgeRestrictedMedia>
         </button>
 
@@ -175,14 +239,15 @@ export function CompanionGallery({
             className="relative h-[80vh] w-full max-w-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              src={activePhoto}
-              alt={photoAlt(activeIndex)}
-              width={768}
-              height={1024}
-              className="size-full object-contain"
-              sizes="(max-width: 768px) 100vw, 512px"
-              quality={85}
+            <GalleryPhotoStack
+              photos={photos}
+              activeIndex={activeIndex}
+              initialIndex={initialIndex}
+              photoAlt={photoAlt}
+              width={mainWidth}
+              height={mainHeight}
+              sizes={mainSizes}
+              fit="contain"
             />
           </div>
 

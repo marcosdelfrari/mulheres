@@ -57,9 +57,15 @@ type AdminReport = {
 };
 
 type Tab = "listings" | "users" | "reports";
+type ListingsView = "cards" | "list";
+type TriFilter = "all" | "yes" | "no";
 
-const btn =
-  "inline-flex cursor-pointer items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+const btnBase =
+  "inline-flex cursor-pointer items-center justify-center rounded-full font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+const btn = `${btnBase} px-4 py-2 text-sm`;
+const btnCompact = `${btnBase} px-3 py-1.5 text-xs`;
+const selectClass =
+  "min-w-[9.5rem] flex-1 rounded-full border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 sm:flex-none";
 
 function statusLabel(status: string) {
   if (status === "published") return "Ativo";
@@ -110,6 +116,292 @@ async function readError(res: Response) {
   }
 }
 
+function ListingActionButtons({
+  listing,
+  luxo,
+  busy,
+  expanded,
+  compact,
+  onPatch,
+  onDelete,
+  onToggleExpand,
+}: {
+  listing: AdminListing;
+  luxo: boolean;
+  busy: boolean;
+  expanded: boolean;
+  compact?: boolean;
+  onPatch: (
+    id: string,
+    body: Record<string, unknown>,
+    key: string,
+  ) => void | Promise<void>;
+  onDelete: (id: string) => void;
+  onToggleExpand: () => void;
+}) {
+  const actionBtn = compact ? btnCompact : btn;
+  return (
+    <div className={`flex flex-wrap gap-2 ${compact ? "justify-end" : ""}`}>
+      {listing.status === "published" ? (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() =>
+            void onPatch(listing.id, { status: "paused" }, `pause-${listing.id}`)
+          }
+          className={`${actionBtn} border border-gray-300 bg-white text-gray-800 hover:bg-gray-50`}
+        >
+          Desativar
+        </button>
+      ) : (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() =>
+            void onPatch(
+              listing.id,
+              { status: "published" },
+              `publish-${listing.id}`,
+            )
+          }
+          className={`${actionBtn} bg-[#0c0414] text-white hover:bg-purple-950`}
+        >
+          Ativar
+        </button>
+      )}
+
+      {luxo ? (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() =>
+            void onPatch(listing.id, { isLuxo: false }, `luxo-off-${listing.id}`)
+          }
+          className={`${actionBtn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
+        >
+          Remover premium
+        </button>
+      ) : (
+        <>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() =>
+              void onPatch(
+                listing.id,
+                { isLuxo: true, luxoHours: 4 },
+                `luxo-4-${listing.id}`,
+              )
+            }
+            className={`${actionBtn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
+          >
+            Premium 4h
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() =>
+              void onPatch(
+                listing.id,
+                { isLuxo: true, luxoHours: 24 },
+                `luxo-24-${listing.id}`,
+              )
+            }
+            className={`${actionBtn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
+          >
+            Premium 24h
+          </button>
+        </>
+      )}
+
+      <button
+        type="button"
+        onClick={onToggleExpand}
+        className={`${actionBtn} border border-gray-300 bg-white text-gray-800 hover:bg-gray-50`}
+      >
+        {expanded ? "Fechar fotos" : "Fotos / NSFW"}
+      </button>
+
+      <button
+        type="button"
+        disabled={busy}
+        onClick={() => onDelete(listing.id)}
+        className={`${actionBtn} border border-red-200 bg-red-50 text-red-700 hover:bg-red-100`}
+      >
+        Excluir
+      </button>
+    </div>
+  );
+}
+
+function ListingNsfwGrid({
+  listing,
+  busy,
+  onToggleNsfw,
+}: {
+  listing: AdminListing;
+  busy: boolean;
+  onToggleNsfw: (listing: AdminListing, photoUrl: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+      {listing.photos.length === 0 ? (
+        <p className="col-span-full text-sm text-gray-500">Sem fotos.</p>
+      ) : (
+        listing.photos.map((photo) => {
+          const nsfw = listing.nsfwPhotos.includes(photo);
+          return (
+            <div key={photo} className="space-y-2">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100">
+                <Image
+                  src={photo}
+                  alt=""
+                  fill
+                  className={`object-cover ${nsfw ? "blur-md" : ""}`}
+                  sizes="160px"
+                  unoptimized
+                />
+              </div>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => void onToggleNsfw(listing, photo)}
+                className={`${btn} w-full ${
+                  nsfw
+                    ? "bg-[#0c0414] text-white"
+                    : "border border-gray-300 bg-white text-gray-800 hover:bg-gray-50"
+                }`}
+              >
+                {nsfw ? "NSFW on" : "Marcar NSFW"}
+              </button>
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+}
+
+function ListingStatusBadges({ listing, luxo }: { listing: AdminListing; luxo: boolean }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+        {statusLabel(listing.status)}
+      </span>
+      {luxo ? (
+        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+          Premium
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+function ListingListRows({
+  listing,
+  luxo,
+  busy,
+  expanded,
+  onPatch,
+  onDelete,
+  onToggleExpand,
+  onToggleNsfw,
+}: {
+  listing: AdminListing;
+  luxo: boolean;
+  busy: boolean;
+  expanded: boolean;
+  onPatch: (
+    id: string,
+    body: Record<string, unknown>,
+    key: string,
+  ) => void | Promise<void>;
+  onDelete: (id: string) => void;
+  onToggleExpand: () => void;
+  onToggleNsfw: (listing: AdminListing, photoUrl: string) => void;
+}) {
+  return (
+    <>
+      <tr className="border-b border-gray-100 align-top last:border-b-0">
+        <td className="px-4 py-3">
+          <div className="flex min-w-0 items-start gap-3">
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+              {listing.photoUrl ? (
+                <Image
+                  src={listing.photoUrl}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                  unoptimized
+                />
+              ) : null}
+            </div>
+            <div className="min-w-0">
+              <Link
+                href={listingPublicPath(listing)}
+                className="font-semibold text-gray-900 hover:underline"
+                target="_blank"
+              >
+                {listing.title}
+              </Link>
+              <p className="mt-0.5 truncate text-xs text-gray-500">
+                {listing.user.name} · {listing.user.email}
+              </p>
+            </div>
+          </div>
+        </td>
+        <td className="px-3 py-3 text-gray-700">{listing.region}</td>
+        <td className="px-3 py-3 text-gray-700">
+          {listing.city}
+          {listing.neighborhood ? (
+            <span className="block text-xs text-gray-400">
+              {listing.neighborhood}
+            </span>
+          ) : null}
+        </td>
+        <td className="px-3 py-3">
+          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+            {statusLabel(listing.status)}
+          </span>
+        </td>
+        <td className="px-3 py-3">
+          {luxo ? (
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+              Premium
+            </span>
+          ) : (
+            <span className="text-xs text-gray-400">—</span>
+          )}
+        </td>
+        <td className="px-4 py-3">
+          <ListingActionButtons
+            listing={listing}
+            luxo={luxo}
+            busy={busy}
+            expanded={expanded}
+            compact
+            onPatch={onPatch}
+            onDelete={onDelete}
+            onToggleExpand={onToggleExpand}
+          />
+        </td>
+      </tr>
+      {expanded ? (
+        <tr className="border-b border-gray-100">
+          <td colSpan={6} className="bg-gray-50/70 px-4 py-4">
+            <ListingNsfwGrid
+              listing={listing}
+              busy={busy}
+              onToggleNsfw={onToggleNsfw}
+            />
+          </td>
+        </tr>
+      ) : null}
+    </>
+  );
+}
+
 export default function AdminPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
@@ -123,6 +415,11 @@ export default function AdminPage() {
   const [actionKey, setActionKey] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [listingsView, setListingsView] = useState<ListingsView>("cards");
+  const [filterEstado, setFilterEstado] = useState("");
+  const [filterCidade, setFilterCidade] = useState("");
+  const [filterAtivo, setFilterAtivo] = useState<TriFilter>("all");
+  const [filterPremium, setFilterPremium] = useState<TriFilter>("all");
 
   const loadListings = useCallback(async () => {
     const res = await fetch("/api/admin/listings", { credentials: "include" });
@@ -170,18 +467,56 @@ export default function AdminPage() {
     void loadAll();
   }, [isLoading, user, router, loadAll]);
 
+  const listingEstados = useMemo(
+    () =>
+      [...new Set(listings.map((item) => item.region))].sort((a, b) =>
+        a.localeCompare(b, "pt-BR"),
+      ),
+    [listings],
+  );
+
+  const listingCidades = useMemo(() => {
+    const source = filterEstado
+      ? listings.filter((item) => item.region === filterEstado)
+      : listings;
+    return [...new Set(source.map((item) => item.city))].sort((a, b) =>
+      a.localeCompare(b, "pt-BR"),
+    );
+  }, [listings, filterEstado]);
+
+  const hasListingFilters =
+    Boolean(filterEstado) ||
+    Boolean(filterCidade) ||
+    filterAtivo !== "all" ||
+    filterPremium !== "all";
+
   const filteredListings = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return listings;
-    return listings.filter(
-      (item) =>
+    return listings.filter((item) => {
+      if (filterEstado && item.region !== filterEstado) return false;
+      if (filterCidade && item.city !== filterCidade) return false;
+      if (filterAtivo === "yes" && item.status !== "published") return false;
+      if (filterAtivo === "no" && item.status === "published") return false;
+      if (filterPremium === "yes" && !isLuxoActive(item)) return false;
+      if (filterPremium === "no" && isLuxoActive(item)) return false;
+      if (!q) return true;
+      return (
         item.title.toLowerCase().includes(q) ||
         item.city.toLowerCase().includes(q) ||
+        item.region.toLowerCase().includes(q) ||
         item.user.email.toLowerCase().includes(q) ||
         item.user.name.toLowerCase().includes(q) ||
-        item.id.toLowerCase().includes(q),
-    );
-  }, [listings, search]);
+        item.id.toLowerCase().includes(q)
+      );
+    });
+  }, [
+    listings,
+    search,
+    filterEstado,
+    filterCidade,
+    filterAtivo,
+    filterPremium,
+  ]);
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -463,6 +798,150 @@ export default function AdminPage() {
         />
       </div>
 
+      {tab === "listings" ? (
+        <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="sr-only" htmlFor="admin-filter-estado">
+              Estado
+            </label>
+            <select
+              id="admin-filter-estado"
+              value={filterEstado}
+              onChange={(e) => {
+                setFilterEstado(e.target.value);
+                setFilterCidade("");
+              }}
+              className={selectClass}
+            >
+              <option value="">Todos os estados</option>
+              {listingEstados.map((estado) => (
+                <option key={estado} value={estado}>
+                  {estado}
+                </option>
+              ))}
+            </select>
+
+            <label className="sr-only" htmlFor="admin-filter-cidade">
+              Cidade
+            </label>
+            <select
+              id="admin-filter-cidade"
+              value={filterCidade}
+              onChange={(e) => setFilterCidade(e.target.value)}
+              className={selectClass}
+            >
+              <option value="">Todas as cidades</option>
+              {listingCidades.map((cidade) => (
+                <option key={cidade} value={cidade}>
+                  {cidade}
+                </option>
+              ))}
+            </select>
+
+            <label className="sr-only" htmlFor="admin-filter-ativo">
+              Ativo
+            </label>
+            <select
+              id="admin-filter-ativo"
+              value={filterAtivo}
+              onChange={(e) => setFilterAtivo(e.target.value as TriFilter)}
+              className={selectClass}
+            >
+              <option value="all">Ativo: todos</option>
+              <option value="yes">Ativos</option>
+              <option value="no">Inativos</option>
+            </select>
+
+            <label className="sr-only" htmlFor="admin-filter-premium">
+              Premium
+            </label>
+            <select
+              id="admin-filter-premium"
+              value={filterPremium}
+              onChange={(e) => setFilterPremium(e.target.value as TriFilter)}
+              className={selectClass}
+            >
+              <option value="all">Premium: todos</option>
+              <option value="yes">Premium</option>
+              <option value="no">Sem premium</option>
+            </select>
+
+            {hasListingFilters ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setFilterEstado("");
+                  setFilterCidade("");
+                  setFilterAtivo("all");
+                  setFilterPremium("all");
+                }}
+                className={`${btnCompact} border border-gray-300 bg-white text-gray-700 hover:bg-gray-50`}
+              >
+                Limpar filtros
+              </button>
+            ) : null}
+
+            <p className="px-1 text-xs text-gray-400">
+              {filteredListings.length} de {listings.length}
+            </p>
+          </div>
+
+          <div
+            className="flex w-fit rounded-full border border-gray-300 bg-white p-1"
+            role="group"
+            aria-label="Visualização dos anúncios"
+          >
+            <button
+              type="button"
+              aria-pressed={listingsView === "cards"}
+              onClick={() => setListingsView("cards")}
+              className={`${btnCompact} gap-1.5 ${
+                listingsView === "cards"
+                  ? "bg-[#0c0414] text-white"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+              Cards
+            </button>
+            <button
+              type="button"
+              aria-pressed={listingsView === "list"}
+              onClick={() => setListingsView("list")}
+              className={`${btnCompact} gap-1.5 ${
+                listingsView === "list"
+                  ? "bg-[#0c0414] text-white"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+              </svg>
+              Lista
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {error ? (
         <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
@@ -477,216 +956,132 @@ export default function AdminPage() {
       {loading ? (
         <p className="mt-10 text-sm text-gray-500">Carregando dados…</p>
       ) : tab === "listings" ? (
-        <div className="mt-8 space-y-4">
+        <div className="mt-8">
           {filteredListings.length === 0 ? (
             <p className="text-sm text-gray-500">Nenhum anúncio encontrado.</p>
+          ) : listingsView === "list" ? (
+            <div className="overflow-x-auto rounded-3xl border border-gray-200 bg-white">
+              <table className="w-full min-w-[880px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                    <th className="px-4 py-3 font-semibold">Anúncio</th>
+                    <th className="px-3 py-3 font-semibold">Estado</th>
+                    <th className="px-3 py-3 font-semibold">Cidade</th>
+                    <th className="px-3 py-3 font-semibold">Status</th>
+                    <th className="px-3 py-3 font-semibold">Premium</th>
+                    <th className="px-4 py-3 text-right font-semibold">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredListings.map((listing) => {
+                    const luxo = isLuxoActive(listing);
+                    const busy = !!actionKey?.includes(listing.id);
+                    const expanded = expandedId === listing.id;
+                    return (
+                      <ListingListRows
+                        key={listing.id}
+                        listing={listing}
+                        luxo={luxo}
+                        busy={busy}
+                        expanded={expanded}
+                        onPatch={patchListing}
+                        onDelete={deleteListing}
+                        onToggleExpand={() =>
+                          setExpandedId((prev) =>
+                            prev === listing.id ? null : listing.id,
+                          )
+                        }
+                        onToggleNsfw={toggleNsfw}
+                      />
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            filteredListings.map((listing) => {
-              const luxo = isLuxoActive(listing);
-              const busy = actionKey?.startsWith(listing.id) ||
-                actionKey?.includes(listing.id);
-              return (
-                <article
-                  key={listing.id}
-                  className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-5"
-                >
-                  <div className="flex flex-col gap-4 sm:flex-row">
-                    <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-gray-100 sm:h-32 sm:w-28">
-                      {listing.photoUrl ? (
-                        <Image
-                          src={listing.photoUrl}
-                          alt={listing.title}
-                          fill
-                          className="object-cover"
-                          sizes="112px"
-                          unoptimized
-                        />
-                      ) : null}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <div>
-                          <Link
-                            href={listingPublicPath(listing)}
-                            className="font-semibold text-gray-900 hover:underline"
-                            target="_blank"
-                          >
-                            {listing.title}
-                          </Link>
-                          <p className="mt-1 text-sm text-gray-500">
-                            {listing.city} · {listing.neighborhood} ·{" "}
-                            {listing.user.name} ({listing.user.email})
-                          </p>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
-                            {statusLabel(listing.status)}
-                          </span>
-                          {luxo ? (
-                            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-                              Premium
-                            </span>
-                          ) : null}
-                        </div>
+            <div className="space-y-4">
+              {filteredListings.map((listing) => {
+                const luxo = isLuxoActive(listing);
+                const busy = !!actionKey?.includes(listing.id);
+                const expanded = expandedId === listing.id;
+                return (
+                  <article
+                    key={listing.id}
+                    className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-5"
+                  >
+                    <div className="flex flex-col gap-4 sm:flex-row">
+                      <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-gray-100 sm:h-32 sm:w-28">
+                        {listing.photoUrl ? (
+                          <Image
+                            src={listing.photoUrl}
+                            alt={listing.title}
+                            fill
+                            className="object-cover"
+                            sizes="112px"
+                            unoptimized
+                          />
+                        ) : null}
                       </div>
 
-                      <p className="mt-2 text-xs text-gray-400">
-                        ID {listing.id} · criado {formatDate(listing.createdAt)}
-                        {listing.luxoUntil
-                          ? ` · luxo até ${formatDate(listing.luxoUntil)}`
-                          : ""}
-                      </p>
-
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {listing.status === "published" ? (
-                          <button
-                            type="button"
-                            disabled={!!busy}
-                            onClick={() =>
-                              void patchListing(
-                                listing.id,
-                                { status: "paused" },
-                                `pause-${listing.id}`,
-                              )
-                            }
-                            className={`${btn} border border-gray-300 bg-white text-gray-800 hover:bg-gray-50`}
-                          >
-                            Desativar
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            disabled={!!busy}
-                            onClick={() =>
-                              void patchListing(
-                                listing.id,
-                                { status: "published" },
-                                `publish-${listing.id}`,
-                              )
-                            }
-                            className={`${btn} bg-[#0c0414] text-white hover:bg-purple-950`}
-                          >
-                            Ativar
-                          </button>
-                        )}
-
-                        {luxo ? (
-                          <button
-                            type="button"
-                            disabled={!!busy}
-                            onClick={() =>
-                              void patchListing(
-                                listing.id,
-                                { isLuxo: false },
-                                `luxo-off-${listing.id}`,
-                              )
-                            }
-                            className={`${btn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
-                          >
-                            Remover premium
-                          </button>
-                        ) : (
-                          <>
-                            <button
-                              type="button"
-                              disabled={!!busy}
-                              onClick={() =>
-                                void patchListing(
-                                  listing.id,
-                                  { isLuxo: true, luxoHours: 4 },
-                                  `luxo-4-${listing.id}`,
-                                )
-                              }
-                              className={`${btn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <div>
+                            <Link
+                              href={listingPublicPath(listing)}
+                              className="font-semibold text-gray-900 hover:underline"
+                              target="_blank"
                             >
-                              Premium 4h
-                            </button>
-                            <button
-                              type="button"
-                              disabled={!!busy}
-                              onClick={() =>
-                                void patchListing(
-                                  listing.id,
-                                  { isLuxo: true, luxoHours: 24 },
-                                  `luxo-24-${listing.id}`,
-                                )
-                              }
-                              className={`${btn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
-                            >
-                              Premium 24h
-                            </button>
-                          </>
-                        )}
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setExpandedId((prev) =>
-                              prev === listing.id ? null : listing.id,
-                            )
-                          }
-                          className={`${btn} border border-gray-300 bg-white text-gray-800 hover:bg-gray-50`}
-                        >
-                          Fotos / NSFW
-                        </button>
-
-                        <button
-                          type="button"
-                          disabled={!!busy}
-                          onClick={() => void deleteListing(listing.id)}
-                          className={`${btn} border border-red-200 bg-red-50 text-red-700 hover:bg-red-100`}
-                        >
-                          Excluir
-                        </button>
-                      </div>
-
-                      {expandedId === listing.id ? (
-                        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-                          {listing.photos.length === 0 ? (
-                            <p className="col-span-full text-sm text-gray-500">
-                              Sem fotos.
+                              {listing.title}
+                            </Link>
+                            <p className="mt-1 text-sm text-gray-500">
+                              {listing.region} · {listing.city}
+                              {listing.neighborhood
+                                ? ` · ${listing.neighborhood}`
+                                : ""}{" "}
+                              · {listing.user.name} ({listing.user.email})
                             </p>
-                          ) : (
-                            listing.photos.map((photo) => {
-                              const nsfw = listing.nsfwPhotos.includes(photo);
-                              return (
-                                <div key={photo} className="space-y-2">
-                                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100">
-                                    <Image
-                                      src={photo}
-                                      alt=""
-                                      fill
-                                      className={`object-cover ${nsfw ? "blur-md" : ""}`}
-                                      sizes="160px"
-                                      unoptimized
-                                    />
-                                  </div>
-                                  <button
-                                    type="button"
-                                    disabled={!!busy}
-                                    onClick={() =>
-                                      void toggleNsfw(listing, photo)
-                                    }
-                                    className={`${btn} w-full ${
-                                      nsfw
-                                        ? "bg-[#0c0414] text-white"
-                                        : "border border-gray-300 bg-white text-gray-800 hover:bg-gray-50"
-                                    }`}
-                                  >
-                                    {nsfw ? "NSFW on" : "Marcar NSFW"}
-                                  </button>
-                                </div>
-                              );
-                            })
-                          )}
+                          </div>
+                          <ListingStatusBadges listing={listing} luxo={luxo} />
                         </div>
-                      ) : null}
+
+                        <p className="mt-2 text-xs text-gray-400">
+                          ID {listing.id} · criado {formatDate(listing.createdAt)}
+                          {listing.luxoUntil
+                            ? ` · luxo até ${formatDate(listing.luxoUntil)}`
+                            : ""}
+                        </p>
+
+                        <div className="mt-4">
+                          <ListingActionButtons
+                            listing={listing}
+                            luxo={luxo}
+                            busy={busy}
+                            expanded={expanded}
+                            onPatch={patchListing}
+                            onDelete={deleteListing}
+                            onToggleExpand={() =>
+                              setExpandedId((prev) =>
+                                prev === listing.id ? null : listing.id,
+                              )
+                            }
+                          />
+                        </div>
+
+                        {expanded ? (
+                          <div className="mt-4">
+                            <ListingNsfwGrid
+                              listing={listing}
+                              busy={busy}
+                              onToggleNsfw={toggleNsfw}
+                            />
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
-                  </div>
-                </article>
-              );
-            })
+                  </article>
+                );
+              })}
+            </div>
           )}
         </div>
       ) : tab === "reports" ? (
