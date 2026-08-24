@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { TrademarkDisclaimer } from "@/components/TrademarkDisclaimer";
-import { CITY_HUBS, cityHubPath } from "@/lib/location-hubs";
+import {
+  formatCityNamesPhrase,
+  getActiveLocationLinks,
+} from "@/lib/active-locations";
 import {
   absoluteUrl,
   buildArticleJsonLd,
@@ -41,36 +44,40 @@ const CHECKLIST = [
   },
 ] as const;
 
-const FAQ = [
-  {
-    question: "Qual site é mais seguro para encontrar acompanhantes?",
-    answer:
-      "Prefira plataformas com verificação de identidade, fotos reais, contato direto via WhatsApp e política clara de privacidade. No Mulheres de Luxo não há taxa de intermediação — você fala direto com a acompanhante.",
-  },
-  {
-    question: "O Mulheres de Luxo cobra taxa ou comissão?",
-    answer:
-      "Não. O contato é direto entre você e a acompanhante. O Mulheres de Luxo reúne anúncios verificados; valores e combinações são acertados no WhatsApp.",
-  },
-  {
-    question: "Como saber se um perfil é confiável?",
-    answer:
-      "Busque o selo verificado, leia a descrição completa, confira se as fotos parecem consistentes e converse antes sobre horário, local e valores. Desconfie de pedidos de pagamento antecipado sem contexto.",
-  },
-  {
-    question: "É seguro usar WhatsApp para combinar?",
-    answer:
-      "Sim, desde que você confirme que está falando com a pessoa do perfil, combine tudo por escrito e evite enviar dados bancários ou pagamentos adiantados a desconhecidos.",
-  },
-  {
-    question: "O Mulheres de Luxo funciona em quais cidades?",
-    answer:
-      "Belo Horizonte, Salvador, São Paulo, Rio de Janeiro, Curitiba, Brasília e outras cidades conforme anúncios publicados. Cada capital tem página dedicada com perfis locais.",
-  },
-] as const;
-
-export default function SiteSeguroPage() {
+export default async function SiteSeguroPage() {
   const url = absoluteUrl("/guias/site-seguro-acompanhantes");
+  const { cities } = await getActiveLocationLinks();
+  const citiesPhrase = formatCityNamesPhrase(cities);
+
+  const faq = [
+    {
+      question: "Qual site é mais seguro para encontrar acompanhantes?",
+      answer:
+        "Prefira plataformas com verificação de identidade, fotos reais, contato direto via WhatsApp e política clara de privacidade. No Mulheres de Luxo não há taxa de intermediação — você fala direto com a acompanhante.",
+    },
+    {
+      question: "O Mulheres de Luxo cobra taxa ou comissão?",
+      answer:
+        "Não. O contato é direto entre você e a acompanhante. O Mulheres de Luxo reúne anúncios verificados; valores e combinações são acertados no WhatsApp.",
+    },
+    {
+      question: "Como saber se um perfil é confiável?",
+      answer:
+        "Busque o selo verificado, leia a descrição completa, confira se as fotos parecem consistentes e converse antes sobre horário, local e valores. Desconfie de pedidos de pagamento antecipado sem contexto.",
+    },
+    {
+      question: "É seguro usar WhatsApp para combinar?",
+      answer:
+        "Sim, desde que você confirme que está falando com a pessoa do perfil, combine tudo por escrito e evite enviar dados bancários ou pagamentos adiantados a desconhecidos.",
+    },
+    {
+      question: "O Mulheres de Luxo funciona em quais cidades?",
+      answer:
+        cities.length > 0
+          ? `Hoje há anúncios em ${citiesPhrase}. Outras cidades entram no catálogo conforme novos perfis publicados — cada uma com página dedicada.`
+          : "O catálogo cobre o Brasil conforme anúncios publicados. Novas cidades entram assim que houver perfis ativos.",
+    },
+  ];
 
   return (
     <>
@@ -82,7 +89,7 @@ export default function SiteSeguroPage() {
             url,
             datePublished: "2026-08-24T22:00:00.000Z",
           }),
-          buildFaqJsonLd(FAQ),
+          buildFaqJsonLd(faq),
         ]}
       />
 
@@ -129,27 +136,29 @@ export default function SiteSeguroPage() {
           </div>
         </section>
 
-        <section className="mt-10 leading-relaxed text-gray-600">
-          <h2 className="font-serif text-xl font-bold italic text-gray-900">
-            Por cidade
-          </h2>
-          <p className="mt-2">
-            Explore perfis verificados nas principais capitais — cada uma com
-            landing page, bairros e FAQ local:
-          </p>
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {CITY_HUBS.map((hub) => (
-              <li key={hub.citySlug}>
-                <Link
-                  href={cityHubPath(hub)}
-                  className="rounded-full border border-gray-200 bg-white px-3 py-1 text-sm text-purple-800 hover:border-purple-300 hover:underline"
-                >
-                  {hub.shortName}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {cities.length > 0 && (
+          <section className="mt-10 leading-relaxed text-gray-600">
+            <h2 className="font-serif text-xl font-bold italic text-gray-900">
+              Por cidade
+            </h2>
+            <p className="mt-2">
+              Explore perfis verificados nas cidades com anúncios ativos — cada
+              uma com landing page e contato direto:
+            </p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {cities.map((city) => (
+                <li key={city.href}>
+                  <Link
+                    href={city.href}
+                    className="rounded-full border border-gray-200 bg-white px-3 py-1 text-sm text-purple-800 hover:border-purple-300 hover:underline"
+                  >
+                    {city.shortName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="mt-14" aria-labelledby="faq-site-seguro">
           <h2
@@ -159,15 +168,15 @@ export default function SiteSeguroPage() {
             Perguntas frequentes
           </h2>
           <dl className="mt-6 space-y-6">
-            {FAQ.map((faq) => (
+            {faq.map((item) => (
               <div
-                key={faq.question}
+                key={item.question}
                 className="rounded-2xl border border-gray-100 bg-gray-50 p-5"
               >
                 <dt className="font-serif font-semibold text-gray-900">
-                  {faq.question}
+                  {item.question}
                 </dt>
-                <dd className="mt-2">{faq.answer}</dd>
+                <dd className="mt-2">{item.answer}</dd>
               </div>
             ))}
           </dl>

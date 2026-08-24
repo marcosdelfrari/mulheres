@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { StateHubPage } from "@/components/LocationHubPages";
-import { getStateHub, STATE_HUBS } from "@/lib/location-hubs";
+import { getActiveLocationLinks } from "@/lib/active-locations";
+import { getStateHub } from "@/lib/location-hubs";
 import { buildStateHubMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
@@ -9,8 +10,9 @@ interface PageProps {
   params: Promise<{ estado: string }>;
 }
 
-export function generateStaticParams() {
-  return STATE_HUBS.map((hub) => ({
+export async function generateStaticParams() {
+  const { states } = await getActiveLocationLinks();
+  return states.map((hub) => ({
     estado: hub.stateSlug,
   }));
 }

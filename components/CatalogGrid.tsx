@@ -7,6 +7,8 @@ interface CatalogGridProps {
   locationMode?: "city" | "neighborhood";
   sponsoredSubtitle?: string;
   regularSectionTitle?: string;
+  /** Limite de cards na seção regular (ex.: 8 = 2 linhas × 4 colunas no desktop). */
+  regularLimit?: number;
 }
 
 export function CatalogGrid({
@@ -14,9 +16,12 @@ export function CatalogGrid({
   locationMode,
   sponsoredSubtitle = "Perfis em destaque para esta busca.",
   regularSectionTitle = "Todas as acompanhantes",
+  regularLimit,
 }: CatalogGridProps) {
   const sponsored = items.filter(({ companion }) => companion.sponsored);
-  const regular = items.filter(({ companion }) => !companion.sponsored);
+  const regularAll = items.filter(({ companion }) => !companion.sponsored);
+  const regular =
+    regularLimit != null ? regularAll.slice(0, regularLimit) : regularAll;
 
   if (items.length === 0) {
     return (

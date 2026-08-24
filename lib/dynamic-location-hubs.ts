@@ -3,7 +3,6 @@ import type { Companion, Region } from "@/lib/types";
 import { slugify } from "@/lib/slug";
 import type { CityHub, NeighborhoodHub, StateHub } from "@/lib/location-hubs";
 import {
-  CITY_HUBS,
   getCityHub,
   getNeighborhoodHub,
   STATE_HUBS,
@@ -372,27 +371,14 @@ export function buildPublishedLocationIndex(
   return { companions, cities };
 }
 
-/** Cidades com hub estático + cidades com anúncios publicados. */
+/** Só cidades com anúncios publicados (para sitemap / static params). */
 export function allCityHubKeys(
   index: PublishedLocationIndex,
 ): Array<{ estado: string; cidade: string }> {
-  const keys = new Map<string, { estado: string; cidade: string }>();
-
-  for (const hub of CITY_HUBS) {
-    keys.set(`${hub.stateSlug}/${hub.citySlug}`, {
-      estado: hub.stateSlug,
-      cidade: hub.citySlug,
-    });
-  }
-
-  for (const city of index.cities) {
-    keys.set(`${city.stateSlug}/${city.citySlug}`, {
-      estado: city.stateSlug,
-      cidade: city.citySlug,
-    });
-  }
-
-  return [...keys.values()];
+  return index.cities.map((city) => ({
+    estado: city.stateSlug,
+    cidade: city.citySlug,
+  }));
 }
 
 export function citiesWithListingsInRegion(

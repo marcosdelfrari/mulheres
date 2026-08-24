@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
-import { BR_FAQ, buildFaqJsonLd } from "@/lib/seo";
+import {
+  formatCityNamesPhrase,
+  getActiveLocationLinks,
+} from "@/lib/active-locations";
+import { buildBrFaq, buildFaqJsonLd } from "@/lib/seo";
 
-export function HomeFaqSection() {
-  const faqs = BR_FAQ;
+export async function HomeFaqSection() {
+  const { cities } = await getActiveLocationLinks();
+  const faqs = buildBrFaq(formatCityNamesPhrase(cities));
 
   return (
     <section className="border-t border-gray-100 bg-white" aria-labelledby="home-faq">

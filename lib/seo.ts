@@ -64,43 +64,49 @@ export const BH_NEIGHBORHOODS = [
 ] as const;
 
 /** FAQ da home (escopo nacional). */
-export const BR_FAQ = [
-  {
-    question: "Onde encontrar acompanhantes de luxo no Brasil?",
-    answer:
-      "No Mulheres de Luxo você encontra acompanhantes verificadas nas principais capitais — Belo Horizonte, São Paulo, Rio de Janeiro, Curitiba, Brasília e Salvador — com filtros por bairro e contato direto via WhatsApp.",
-  },
-  {
-    question: "O Mulheres de Luxo atende só uma cidade?",
-    answer:
-      "Não. O Mulheres de Luxo cobre todo o Brasil, com páginas por estado e capital. Belo Horizonte foi o primeiro hub e continua com o maior volume de bairros indexados.",
-  },
-  {
-    question: "Como filtrar por cidade ou bairro?",
-    answer:
-      "Use o catálogo ou as páginas de estado e capital. Em BH você também encontra hubs por bairro (Savassi, Lourdes, Funcionários e mais).",
-  },
-  {
-    question: "Como entrar em contato com uma acompanhante?",
-    answer:
-      "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Combine valores, horários e local antes do encontro.",
-  },
-  {
-    question: "O Mulheres de Luxo é seguro?",
-    answer:
-      "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro. Conteúdo destinado a maiores de 18 anos.",
-  },
-  {
-    question: "Tem acompanhantes com local?",
-    answer:
-      "Sim. Vários perfis indicam atendimento com local próprio, além de hotel, motel e deslocamento. Use os filtros do catálogo por cidade e bairro para encontrar a opção ideal.",
-  },
-  {
-    question: "O que diferencia o Mulheres de Luxo?",
-    answer:
-      "Perfis verificados, filtros por região, cidade e bairro, páginas locais para SEO e contato direto via WhatsApp — sem intermediários. Conteúdo destinado a maiores de 18 anos.",
-  },
-] as const;
+export function buildBrFaq(citiesPhrase = "todo o Brasil") {
+  return [
+    {
+      question: "Onde encontrar acompanhantes de luxo no Brasil?",
+      answer: `No Mulheres de Luxo você encontra acompanhantes verificadas em ${citiesPhrase}, com filtros por bairro e contato direto via WhatsApp.`,
+    },
+    {
+      question: "O Mulheres de Luxo atende só uma cidade?",
+      answer:
+        "Não. O Mulheres de Luxo cobre todo o Brasil, com páginas por estado e cidade conforme os anúncios publicados. Belo Horizonte foi o primeiro hub e continua com o maior volume de bairros indexados.",
+    },
+    {
+      question: "Como filtrar por cidade ou bairro?",
+      answer:
+        "Use o catálogo ou as páginas de estado e capital. Em BH você também encontra hubs por bairro (Savassi, Lourdes, Funcionários e mais).",
+    },
+    {
+      question: "Como entrar em contato com uma acompanhante?",
+      answer:
+        "Cada perfil exibe WhatsApp e telefone para contato direto. Perfis verificados passam por checagem de identidade. Combine valores, horários e local antes do encontro.",
+    },
+    {
+      question: "O Mulheres de Luxo é seguro?",
+      answer:
+        "Sim. Perfis verificados passam por checagem de identidade, fotos reais e contato direto via WhatsApp — sem intermediários. Combine valores, horários e local antes do encontro. Conteúdo destinado a maiores de 18 anos.",
+    },
+    {
+      question: "Tem acompanhantes com local?",
+      answer:
+        "Sim. Vários perfis indicam atendimento com local próprio, além de hotel, motel e deslocamento. Use os filtros do catálogo por cidade e bairro para encontrar a opção ideal.",
+    },
+    {
+      question: "O que diferencia o Mulheres de Luxo?",
+      answer:
+        "Perfis verificados, filtros por região, cidade e bairro, páginas locais para SEO e contato direto via WhatsApp — sem intermediários. Conteúdo destinado a maiores de 18 anos.",
+    },
+  ] as const;
+}
+
+/** FAQ estático legado — preferir `buildBrFaq` quando houver cidades ativas. */
+export const BR_FAQ = buildBrFaq(
+  "Belo Horizonte, São Paulo, Rio de Janeiro, Brasília e Salvador",
+);
 
 /** FAQ legado BH — mantido para guias e redirects; hubs de cidade usam hub.faq. */
 export const BH_FAQ = [

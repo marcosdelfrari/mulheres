@@ -185,7 +185,7 @@ export async function getSponsoredCompanions(): Promise<Companion[]> {
   return listings.map(listingToCompanion);
 }
 
-export async function getTopCompanions(limit = 6): Promise<Companion[]> {
+export async function getTopCompanions(limit = 8): Promise<Companion[]> {
   if (!hasDatabaseUrl()) return [];
 
   const listings = await prisma.listing.findMany({

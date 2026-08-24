@@ -337,14 +337,26 @@ export async function handleMcpJsonRpc(
 
     if (method === "resources/read") {
       const uri = String(params.uri ?? "");
+      if (uri === absoluteUrl("/llms.txt")) {
+        const { buildLlmsTxt } = await import("@/lib/llms-txt");
+        const text = await buildLlmsTxt();
+        responses.push(
+          ok(id, {
+            contents: [
+              {
+                uri,
+                mimeType: "text/plain",
+                text,
+              },
+            ],
+          }),
+        );
+        continue;
+      }
       const fileByUri: Record<string, { file: string; mimeType: string }> = {
         [absoluteUrl("/openapi.json")]: {
           file: "public/openapi.json",
           mimeType: "application/json",
-        },
-        [absoluteUrl("/llms.txt")]: {
-          file: "public/llms.txt",
-          mimeType: "text/plain",
         },
         [absoluteUrl("/auth.md")]: {
           file: "public/auth.md",

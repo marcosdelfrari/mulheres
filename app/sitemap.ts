@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { filterStateHubsWithListings } from "@/lib/active-locations";
 import { buildCompanionSlug } from "@/lib/companion-utils";
 import {
   buildPublishedLocationIndex,
@@ -9,7 +10,6 @@ import {
   cityHubPath,
   getNeighborhoodCompanions,
   neighborhoodHubPath,
-  STATE_HUBS,
   stateHubPath,
 } from "@/lib/location-hubs";
 import { getPublishedCompanions } from "@/lib/listings";
@@ -19,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const companions = await getPublishedCompanions().catch(() => []);
   const index = buildPublishedLocationIndex(companions);
+  const activeStates = filterStateHubsWithListings(index);
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -71,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const statePages: MetadataRoute.Sitemap = STATE_HUBS.map((hub) => ({
+  const statePages: MetadataRoute.Sitemap = activeStates.map((hub) => ({
     url: absoluteUrl(stateHubPath(hub)),
     lastModified: now,
     changeFrequency: "daily" as const,
