@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { resolveCatalogSearch } from "@/lib/catalog-search-resolve";
 
 export interface LocationHeroProps {
   eyebrow: string;
@@ -25,8 +26,14 @@ export function LocationHero({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/acompanhantes?search=${encodeURIComponent(query.trim())}`);
+    const term = query.trim();
+    if (term) {
+      const resolved = resolveCatalogSearch(term);
+      if (resolved.kind === "neighborhood" || resolved.kind === "city") {
+        router.push(resolved.hubPath);
+        return;
+      }
+      router.push(`/acompanhantes?search=${encodeURIComponent(term)}`);
     } else {
       router.push(catalogHref);
     }

@@ -115,7 +115,7 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
               em breve — estamos expandindo as modelos em {hub.city}.
             </p>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {cityCompanions.map((c) => (
                 <CompanionCard
                   key={c.id}
@@ -407,7 +407,7 @@ export async function StateHubPage({ hub }: StateHubPageProps) {
               )}
             </p>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {regionCompanions.slice(0, 12).map((c) => (
                 <CompanionCard key={c.id} companion={c} locationMode="city" />
               ))}

@@ -1,5 +1,6 @@
 import type { CatalogFilters, Companion, Region } from "./types";
 import { DEFAULT_CATALOG_FILTERS } from "./types";
+import { catalogHeadingFromSearch } from "./catalog-search-resolve";
 import { getDistanceKm } from "./geo";
 import type { Coordinates } from "./types";
 
@@ -102,6 +103,13 @@ export function getCatalogHeading(filters: CatalogFilters): {
   description: string;
 } {
   if (filters.neighborhood !== "all" && filters.city) {
+    const byNeighborhood = catalogHeadingFromSearch(filters.neighborhood);
+    if (byNeighborhood.hubPath) {
+      return {
+        title: byNeighborhood.title,
+        description: byNeighborhood.description,
+      };
+    }
     return {
       title: `Acompanhantes em ${filters.neighborhood}, ${filters.city}`,
       description: `Encontre acompanhantes verificadas em ${filters.neighborhood}, ${filters.city}. Perfis com fotos reais e contato direto via WhatsApp.`,
@@ -109,16 +117,18 @@ export function getCatalogHeading(filters: CatalogFilters): {
   }
 
   if (filters.search && filters.region !== "all") {
+    const heading = catalogHeadingFromSearch(filters.search, filters.region);
     return {
-      title: `Acompanhantes em ${filters.search}, ${filters.region}`,
-      description: `Modelos e acompanhantes em ${filters.search}. Filtros por bairro, preço e serviços. Contato direto via WhatsApp.`,
+      title: heading.title,
+      description: heading.description,
     };
   }
 
   if (filters.search) {
+    const heading = catalogHeadingFromSearch(filters.search);
     return {
-      title: `Acompanhantes em ${filters.search}`,
-      description: `Encontre acompanhantes em ${filters.search} com perfis verificados, fotos e contato via WhatsApp.`,
+      title: heading.title,
+      description: heading.description,
     };
   }
 

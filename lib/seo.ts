@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { Companion } from "./types";
 import { companionPhotoAlt, companionProfilePath } from "./companion-utils";
+import { catalogHeadingFromSearch } from "./catalog-search-resolve";
 import { SEO_COMPETITOR_KEYWORDS } from "./brand-copy";
 import { slugify } from "./slug";
 import type { CityHub, NeighborhoodHub, StateHub } from "./location-hubs";
@@ -385,6 +386,16 @@ export function buildCatalogMetadata(params: {
   }
 
   if (search) {
+    const heading = catalogHeadingFromSearch(search, region);
+    if (heading.hubPath) {
+      return buildPageMetadata({
+        title: heading.title,
+        description: trimMetaDescription(heading.description),
+        path: heading.hubPath,
+        ogImagePath: routeOgImagePath(heading.hubPath),
+      });
+    }
+
     const cityHub = findCityHubBySearch(search);
     if (cityHub) {
       const path = cityHubPath(cityHub);
@@ -397,8 +408,8 @@ export function buildCatalogMetadata(params: {
     }
 
     return buildPageMetadata({
-      title: `Acompanhantes em ${search}`,
-      description: `Encontre acompanhantes em ${search}. Perfis verificados, fotos reais e contato via WhatsApp.`,
+      title: heading.title,
+      description: trimMetaDescription(heading.description),
       path: `/acompanhantes?search=${encodeURIComponent(search)}`,
     });
   }

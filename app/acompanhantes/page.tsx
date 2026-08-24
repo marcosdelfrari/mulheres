@@ -1,6 +1,8 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import { CatalogInteractive } from "@/components/CatalogInteractive";
 import { JsonLd } from "@/components/JsonLd";
+import { resolveCatalogSearch } from "@/lib/catalog-search-resolve";
 import {
   filterCompanions,
   getCatalogHeading,
@@ -32,6 +34,20 @@ export async function generateMetadata({ searchParams }: PageProps) {
 
 export default async function CatalogPage({ searchParams }: PageProps) {
   const params = await searchParams;
+  const search = typeof params.search === "string" ? params.search : undefined;
+  const hasCity = typeof params.city === "string" && params.city.length > 0;
+  const hasNeighborhood =
+    typeof params.neighborhood === "string" &&
+    params.neighborhood.length > 0 &&
+    params.neighborhood !== "all";
+
+  if (search && !hasCity && !hasNeighborhood) {
+    const resolved = resolveCatalogSearch(search);
+    if (resolved.kind === "neighborhood" || resolved.kind === "city") {
+      redirect(resolved.hubPath);
+    }
+  }
+
   const filters = parseCatalogSearchParams(params);
   const companions = await getPublishedCompanions();
   const items = filterCompanions(companions, filters);

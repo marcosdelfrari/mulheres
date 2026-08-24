@@ -17,6 +17,26 @@ const BH_NEIGHBORHOOD_REDIRECTS = [
   permanent: true,
 }));
 
+const BH_SEARCH_NEIGHBORHOOD_REDIRECTS = [
+  { search: "centro", slug: "centro" },
+  { search: "Centro", slug: "centro" },
+  { search: "savassi", slug: "savassi" },
+  { search: "Savassi", slug: "savassi" },
+  { search: "lourdes", slug: "lourdes" },
+  { search: "Lourdes", slug: "lourdes" },
+  { search: "funcionarios", slug: "funcionarios" },
+  { search: "Funcionários", slug: "funcionarios" },
+  { search: "pampulha", slug: "pampulha" },
+  { search: "Pampulha", slug: "pampulha" },
+  { search: "buritis", slug: "buritis" },
+  { search: "Buritis", slug: "buritis" },
+].map(({ search, slug }) => ({
+  source: "/acompanhantes",
+  has: [{ type: "query" as const, key: "search", value: search }],
+  destination: `/minas-gerais/belo-horizonte/${slug}`,
+  permanent: true,
+}));
+
 const AGENT_LINK_HEADER = [
   '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
   '</.well-known/oauth-protected-resource>; rel="oauth-protected-resource"; type="application/json"',
@@ -178,6 +198,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       ...BH_NEIGHBORHOOD_REDIRECTS,
+      ...BH_SEARCH_NEIGHBORHOOD_REDIRECTS,
       {
         source: "/acompanhantes",
         has: [{ type: "query", key: "search", value: "acompanhantes rh" }],
