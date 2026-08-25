@@ -4,22 +4,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { isLocationHubPath, isLuxuryPath } from "@/lib/luxury-theme";
+import { isHomeLikePath, isLuxuryPath } from "@/lib/luxury-theme";
 
 export function Header() {
   const { user } = useAuth();
   const pathname = usePathname();
   const luxury = isLuxuryPath(pathname);
-  const homeLike = pathname === "/" || isLocationHubPath(pathname);
+  const homeLike = isHomeLikePath(pathname);
 
   return (
     <header
       className={
         homeLike
-          ? "absolute inset-x-0 top-0 z-50 border-b border-transparent bg-transparent"
+          ? "site-header absolute inset-x-0 top-0 z-50 border-b border-transparent bg-transparent"
           : luxury
-            ? "relative z-50 border-b border-white/5 bg-[#0c0414]/80 backdrop-blur-md"
-            : "relative z-50 border-b border-gray-100 bg-white"
+            ? "site-header relative z-50 border-b border-white/5 bg-[#0c0414]/80 backdrop-blur-md"
+            : "site-header relative z-50 border-b border-gray-100 bg-white"
       }
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">

@@ -65,7 +65,7 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
         ]}
       />
 
-      <div className="luxury-shell">
+      <div className="luxury-shell" data-luxury-hero>
         <LocationHero
           eyebrow={hub.eyebrow}
           locationName={hub.heroLocation}
@@ -325,7 +325,7 @@ export async function StateHubPage({ hub }: StateHubPageProps) {
         ]}
       />
 
-      <div className="luxury-shell">
+      <div className="luxury-shell" data-luxury-hero>
         <LocationHero
           eyebrow={hub.eyebrow}
           locationName={hub.heroLocation}

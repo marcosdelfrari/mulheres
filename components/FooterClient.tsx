@@ -6,7 +6,7 @@ import { GENERIC_PLATFORMS_PHRASE } from "@/lib/brand-copy";
 import type { ActiveCityLink, ActiveStateLink } from "@/lib/active-locations";
 import { SITE_NAME } from "@/lib/seo";
 import { TrademarkDisclaimer } from "@/components/TrademarkDisclaimer";
-import { isLuxuryPath } from "@/lib/luxury-theme";
+import { isLuxuryPath, normalizePathname } from "@/lib/luxury-theme";
 
 interface FooterClientProps {
   cities: ActiveCityLink[];
@@ -14,7 +14,7 @@ interface FooterClientProps {
 }
 
 export function FooterClient({ cities, states }: FooterClientProps) {
-  const pathname = usePathname();
+  const pathname = normalizePathname(usePathname());
   const luxury = isLuxuryPath(pathname);
   const platforms = GENERIC_PLATFORMS_PHRASE;
 

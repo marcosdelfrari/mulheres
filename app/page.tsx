@@ -17,7 +17,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <div className="luxury-shell">
+      <div className="luxury-shell" data-luxury-hero>
         <HomeHero />
       </div>
       <TopCompanions tops={tops} sponsored={sponsored} />
