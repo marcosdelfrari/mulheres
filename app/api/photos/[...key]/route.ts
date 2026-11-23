@@ -23,7 +23,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
     const bytes = await body.transformToByteArray();
 
-    return new Response(bytes, {
+    return new Response(Buffer.from(bytes), {
       headers: {
         "Content-Type": object.ContentType ?? "image/jpeg",
         "Cache-Control": CACHE,
