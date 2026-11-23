@@ -66,6 +66,8 @@ const nextConfig: NextConfig = {
     ],
   },
   images: {
+    // Sem Image Optimization na Vercel (/_next/image) — URLs diretas do S3/proxy.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
