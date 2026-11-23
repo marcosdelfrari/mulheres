@@ -134,5 +134,5 @@ Provedores também podem enviar Security Event Tokens para `https://mulheresdelu
 ## Documentação humana
 
 - Como o produto funciona: https://mulheresdeluxo.com.br/guias/como-funciona
-- Contato: https://mulheresdeluxo.com.br/contato
+- E-mail institucional: contato@mulheresdeluxo.com.br
 - Resumo para LLMs: https://mulheresdeluxo.com.br/llms.txt

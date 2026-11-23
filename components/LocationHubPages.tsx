@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CatalogGrid } from "@/components/CatalogGrid";
 import { CompanionCard } from "@/components/CompanionCard";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { JsonLd } from "@/components/JsonLd";
 import { LocationHero } from "@/components/LocationHero";
 import {
@@ -274,21 +275,7 @@ export async function CityHubPage({ hub }: CityHubPageProps) {
             >
               Perguntas frequentes — {hub.city}
             </h2>
-            <dl className="mt-5 space-y-4 sm:mt-6">
-              {faqs.map((faq) => (
-                <div
-                  key={faq.question}
-                  className="rounded-2xl border border-gray-100 bg-white p-4 sm:rounded-3xl sm:p-5"
-                >
-                  <dt className="text-[15px] font-medium leading-snug text-gray-900 sm:text-base sm:font-light">
-                    {faq.question}
-                  </dt>
-                  <dd className="mt-2 text-sm font-light leading-relaxed text-gray-600">
-                    {faq.answer}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <FaqAccordion faqs={faqs} className="mt-5 space-y-3 sm:mt-6" />
           </div>
         </div>
       </section>
@@ -483,19 +470,7 @@ export async function StateHubPage({ hub }: StateHubPageProps) {
             >
               Perguntas frequentes — {hub.region}
             </h2>
-            <dl className="mt-6 space-y-4">
-              {faqs.map((faq) => (
-                <div
-                  key={faq.question}
-                  className="rounded-3xl border border-gray-100 bg-white p-5"
-                >
-                  <dt className="font-light text-gray-900">{faq.question}</dt>
-                  <dd className="mt-2 text-sm font-light leading-relaxed text-gray-600">
-                    {faq.answer}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <FaqAccordion faqs={faqs} />
           </div>
         </div>
       </section>
@@ -625,21 +600,10 @@ export async function NeighborhoodHubPage({
           >
             Perguntas frequentes — {neighborhood.name}
           </h2>
-          <dl className="mt-5 space-y-4 sm:mt-6 sm:space-y-6">
-            {neighborhood.faq.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-5"
-              >
-                <dt className="text-[15px] font-medium leading-snug text-gray-900 sm:text-base sm:font-light">
-                  {faq.question}
-                </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
-                  {faq.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion
+            faqs={neighborhood.faq}
+            className="mt-5 space-y-3 sm:mt-6"
+          />
         </section>
       </div>
     </>
@@ -770,21 +734,7 @@ export async function ComLocalHubPage({ hub }: ComLocalHubPageProps) {
           >
             Perguntas frequentes — com local em {hub.city}
           </h2>
-          <dl className="mt-5 space-y-4 sm:mt-6 sm:space-y-6">
-            {faqs.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-5"
-              >
-                <dt className="text-[15px] font-medium leading-snug text-gray-900 sm:text-base sm:font-light">
-                  {faq.question}
-                </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
-                  {faq.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={faqs} className="mt-5 space-y-3 sm:mt-6" />
         </section>
       </div>
     </>
@@ -913,21 +863,7 @@ export async function TypeTagHubPage({ hub, typeTag }: TypeTagHubPageProps) {
           >
             Perguntas frequentes — {typeTag} em {hub.city}
           </h2>
-          <dl className="mt-5 space-y-4 sm:mt-6 sm:space-y-6">
-            {faqs.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-5"
-              >
-                <dt className="text-[15px] font-medium leading-snug text-gray-900 sm:text-base sm:font-light">
-                  {faq.question}
-                </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
-                  {faq.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={faqs} className="mt-5 space-y-3 sm:mt-6" />
         </section>
       </div>
     </>

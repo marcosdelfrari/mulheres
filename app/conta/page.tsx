@@ -18,6 +18,7 @@ import { REGIONS } from "@/lib/regions";
 import { uploadListingPhotos } from "@/lib/upload-listing-photos";
 import { formatListingPrice, type PriceDisplayUnit } from "@/lib/price-display";
 import { formatBrazilPhone, normalizeBrazilPhone } from "@/lib/phone";
+import { listingPhotoDisplayUrl } from "@/lib/listing-photo-url";
 
 type ListingLimits = {
   maxActive: number;
@@ -781,11 +782,11 @@ export default function ContaPage() {
       <section className="rounded-3xl border border-gray-200 bg-gray-50 p-5">
         <h2 className="text-xl font-bold text-gray-900">Aparecer no topo</h2>
         <p className="mt-2 text-base leading-relaxed text-gray-700">
-          Seu anúncio fica em destaque na lista por 4 horas. Mais visualizações,
+          Seu anúncio fica em destaque na lista por 30 dias. Mais visualizações,
           mais contatos.
         </p>
         <p className="mt-4 text-lg font-semibold text-gray-900">
-          R$ 19,90 · 4 horas em destaque
+          R$ 19,90 · 30 dias em destaque
         </p>
       </section>
 
@@ -873,7 +874,7 @@ export default function ContaPage() {
                 {form.photos.map((photo, index) => {
                   const src =
                     photo.kind === "existing"
-                      ? photo.url
+                      ? listingPhotoDisplayUrl(photo.url)
                       : newPhotoPreviews.get(photo.id);
                   if (!src) return null;
                   const isAvatar = form.avatarKey === photo.id;
@@ -1216,8 +1217,11 @@ export default function ContaPage() {
           <ul className="space-y-4">
             {listings.map((listing) => {
               const luxoActive = isLuxoActive(listing);
-              const cover =
+              const coverRaw =
                 listing.photoUrl || listing.photos?.[0] || null;
+              const cover = coverRaw
+                ? listingPhotoDisplayUrl(coverRaw)
+                : null;
 
               return (
                 <li
@@ -1316,7 +1320,7 @@ export default function ContaPage() {
                             </span>
                             {!luxoActive && (
                               <span className="text-[11px] font-semibold uppercase tracking-wide text-amber-800/80">
-                                4 horas no topo
+                                30 dias no topo
                               </span>
                             )}
                           </div>

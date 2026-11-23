@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin";
-import { jsonError, toListingSummary } from "@/lib/auth";
+import { LUXO_HOURS, jsonError, toListingSummary } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 const patchSchema = z.object({
   status: z.enum(["draft", "published", "paused"]).optional(),
   isLuxo: z.boolean().optional(),
   /** Horas de destaque a partir de agora (quando isLuxo = true). */
-  luxoHours: z.coerce.number().int().min(1).max(720).optional(),
+  luxoHours: z.coerce.number().int().min(1).max(LUXO_HOURS).optional(),
   nsfwPhotos: z.array(z.string().min(1)).optional(),
 });
 
@@ -49,7 +49,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       if (!body.isLuxo) {
         data.luxoUntil = null;
       } else {
-        const hours = body.luxoHours ?? 4;
+        const hours = body.luxoHours ?? LUXO_HOURS;
         data.luxoUntil = new Date(Date.now() + hours * 60 * 60 * 1000);
       }
     } else if (body.luxoHours !== undefined && existing.isLuxo) {

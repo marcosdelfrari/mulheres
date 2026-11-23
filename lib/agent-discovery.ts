@@ -54,7 +54,7 @@ export function buildAgentCard() {
       mcpServerCard: absoluteUrl("/.well-known/mcp/server-card.json"),
       mcp: absoluteUrl("/mcp"),
       agentSkills: absoluteUrl("/.well-known/agent-skills/index.json"),
-      contact: absoluteUrl("/contato"),
+      contact: "mailto:contato@mulheresdeluxo.com.br",
       catalog: absoluteUrl("/acompanhantes"),
     },
   };

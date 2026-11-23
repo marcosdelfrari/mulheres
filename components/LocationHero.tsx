@@ -40,50 +40,54 @@ export function LocationHero({
   };
 
   return (
-    <section className="relative overflow-hidden border-b border-white/5 pb-12 pt-28 sm:pb-20 sm:pt-32">
+    <section className="relative overflow-hidden border-b border-white/5 pt-22 pb-9 sm:pt-32 sm:pb-20">
       <div
-        className="pointer-events-none absolute inset-0 opacity-30"
+        className="pointer-events-none absolute inset-0 opacity-20 sm:opacity-30"
         aria-hidden
       >
-        <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-luxury-accent/10 blur-[120px]" />
-        <div className="absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-purple-900/20 blur-[120px]" />
+        <div className="absolute -top-32 -right-32 h-72 w-72 rounded-full bg-luxury-accent/10 blur-[100px] sm:h-96 sm:w-96 sm:blur-[120px]" />
+        <div className="absolute bottom-0 -left-32 h-72 w-72 rounded-full bg-purple-900/20 blur-[100px] sm:h-96 sm:w-96 sm:blur-[120px]" />
       </div>
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-luxury-accent/20 bg-luxury-accent/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-luxury-accent">
+          <p className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-luxury-accent/90 sm:gap-2 sm:rounded-full sm:border sm:border-luxury-accent/20 sm:bg-luxury-accent/5 sm:px-4 sm:py-1.5 sm:text-xs sm:font-bold sm:tracking-widest sm:text-luxury-accent">
             <span
-              className="h-1.5 w-1.5 rounded-full bg-luxury-accent animate-pulse"
+              className="h-px w-5 bg-luxury-accent/60 sm:h-1.5 sm:w-1.5 sm:rounded-full sm:bg-luxury-accent sm:animate-pulse"
               aria-hidden
             />
             {eyebrow}
           </p>
 
-          <h1 className="mt-6 font-serif text-4xl font-bold italic leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
-            Acompanhantes <br />
-            de <span className="text-luxury-accent">luxo</span> em <br />
+          <h1 className="mt-3.5 text-balance font-serif text-[2rem] font-normal italic leading-[1.14] tracking-tight text-white sm:mt-6 sm:text-5xl sm:font-bold sm:leading-[1.1] lg:text-[3.5rem]">
+            Acompanhantes <br className="hidden sm:inline" />
+            de <span className="text-luxury-accent">luxo</span> em{" "}
+            <br className="hidden sm:inline" />
             {locationName}
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/60">
+          <p className="mt-3 max-w-md text-sm font-light leading-relaxed text-white/55 sm:mt-6 sm:max-w-xl sm:text-lg sm:font-normal sm:text-white/60">
             {subtitle}
           </p>
 
-          <form onSubmit={handleSubmit} className="relative mt-10 max-w-lg">
+          <form
+            onSubmit={handleSubmit}
+            className="relative mt-6 max-w-lg sm:mt-10"
+          >
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={searchPlaceholder}
-              className="w-full rounded-full border border-white/10 bg-white/5 py-5 pl-8 pr-16 text-base text-white placeholder:text-white/30 focus:border-luxury-accent/50 focus:outline-none focus:ring-4 focus:ring-luxury-accent/5 transition-all"
+              className="h-12 w-full rounded-full border border-white/12 bg-white/[0.04] pr-12 pl-5 text-base text-white placeholder:text-white/35 transition-all focus:border-luxury-accent/50 focus:bg-white/[0.06] focus:ring-4 focus:ring-luxury-accent/5 focus:outline-none sm:h-auto sm:border-white/10 sm:bg-white/5 sm:py-5 sm:pr-16 sm:pl-8 sm:placeholder:text-white/30"
             />
             <button
               type="submit"
-              className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center rounded-full bg-luxury-accent text-[#0c0414] transition-all hover:bg-luxury-accent-hover active:scale-90"
+              className="absolute top-1.5 right-1.5 flex h-9 w-9 items-center justify-center rounded-full bg-luxury-accent text-[#0c0414] transition-all hover:bg-luxury-accent-hover active:scale-95 sm:top-2 sm:right-2 sm:h-12 sm:w-12"
               aria-label="Buscar"
             >
               <svg
-                className="h-6 w-6"
+                className="h-4 w-4 sm:h-6 sm:w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -91,21 +95,30 @@ export function LocationHero({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2.5}
+                  strokeWidth={2.25}
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
             </button>
           </form>
 
-          <p className="mt-5 max-w-lg text-center text-base text-white/50">
+          <div className="mt-4 flex items-center gap-3 pl-1 text-xs tracking-wide text-white/45 sm:mt-5 sm:max-w-lg sm:justify-center sm:pl-0 sm:text-base sm:text-white/50">
+            <Link
+              href={catalogHref}
+              className="transition-colors hover:text-luxury-accent sm:hidden"
+            >
+              Ver modelos
+            </Link>
+            <span className="text-white/20 sm:hidden" aria-hidden>
+              ·
+            </span>
             <Link
               href="/criar-conta?role=acompanhante"
-              className="transition-colors hover:text-white/70"
+              className="transition-colors hover:text-white/75"
             >
               Crie seu anúncio
             </Link>
-          </p>
+          </div>
         </div>
 
         <div className="relative hidden justify-center lg:flex">

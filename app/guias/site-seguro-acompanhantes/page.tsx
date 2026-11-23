@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { JsonLd } from "@/components/JsonLd";
 import { TrademarkDisclaimer } from "@/components/TrademarkDisclaimer";
 import {
@@ -167,19 +168,7 @@ export default async function SiteSeguroPage() {
           >
             Perguntas frequentes
           </h2>
-          <dl className="mt-6 space-y-6">
-            {faq.map((item) => (
-              <div
-                key={item.question}
-                className="rounded-2xl border border-gray-100 bg-gray-50 p-5"
-              >
-                <dt className="font-serif font-semibold text-gray-900">
-                  {item.question}
-                </dt>
-                <dd className="mt-2">{item.answer}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={faq} />
         </section>
 
         <div className="mt-10 flex flex-wrap gap-3">

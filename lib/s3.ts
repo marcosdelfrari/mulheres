@@ -1,6 +1,7 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomBytes } from "crypto";
+import { listingPhotoKeyFromUrl } from "@/lib/listing-photo-url";
 
 const region = process.env.AWS_REGION ?? "us-east-2";
 const bucket = process.env.AWS_S3_BUCKET ?? "";
@@ -58,6 +59,15 @@ function extensionFor(mime: string) {
 
 export function publicUrlForKey(key: string) {
   return `https://${bucket}.s3.${region}.amazonaws.com/${key}`;
+}
+
+export async function getListingPhotoObject(key: string) {
+  return getClient().send(
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    }),
+  );
 }
 
 export function isOwnedListingPhotoUrl(url: string, userId: string) {
@@ -118,9 +128,17 @@ export async function createListingPhotoPresign(
 
 export async function classifyRemoteImageNsfw(url: string) {
   try {
-    const res = await fetch(url);
-    if (!res.ok) return false;
-    const buffer = Buffer.from(await res.arrayBuffer());
+    const key = listingPhotoKeyFromUrl(url);
+    let buffer: Buffer;
+    if (key) {
+      const object = await getListingPhotoObject(key);
+      if (!object.Body) return false;
+      buffer = Buffer.from(await object.Body.transformToByteArray());
+    } else {
+      const res = await fetch(url);
+      if (!res.ok) return false;
+      buffer = Buffer.from(await res.arrayBuffer());
+    }
     return classifyImageNsfw(buffer);
   } catch (error) {
     console.error("[s3] NSFW classify from URL failed:", error);

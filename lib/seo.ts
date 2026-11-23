@@ -26,9 +26,10 @@ function normalizeSiteUrl(raw: string): string {
       trimmed.includes("://") ? trimmed : `https://${trimmed}`,
     );
     url.protocol = "https:";
-    // Produção redireciona apex → www; sitemap/canonical devem bater com o host final.
-    if (url.hostname === "mulheresdeluxo.com.br") {
-      url.hostname = "www.mulheresdeluxo.com.br";
+    // Na Vercel o www redireciona (307) para o apex; canonical/sitemap/JSON-LD
+    // precisam usar o mesmo host que entrega o HTML, não o host que só redireciona.
+    if (url.hostname === "www.mulheresdeluxo.com.br") {
+      url.hostname = "mulheresdeluxo.com.br";
     }
     return url.origin;
   } catch {

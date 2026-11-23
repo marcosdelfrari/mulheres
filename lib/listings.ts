@@ -4,6 +4,7 @@ import { coordsForCity } from "@/lib/city-coords";
 import { buildCompanionSlug } from "@/lib/companion-utils";
 import { extractPublicCodeFromSlug } from "@/lib/listing-public-code";
 import { digitsOnly, normalizeBrazilPhone } from "@/lib/phone";
+import { listingPhotoDisplayUrl } from "@/lib/listing-photo-url";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 import type { Companion, Region } from "@/lib/types";
 import { REGIONS } from "@/lib/regions";
@@ -60,14 +61,22 @@ function isLuxoActive(listing: Pick<Listing, "isLuxo" | "luxoUntil">) {
   return listing.luxoUntil.getTime() > Date.now();
 }
 
+function mapPublicPhotos(urls: string[]) {
+  return urls.map((url) => listingPhotoDisplayUrl(url));
+}
+
 export function listingToCompanion(listing: ListingWithUser): Companion {
-  const photos =
+  const rawPhotos =
     listing.photos?.length > 0
       ? listing.photos
       : listing.photoUrl
         ? [listing.photoUrl]
         : [];
-  const coverPhoto = listing.photoUrl ?? photos[0] ?? "";
+  const photos = mapPublicPhotos(rawPhotos);
+  const coverPhoto = listingPhotoDisplayUrl(
+    listing.photoUrl ?? rawPhotos[0] ?? "",
+  );
+  const nsfwPhotos = mapPublicPhotos(listing.nsfwPhotos ?? []);
   const contact = normalizeBrazilPhone(
     listing.whatsapp || listing.phone || listing.user?.phone || "",
   );
@@ -105,7 +114,7 @@ export function listingToCompanion(listing: ListingWithUser): Companion {
     avatarColor: avatarColorFromId(listing.id),
     coverPhoto,
     photos,
-    nsfwPhotos: listing.nsfwPhotos ?? [],
+    nsfwPhotos,
     adId: listing.publicCode,
     publicCode: listing.publicCode,
     publishedAt: listing.createdAt.toISOString(),

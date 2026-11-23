@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { JsonLd } from "@/components/JsonLd";
 import {
   formatCityNamesPhrase,
@@ -21,19 +22,7 @@ export async function HomeFaqSection() {
           >
             Perguntas frequentes
           </h2>
-          <dl className="mt-6 space-y-4">
-            {faqs.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-3xl border border-gray-100 bg-gray-50 p-5"
-              >
-                <dt className="font-light text-gray-900">{faq.question}</dt>
-                <dd className="mt-2 text-sm font-light leading-relaxed text-gray-600">
-                  {faq.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={faqs} />
           <Link
             href="/guias/como-funciona"
             className="mt-6 inline-block text-sm font-bold text-purple-800 hover:text-luxury-accent hover:underline"

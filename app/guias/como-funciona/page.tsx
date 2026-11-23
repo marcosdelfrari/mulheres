@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { JsonLd } from "@/components/JsonLd";
 import { TrademarkDisclaimer } from "@/components/TrademarkDisclaimer";
 import {
@@ -121,19 +122,7 @@ export default function ComoFuncionaPage() {
           <h2 id="faq-guia" className="font-serif text-2xl font-bold italic text-gray-900">
             Perguntas frequentes
           </h2>
-          <dl className="mt-6 space-y-6">
-            {FAQ.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-2xl border border-gray-100 bg-gray-50 p-5"
-              >
-                <dt className="font-serif font-semibold text-gray-900">
-                  {faq.question}
-                </dt>
-                <dd className="mt-2">{faq.answer}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={FAQ} />
         </section>
 
         <TrademarkDisclaimer className="mt-10" />

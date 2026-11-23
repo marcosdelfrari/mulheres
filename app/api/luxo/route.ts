@@ -13,7 +13,7 @@ import { prisma } from "@/lib/prisma";
 
 const createSchema = z.object({
   listingId: z.string().min(1),
-  hours: z.coerce.number().int().min(1).max(168).default(LUXO_HOURS),
+  hours: z.coerce.number().int().min(1).max(LUXO_HOURS).default(LUXO_HOURS),
 });
 
 export async function POST(request: Request) {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       return jsonError("Publique o anúncio antes de colocá-lo em destaque.", 400);
     }
 
-    // Pacote fixo: R$ 19,90 por 4 horas (não proporcional).
+    // Pacote fixo: R$ 19,90 por 30 dias (não proporcional).
     const hours = LUXO_HOURS;
     const amount = LUXO_PRICE_CENTS;
     const txid = createToken().slice(0, 20);
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
           currency: "BRL",
         }),
         hours: payment.hours,
-        days: payment.hours, // compat UI antiga
+        days: Math.round(payment.hours / 24),
         pixCode: payment.pixCode,
         pixKey: payment.pixKey,
         expiresAt: payment.expiresAt.toISOString(),

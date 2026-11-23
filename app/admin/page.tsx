@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { listingPublicPath } from "@/lib/companion-utils";
 import type { ListingSummary } from "@/lib/auth-types";
 import type { VerificationStatus } from "@/lib/types";
+import { listingPhotoDisplayUrl } from "@/lib/listing-photo-url";
 
 type AdminListing = ListingSummary & {
   user: {
@@ -170,7 +171,7 @@ function ListingActionButtons({
         </button>
       )}
 
-      {luxo ? (
+      {luxo && (
         <button
           type="button"
           disabled={busy}
@@ -181,38 +182,32 @@ function ListingActionButtons({
         >
           Remover premium
         </button>
-      ) : (
-        <>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() =>
-              void onPatch(
-                listing.id,
-                { isLuxo: true, luxoHours: 4 },
-                `luxo-4-${listing.id}`,
-              )
-            }
-            className={`${actionBtn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
-          >
-            Premium 4h
-          </button>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() =>
-              void onPatch(
-                listing.id,
-                { isLuxo: true, luxoHours: 24 },
-                `luxo-24-${listing.id}`,
-              )
-            }
-            className={`${actionBtn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
-          >
-            Premium 24h
-          </button>
-        </>
       )}
+
+      {(
+        [
+          { label: "4h", hours: 4, key: "4h" },
+          { label: "24h", hours: 24, key: "24h" },
+          { label: "7 dias", hours: 7 * 24, key: "7d" },
+          { label: "30 dias", hours: 30 * 24, key: "30d" },
+        ] as const
+      ).map((pack) => (
+        <button
+          key={pack.key}
+          type="button"
+          disabled={busy}
+          onClick={() =>
+            void onPatch(
+              listing.id,
+              { isLuxo: true, luxoHours: pack.hours },
+              `luxo-${pack.key}-${listing.id}`,
+            )
+          }
+          className={`${actionBtn} border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100`}
+        >
+          {luxo ? `Renovar ${pack.label}` : `Premium ${pack.label}`}
+        </button>
+      ))}
 
       <button
         type="button"
@@ -254,7 +249,7 @@ function ListingNsfwGrid({
             <div key={photo} className="space-y-2">
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100">
                 <Image
-                  src={photo}
+                  src={listingPhotoDisplayUrl(photo)}
                   alt=""
                   fill
                   className={`object-cover ${nsfw ? "blur-md" : ""}`}
@@ -328,7 +323,7 @@ function ListingListRows({
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-gray-100">
               {listing.photoUrl ? (
                 <Image
-                  src={listing.photoUrl}
+                  src={listingPhotoDisplayUrl(listing.photoUrl)}
                   alt=""
                   fill
                   className="object-cover"
@@ -1013,7 +1008,7 @@ export default function AdminPage() {
                       <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-gray-100 sm:h-32 sm:w-28">
                         {listing.photoUrl ? (
                           <Image
-                            src={listing.photoUrl}
+                            src={listingPhotoDisplayUrl(listing.photoUrl)}
                             alt={listing.title}
                             fill
                             className="object-cover"

@@ -13,7 +13,8 @@ export const SESSION_COOKIE = "mulheres_session";
 export const SESSION_DAYS = 30;
 export const LUXO_PRICE_CENTS = 1990;
 /** Duração do destaque após pagamento confirmado. */
-export const LUXO_HOURS = 4;
+export const LUXO_DAYS = 30;
+export const LUXO_HOURS = LUXO_DAYS * 24;
 export const PIX_KEY = process.env.PIX_KEY ?? "contato@mulheresdeluxo.com.br";
 
 export {

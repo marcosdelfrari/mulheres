@@ -19,7 +19,7 @@ export async function GET() {
           },
         },
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: { createdAt: "desc" },
     });
 
     return Response.json({
